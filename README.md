@@ -1,5 +1,5 @@
-# HoardHelper
-JD Hoard Helper - General purpose scripting engine for managing hoards of files
+# JD HoardHelper
+General purpose scripting engine for managing hoards of files
 
 Got a mess of media files you need to cleanup? Say no more. JD Hoard Helper is here to help you manage your hoard of data.
 
