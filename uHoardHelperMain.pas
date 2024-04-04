@@ -42,6 +42,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure txtScriptKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private
     FFilename: String;
     FModified: Boolean;
@@ -85,6 +86,12 @@ end;
 procedure TfrmHoardHelperMain.actSaveExecute(Sender: TObject);
 begin
   Save;
+end;
+
+procedure TfrmHoardHelperMain.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  //
 end;
 
 procedure TfrmHoardHelperMain.FormCreate(Sender: TObject);

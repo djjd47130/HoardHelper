@@ -12,6 +12,7 @@ object frmHoardHelperMain: TfrmHoardHelperMain
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 18
@@ -374,7 +375,7 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWhite
       Font.Height = -16
-      Font.Name = 'Tahoma'
+      Font.Name = 'Consolas'
       Font.Style = []
       ParentFont = False
       ReadOnly = True
@@ -432,12 +433,15 @@ object frmHoardHelperMain: TfrmHoardHelperMain
   object dlgOpen: TOpenTextFileDialog
     DefaultExt = '.hhs'
     Filter = 'JD Hoard Helper Script (*.hhs)|*.hhs|All Fies (*.*)|*.*'
+    Title = 'Open Script File'
     Left = 528
     Top = 57
   end
   object dlgSave: TSaveTextFileDialog
     DefaultExt = '.hhs'
     Filter = 'JD Hoard Helper Script (*.hhs)|*.hhs|All Fies (*.*)|*.*'
+    Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
+    Title = 'Save Script File'
     Left = 584
     Top = 57
   end

@@ -4,6 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes,
+  Winapi.Windows,
   dwsComp, dwsCompiler, dwsExprs, dwsSymbols;
 
 type
@@ -20,6 +21,8 @@ type
     procedure StrUtilsFunctionsUpperCaseEval(info: TProgramInfo);
     procedure StrUtilsFunctionsLowerCaseEval(info: TProgramInfo);
     procedure StrUtilsFunctionsDeleteEval(info: TProgramInfo);
+    procedure FileUtilsFunctionsGetFileSizeEval(info: TProgramInfo);
+    procedure FileUtilsFunctionsGetFileSizeStrEval(info: TProgramInfo);
   private
     { Private declarations }
   public
@@ -38,6 +41,17 @@ implementation
 uses
   System.IOUtils, System.StrUtils, System.Math, System.Masks,
   System.Types;
+
+function FileSize(const aFilename: String): Int64;
+var
+  info: TWin32FileAttributeData;
+begin
+  result := -1; // Default value in case of failure
+  if NOT GetFileAttributesEx(PChar(aFileName), GetFileExInfoStandard, @info) then
+    EXIT; // Unable to get file attributes
+
+  result := Int64(info.nFileSizeLow) or Int64(info.nFileSizeHigh shl 32);
+end;
 
 function TdmHoardHelperCtrl.Exec(const Expr: String): String;
 var
@@ -130,20 +144,47 @@ begin
   Info.ResultAsString:= ExtractFilePath(Info.ParamAsString[0]);
 end;
 
+procedure TdmHoardHelperCtrl.FileUtilsFunctionsGetFileSizeEval(
+  info: TProgramInfo);
+var
+  FN: String;
+  FS: Int64;
+begin
+  FN:= Info.ParamAsString[0];
+  FS:= FileSize(FN);
+  Info.ResultAsInteger:= FS;
+end;
+
+procedure TdmHoardHelperCtrl.FileUtilsFunctionsGetFileSizeStrEval(
+  info: TProgramInfo);
+var
+  FN: String;
+  FS: Int64;
+  R: String;
+begin
+  FN:= Info.ParamAsString[0];
+  FS:= FileSize(FN);
+  R:= FormatFloat('#,###,###,###,###,##0 B', FS);
+  Info.ResultAsString:= R;
+end;
+
 procedure TdmHoardHelperCtrl.FileUtilsFunctionsListFilesEval(info: TProgramInfo);
+const
+  FILTER_SEPARATOR = ';';
 var
   Path: String;
   Mask: String;
-  Rec: Boolean;
+  Recurse: Boolean;
   MaskArray: TStringDynArray;
   Pred: TDirectory.TFilterPredicate;
   Arr: TArray<String>;
 begin
   Path:= Info.ParamAsString[0];
   Mask:= Info.ParamAsString[1];
-  Rec:= Info.ParamAsBoolean[2];
-  MaskArray := SplitString(Mask, ';');
+  Recurse:= Info.ParamAsBoolean[2];
+
   //https://stackoverflow.com/questions/12726756/how-to-pass-multiple-file-extensions-to-tdirectory-getfiles
+  MaskArray := SplitString(Mask, FILTER_SEPARATOR);
   Pred:=
     function(const Path: string; const SearchRec: TSearchRec): Boolean
     var
@@ -151,15 +192,17 @@ begin
     begin
       for Mask in MaskArray do
         if MatchesMask(SearchRec.Name, Mask) then
-          exit(True);
-      exit(False);
+          Exit(True);
+      Exit(False);
     end;
 
-  if Rec then
+  //Recursive?
+  if Recurse then
     Arr:= TDirectory.GetFiles(Path, TSearchOption.soAllDirectories, Pred)
   else
     Arr:= TDirectory.GetFiles(Path, Pred);
 
+  //Set scripted function result
   Info.SetResultAsStringArray(Arr);
 
 end;

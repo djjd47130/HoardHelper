@@ -60,6 +60,82 @@ object dmHoardHelperCtrl: TdmHoardHelperCtrl
           end>
         ResultType = 'String'
         OnEval = FileUtilsFunctionsExtractFileExtEval
+      end
+      item
+        Name = 'MoveFile'
+        ResultType = 'Boolean'
+      end
+      item
+        Name = 'CopyFile'
+        ResultType = 'Boolean'
+      end
+      item
+        Name = 'DeleteFile'
+        ResultType = 'Boolean'
+      end
+      item
+        Name = 'CreateDir'
+        ResultType = 'Boolean'
+      end
+      item
+        Name = 'MoveDir'
+        ResultType = 'Boolean'
+      end
+      item
+        Name = 'CopyDir'
+        ResultType = 'Boolean'
+      end
+      item
+        Name = 'DeleteDir'
+        ResultType = 'Boolean'
+      end
+      item
+        Name = 'ExtractID3v1'
+        ResultType = 'TID3v1Info'
+      end
+      item
+        Name = 'ExtractID3v2'
+        ResultType = 'TID3v2Info'
+      end
+      item
+        Name = 'SearchIMDB'
+        ResultType = 'TIMDBInfo'
+      end
+      item
+        Name = 'GetFileSize'
+        Parameters = <
+          item
+            Name = 'Filename'
+            DataType = 'String'
+          end>
+        ResultType = 'Integer'
+        OnEval = FileUtilsFunctionsGetFileSizeEval
+      end
+      item
+        Name = 'GetFileSizeStr'
+        Parameters = <
+          item
+            Name = 'Filename'
+            DataType = 'String'
+          end>
+        ResultType = 'String'
+        OnEval = FileUtilsFunctionsGetFileSizeStrEval
+      end>
+    Records = <
+      item
+        Name = 'TID3v1Info'
+        Members = <>
+        Properties = <>
+      end
+      item
+        Name = 'TID3v2Info'
+        Members = <>
+        Properties = <>
+      end
+      item
+        Name = 'TIMDBInfo'
+        Members = <>
+        Properties = <>
       end>
     UnitName = 'FileUtils'
     StaticSymbols = False
