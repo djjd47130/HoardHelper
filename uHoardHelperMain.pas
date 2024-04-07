@@ -294,7 +294,7 @@ begin
     txtScript.Lines.LoadFromFile(FFilename);
     txtOutput.Lines.Clear;
     FModified:= False;
-    txtScript.UndoRedo.Clear;
+    txtScript.UndoList.Clear;
     txtScript.SetFocus;
   end;
   UpdateActions;
@@ -323,7 +323,7 @@ begin
     txtOutput.Lines.Clear;
     FFilename:= '';
     FModified:= False;
-    txtScript.UndoRedo.Clear;
+    txtScript.UndoList.Clear;
     txtScript.SetFocus;
   end;
   UpdateActions;
@@ -448,7 +448,7 @@ end;
 
 procedure TfrmHoardHelperMain.actDeleteExecute(Sender: TObject);
 begin
-  txtScript.ExecCmdDeleteLine;
+  txtScript.SelText:= '';
   UpdateActions;
 end;
 

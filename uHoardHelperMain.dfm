@@ -258,8 +258,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 4
       Text = 'Execute Script'
-      ExplicitLeft = 312
-      ExplicitTop = 3
     end
     object JDFontButton6: TJDFontButton
       Left = 211
@@ -302,7 +300,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 5
       Text = 'Undo'
-      ExplicitLeft = 205
     end
     object JDFontButton7: TJDFontButton
       Left = 373
@@ -346,8 +343,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 6
       Text = 'Stop Exec'
-      ExplicitLeft = 269
-      ExplicitTop = 3
     end
     object JDFontButton8: TJDFontButton
       Left = 260
@@ -390,8 +385,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 7
       Text = 'Redo'
-      ExplicitLeft = 266
-      ExplicitTop = -6
     end
   end
   object Stat: TStatusBar
@@ -437,7 +430,7 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Left = 0
       Top = 0
       Width = 863
-      Height = 225
+      Height = 265
       Align = alTop
       Color = clBlack
       ActiveLineColor = 3158064
@@ -446,10 +439,16 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Font.Height = -16
       Font.Name = 'Consolas'
       Font.Style = []
-      Font.Quality = fqClearTypeNatural
       TabOrder = 0
       OnKeyUp = txtScriptKeyUp
       OnMouseUp = txtScriptMouseUp
+      CodeFolding.GutterShapeSize = 11
+      CodeFolding.CollapsedLineColor = clGrayText
+      CodeFolding.FolderBarLinesColor = clGrayText
+      CodeFolding.IndentGuidesColor = clGray
+      CodeFolding.IndentGuides = True
+      CodeFolding.ShowCollapsedLine = False
+      CodeFolding.ShowHintMark = True
       UseCodeFolding = False
       BorderStyle = bsNone
       Gutter.BorderStyle = gbsNone
@@ -465,24 +464,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Gutter.Gradient = True
       Gutter.GradientStartColor = clBlack
       Gutter.GradientEndColor = 4539717
-      Gutter.Bands = <
-        item
-          Kind = gbkMarks
-          Width = 13
-        end
-        item
-          Kind = gbkLineNumbers
-        end
-        item
-          Kind = gbkFold
-        end
-        item
-          Kind = gbkTrackChanges
-        end
-        item
-          Kind = gbkMargin
-          Width = 3
-        end>
       Highlighter = SynDWSSyn1
       Lines.Strings = (
         'procedure ListFilesInFolder(Dir: String);'
@@ -498,15 +479,15 @@ object frmHoardHelperMain: TfrmHoardHelperMain
         'end;'
         ''
         'ListFilesInFolder('#39'M:\Media\Videos\Movies'#39');')
-      Options = [eoAutoIndent, eoDisableScrollArrows, eoDragDropEditing, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoHideShowScrollbars, eoKeepCaretX, eoShowScrollHint, eoSmartTabDelete, eoTabIndent, eoTabsToSpaces, eoShowLigatures, eoWrapWithRightEdge]
+      Options = [eoAutoIndent, eoDragDropEditing, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs, eoTabsToSpaces]
       RightEdge = 70
       RightEdgeColor = 4539717
       ScrollHintColor = 6828847
       SelectedColor.Background = 9201502
-      SelectedColor.Alpha = 0.400000005960464500
       TabWidth = 2
       WantTabs = True
       OnChange = txtScriptChange
+      FontSmoothing = fsmClearType
     end
     object txtOutput: TMemo
       Left = 0
@@ -531,6 +512,9 @@ object frmHoardHelperMain: TfrmHoardHelperMain
   end
   object SynDWSSyn1: TSynDWSSyn
     DefaultFilter = 'DWScript Files (*.dws;*.pas;*.inc)|*.dws;*.pas;*.inc'
+    Options.AutoDetectEnabled = False
+    Options.AutoDetectLineLimit = 0
+    Options.Visible = False
     CommentAttri.Foreground = clLime
     IdentifierAttri.Foreground = clSilver
     NumberAttri.Foreground = clMoneyGreen
