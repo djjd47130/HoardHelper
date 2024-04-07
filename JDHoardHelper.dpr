@@ -3,17 +3,19 @@ program JDHoardHelper;
 uses
   Vcl.Forms,
   uHoardHelperMain in 'uHoardHelperMain.pas' {frmHoardHelperMain},
-  uHoardHelperCtrl in 'uHoardHelperCtrl.pas' {dmHoardHelperCtrl: TDataModule},
+  uHHContext in 'uHHContext.pas' {HHContext: TDataModule},
   Vcl.Themes,
-  Vcl.Styles;
+  Vcl.Styles,
+  JD.HoardHelper in 'JD.HoardHelper.pas',
+  uHoardHelperLibs in 'uHoardHelperLibs.pas' {frmLibs};
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
+  Application.Title := 'JD Hoard Helper';
   TStyleManager.TrySetStyle('Charcoal Dark Slate');
-  Application.CreateForm(TdmHoardHelperCtrl, dmHoardHelperCtrl);
   Application.CreateForm(TfrmHoardHelperMain, frmHoardHelperMain);
   Application.Run;
 end.

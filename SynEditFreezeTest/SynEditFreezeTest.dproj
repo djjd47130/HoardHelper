@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{1F15885D-6C06-4B73-ACB9-F7681B04E6FD}</ProjectGuid>
+        <ProjectGuid>{BD974417-F28D-4645-A77D-5576ABBCBE50}</ProjectGuid>
         <ProjectVersion>19.1</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
@@ -8,7 +8,7 @@
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Application</AppType>
-        <MainSource>JDHoardHelper.dpr</MainSource>
+        <MainSource>SynEditFreezeTest.dpr</MainSource>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
         <Base>true</Base>
@@ -57,8 +57,7 @@
         <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
-        <SanitizedProjectName>JDHoardHelper</SanitizedProjectName>
-        <Custom_Styles>&quot;Charcoal Dark Slate|VCLSTYLE|$(BDSCOMMONDIR)\Styles\CharcoalDarkSlate.vsf&quot;</Custom_Styles>
+        <SanitizedProjectName>SynEditFreezeTest</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>DBXSqliteDriver;RESTComponents;DBXInterBaseDriver;vclactnband;vclFireDAC;OpenWireBindingPkg;bindcompvclsmp;tethering;svnui;Mitov_VCL_BasicLab;JDLibComponents;FireDACADSDriver;OpenWireEditorPkg;OpenWireBindingFmxPkg;JDGamesComps;vcltouch;AudioLabEssentialPkg;vcldb;bindcompfmx;svn;inetdb;RaizeComponentsVcl;OpenWireEditorBasicPkg;FmxTeeUI;RaizeComponentsVclDb;EdoniaCompPackage;fmx;FireDACIBDriver;fmxdae;MSICS_RAD21_Rtl;vcledge;Mitov_VCL_AudioLab;dwsLibRuntime;dbexpress;IndyCore;TextLabBasicPkg;vclx;dsnap;Mitov_VCL_AudioLab_Essential;FireDACCommon;TimingLabBasicPkg;RESTBackendComponents;JDVisualsComponentsDX10_1;QR506RunDXE10;VCLRESTComponents;soapserver;JclDeveloperTools;vclie;bindengine;DBXMySQLDriver;CloudService;FireDACMySQLDriver;FireDACCommonODBC;FireDACCommonDriver;Mitov_BasicLab;SignalLabScopePkg;LockBoxDR;inet;IndyIPCommon;bindcompdbx;OpenWirePkg;vcl;IndyIPServer;MediaLabBasicPkg;IndySystem;OpenWireStudioAudioHostPkg;dsnapcon;FireDACMSAccDriver;fmxFireDAC;JDCardComponents;vclimg;TeeDB;FireDAC;Jcl;Mitov_Runtime;OpenWireStudioHostPkg;MiTeC_Common_RAD21;FireDACSqliteDriver;FireDACPgDriver;FMXTee;soaprtl;DbxCommonDriver;OpenWireBindingDatabasePkg;Tee;Mitov_VCL_AudioLab_Basic;xmlrtl;soapmidas;fmxobj;vclwinx;rtl;DbxClientDriver;CustomIPTransport;vcldsnap;SignalLabBasicPkg;AudioLabBasicPkg;MediaLabPkg;WMI_PKG;SignalLabAdditionalPkg;bindcomp;appanalytics;Mitov_VCL_Runtime;SynEditDR;AudioLabPkg;IndyIPClient;bindcompvcl;TeeUI;dbxcds;VclSmp;OpenWireBindingVclPkg;adortl;AudioLabGenericBasicPkg;SignalLabGenericBasicPkg;JclVcl;dsnapxml;dbrtl;IndyProtocols;inetdbxpress;JclContainers;fmxase;$(DCC_UsePackage)</DCC_UsePackage>
@@ -101,18 +100,8 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="uHoardHelperMain.pas">
-            <Form>frmHoardHelperMain</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="uHHContext.pas">
-            <Form>HHContext</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="JD.HoardHelper.pas"/>
-        <DCCReference Include="uHoardHelperLibs.pas">
-            <Form>frmLibs</Form>
+        <DCCReference Include="uMain.pas">
+            <Form>Form2</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">
@@ -133,7 +122,7 @@
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">JDHoardHelper.dpr</Source>
+                    <Source Name="MainSource">SynEditFreezeTest.dpr</Source>
                 </Source>
                 <Excluded_Packages>
                     <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\21.0\Bpl\JDWordGridComps.bpl">(untitled)</Excluded_Packages>
@@ -145,9 +134,9 @@
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="Win32\Debug\JDHoardHelper.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="Win32\Debug\SynEditFreezeTest.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>JDHoardHelper.exe</RemoteName>
+                        <RemoteName>SynEditFreezeTest.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
