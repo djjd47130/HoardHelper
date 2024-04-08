@@ -3,8 +3,8 @@ object frmLibs: TfrmLibs
   Top = 0
   BorderIcons = [biSystemMenu, biMaximize]
   Caption = 'JD Hoard Helper Libraries'
-  ClientHeight = 450
-  ClientWidth = 602
+  ClientHeight = 524
+  ClientWidth = 758
   Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -20,15 +20,15 @@ object frmLibs: TfrmLibs
   TextHeight = 13
   object Panel1: TPanel
     Left = 0
-    Top = 405
-    Width = 602
+    Top = 479
+    Width = 758
     Height = 45
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 406
-    ExplicitWidth = 608
+    ExplicitTop = 405
+    ExplicitWidth = 602
     object btnDone: TJDFontButton
-      Left = 517
+      Left = 673
       Top = 1
       Width = 84
       Height = 43
@@ -68,24 +68,24 @@ object frmLibs: TfrmLibs
       SubTextFont.Style = []
       TabOrder = 0
       Text = 'Done'
-      ExplicitLeft = 535
+      ExplicitLeft = 517
     end
   end
   object pMain: TPanel
     Left = 0
     Top = 0
-    Width = 602
-    Height = 361
+    Width = 758
+    Height = 435
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitLeft = -1
-    ExplicitWidth = 614
+    ExplicitWidth = 602
+    ExplicitHeight = 361
     object Label1: TLabel
       Left = 0
       Top = 0
-      Width = 602
+      Width = 758
       Height = 33
       Align = alTop
       Alignment = taCenter
@@ -104,18 +104,17 @@ object frmLibs: TfrmLibs
     object Toolbar: TPanel
       Left = 0
       Top = 33
-      Width = 602
+      Width = 758
       Height = 41
       Align = alTop
       BevelOuter = bvNone
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
-      ExplicitTop = 30
-      ExplicitWidth = 633
+      ExplicitWidth = 602
       object lblEditing: TLabel
         AlignWithMargins = True
-        Left = 425
+        Left = 581
         Top = 3
         Width = 174
         Height = 35
@@ -166,7 +165,6 @@ object frmLibs: TfrmLibs
         Overlay.Position = foNone
         Overlay.Margin = 3
         ImagePosition = fpImgOnly
-        ShowHint = True
         SubTextFont.Charset = DEFAULT_CHARSET
         SubTextFont.Color = clGray
         SubTextFont.Height = -11
@@ -174,8 +172,6 @@ object frmLibs: TfrmLibs
         SubTextFont.Style = []
         TabOrder = 0
         Text = 'New Library'
-        ExplicitLeft = -6
-        ExplicitTop = -3
       end
       object btnEditLib: TJDFontButton
         Left = 49
@@ -211,7 +207,6 @@ object frmLibs: TfrmLibs
         Overlay.Position = foNone
         Overlay.Margin = 3
         ImagePosition = fpImgOnly
-        ShowHint = True
         SubTextFont.Charset = DEFAULT_CHARSET
         SubTextFont.Color = clGray
         SubTextFont.Height = -11
@@ -254,7 +249,6 @@ object frmLibs: TfrmLibs
         Overlay.Position = foNone
         Overlay.Margin = 3
         ImagePosition = fpImgOnly
-        ShowHint = True
         SubTextFont.Charset = DEFAULT_CHARSET
         SubTextFont.Color = clGray
         SubTextFont.Height = -11
@@ -262,8 +256,6 @@ object frmLibs: TfrmLibs
         SubTextFont.Style = []
         TabOrder = 3
         Text = 'Save Library'
-        ExplicitLeft = 153
-        ExplicitTop = -3
       end
       object btnCancelLib: TJDFontButton
         Left = 196
@@ -299,7 +291,6 @@ object frmLibs: TfrmLibs
         Overlay.Position = foNone
         Overlay.Margin = 3
         ImagePosition = fpImgOnly
-        ShowHint = True
         SubTextFont.Charset = DEFAULT_CHARSET
         SubTextFont.Color = clGray
         SubTextFont.Height = -11
@@ -307,7 +298,6 @@ object frmLibs: TfrmLibs
         SubTextFont.Style = []
         TabOrder = 4
         Text = 'Cancel Changes'
-        ExplicitTop = -3
       end
       object btnDeleteLib: TJDFontButton
         Left = 98
@@ -343,7 +333,6 @@ object frmLibs: TfrmLibs
         Overlay.Position = foNone
         Overlay.Margin = 3
         ImagePosition = fpImgOnly
-        ShowHint = True
         SubTextFont.Charset = DEFAULT_CHARSET
         SubTextFont.Color = clGray
         SubTextFont.Height = -11
@@ -357,43 +346,49 @@ object frmLibs: TfrmLibs
       AlignWithMargins = True
       Left = 3
       Top = 77
-      Width = 596
-      Height = 148
+      Width = 752
+      Height = 222
       Align = alTop
       Anchors = [akLeft, akTop, akRight, akBottom]
       Columns = <
         item
           Caption = 'Name'
-          Width = 120
+          Width = 150
         end
         item
-          Caption = 'Library Type'
-          Width = 90
+          Caption = 'Type'
+          Width = 150
         end
         item
           Caption = 'Path'
-          Width = 350
+          Width = 400
         end>
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
       HideSelection = False
       HotTrackStyles = [htHandPoint, htUnderlineHot]
       ReadOnly = True
       RowSelect = True
+      ParentFont = False
       TabOrder = 1
       ViewStyle = vsReport
       OnSelectItem = lstLibrariesSelectItem
       ExplicitLeft = 5
-      ExplicitWidth = 637
     end
     object Panel2: TPanel
       Left = 0
-      Top = 272
-      Width = 602
+      Top = 346
+      Width = 758
       Height = 89
       Align = alBottom
       TabOrder = 2
-      ExplicitWidth = 643
+      ExplicitTop = 272
+      ExplicitWidth = 602
       DesignSize = (
-        602
+        758
         89)
       object Label2: TLabel
         Left = 18
@@ -403,7 +398,7 @@ object frmLibs: TfrmLibs
         Caption = 'Library Name:'
       end
       object Label3: TLabel
-        Left = 349
+        Left = 505
         Top = 16
         Width = 64
         Height = 13
@@ -421,25 +416,25 @@ object frmLibs: TfrmLibs
       object txtName: TEdit
         Left = 112
         Top = 13
-        Width = 202
+        Width = 358
         Height = 21
         Anchors = [akLeft, akTop, akRight]
         ReadOnly = True
         TabOrder = 0
-        ExplicitWidth = 233
+        ExplicitWidth = 202
       end
       object txtDir: TEdit
         Left = 112
         Top = 48
-        Width = 440
+        Width = 596
         Height = 21
         Anchors = [akLeft, akTop, akRight]
         ReadOnly = True
         TabOrder = 1
-        ExplicitWidth = 471
+        ExplicitWidth = 440
       end
       object cboType: TComboBox
-        Left = 441
+        Left = 597
         Top = 13
         Width = 147
         Height = 21
@@ -456,10 +451,10 @@ object frmLibs: TfrmLibs
           'Pictures'
           'Documents'
           'Applications')
-        ExplicitLeft = 472
+        ExplicitLeft = 441
       end
       object btnSelectDir: TJDFontButton
-        Left = 558
+        Left = 714
         Top = 48
         Width = 30
         Height = 21
@@ -500,7 +495,7 @@ object frmLibs: TfrmLibs
         TabOrder = 3
         Text = 'btnSelectDir'
         OnClick = btnSelectDirClick
-        ExplicitLeft = 599
+        ExplicitLeft = 558
       end
     end
   end

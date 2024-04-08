@@ -51,6 +51,7 @@ type
     procedure DoPrintLn(const S: String);
   public
     function Exec(const Expr: String): String;
+    function Compile(const Expr: String): String;
     procedure BackupFile(Context: THHContext; const Filename: String);
   published
     property OnPrintLn: THHPrintEvent read FOnPrintLn write FOnPrintLn;
@@ -104,6 +105,22 @@ procedure THHContext.DoPrintLn(const S: String);
 begin
   if Assigned(FOnPrintLn) then
     FOnPrintLn(Self, Self, S);
+end;
+
+function THHContext.Compile(const Expr: String): String;
+var
+  E: String;
+  Prog: IdwsProgram;
+begin
+  DoPrintLn('Compiling script...');
+  E:= Expr;
+  Prog:= DWS.Compile(E, '');
+  if Prog.Msgs.Count > 0 then begin
+    Result:= 'FAILED TO COMPILE:'+sLineBreak+sLineBreak+Prog.Msgs.AsInfo;
+  end else begin
+    Result:= 'Compiled successfully.';
+  end;
+  DoPrintLn(Result);
 end;
 
 function THHContext.Exec(const Expr: String): String;

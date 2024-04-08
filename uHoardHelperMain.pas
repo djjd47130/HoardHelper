@@ -11,7 +11,23 @@ uses
   JD.Common, JD.Ctrls, JD.Ctrls.FontButton,
   Vcl.StdCtrls, Vcl.ExtDlgs, Vcl.Menus,
   JD.HoardHelper,
-  uHHContext;
+  uHHContext,
+
+  JD.CmdLine,
+
+  Vcl.Themes,
+
+  Vcl.Styles.Fixes,
+  Vcl.Styles.Utils,
+
+  Vcl.Styles.Hooks,
+  Vcl.Styles.Utils.Menus,
+  Vcl.Styles.Utils.Forms,
+  Vcl.Styles.Utils.StdCtrls,
+  Vcl.Styles.Utils.ComCtrls,
+  Vcl.Styles.Utils.ScreenTips,
+  Vcl.Styles.Utils.SysControls,
+  Vcl.Styles.Utils.SysStyleHook;
 
 type
   TfrmHoardHelperMain = class(TForm)
@@ -23,7 +39,6 @@ type
     Acts: TActionList;
     JDFontButton1: TJDFontButton;
     JDFontButton2: TJDFontButton;
-    txtOutput: TMemo;
     Splitter1: TSplitter;
     JDFontButton3: TJDFontButton;
     JDFontButton4: TJDFontButton;
@@ -33,8 +48,6 @@ type
     actSave: TAction;
     actSaveAs: TAction;
     actExec: TAction;
-    dlgOpen: TOpenTextFileDialog;
-    dlgSave: TSaveTextFileDialog;
     Bevel1: TBevel;
     Bevel2: TBevel;
     JDFontButton6: TJDFontButton;
@@ -95,6 +108,13 @@ type
     SelectAll1: TMenuItem;
     actOpenCommon: TAction;
     OpenCommonScript1: TMenuItem;
+    actCheckSyntax: TAction;
+    JDFontButton9: TJDFontButton;
+    txtOutput: TSynEdit;
+    dlgOpen: TOpenDialog;
+    dlgSave: TSaveDialog;
+    Bevel3: TBevel;
+    JDFontButton10: TJDFontButton;
     procedure FormCreate(Sender: TObject);
     procedure actExecExecute(Sender: TObject);
     procedure actNewExecute(Sender: TObject);
@@ -118,6 +138,7 @@ type
     procedure actDeleteExecute(Sender: TObject);
     procedure actSelectAllExecute(Sender: TObject);
     procedure actOpenCommonExecute(Sender: TObject);
+    procedure actCheckSyntaxExecute(Sender: TObject);
   private
     FFilename: String;
     FModified: Boolean;
@@ -127,6 +148,7 @@ type
     procedure Started(Sender: TObject);
     procedure Stopped(Sender: TObject);
     function CommonIsLoaded: Boolean;
+    function GetScript: String;
   public
     function New: Boolean;
     function Load(const Filename: String): Boolean;
@@ -152,6 +174,9 @@ begin
   {$IFDEF DEBUG}
   ReportMemoryLeaksOnShutdown:= True;
   {$ENDIF}
+
+  TStyleManager.Engine.RegisterStyleHook(TCustomSynEdit, TScrollingStyleHook);
+
   pMain.Align:= alClient;
   txtScript.Align:= alClient;
   FFilename:= '';
@@ -160,8 +185,11 @@ begin
   HH.OnPrintLn:= PrintLn;
   HH.OnStarted:= Started;
   HH.OnStopped:= Stopped;
-
   HH.LoadSettings;
+
+  if CmdLine.OpenFilename <> '' then begin
+    Self.Load(CmdLine.OpenFilename);
+  end;
 
   UpdateActions;
 end;
@@ -215,6 +243,128 @@ end;
 function TfrmHoardHelperMain.CommonIsLoaded: Boolean;
 begin
   Result:= SameText(HH.CommonFilename, Self.FFilename);
+end;
+
+function TfrmHoardHelperMain.Load(const Filename: String): Boolean;
+begin
+  if FModified then begin
+    case MessageDlg('Save changes to current script?', mtConfirmation, [mbYes,mbNo,mbCancel], 0) of
+      mrYes: begin
+        Result:= Save;
+      end;
+      mrNo: begin
+        Result:= True;
+      end;
+      else begin
+        Result:= False;
+      end;
+    end;
+  end else begin
+    Result:= True;
+  end;
+  if Result then begin
+    //Open script from file...
+    FFilename:= Filename;
+    txtScript.Lines.LoadFromFile(FFilename);
+    txtOutput.Lines.Clear;
+    FModified:= False;
+    txtScript.UndoList.Clear;
+    //txtScript.SetFocus;
+  end;
+  UpdateActions;
+end;
+
+function TfrmHoardHelperMain.New: Boolean;
+begin
+  if FModified then begin
+    case MessageDlg('Save changes to current script?', mtConfirmation, [mbYes,mbNo,mbCancel], 0) of
+      mrYes: begin
+        Result:= Save;
+      end;
+      mrNo: begin
+        Result:= True;
+      end;
+      else begin
+        Result:= False;
+      end;
+    end;
+  end else begin
+    Result:= True;
+  end;
+  if Result then begin
+    //Prepare new blank script...
+    txtScript.Lines.Clear;
+    txtOutput.Lines.Clear;
+    FFilename:= '';
+    FModified:= False;
+    txtScript.UndoList.Clear;
+    //txtScript.SetFocus;
+  end;
+  UpdateActions;
+end;
+
+function TfrmHoardHelperMain.Save: Boolean;
+begin
+  if FFilename = '' then begin
+    Result:= SaveAs;
+  end else begin
+    Result:= SaveToFile(FFilename);
+  end;
+end;
+
+function TfrmHoardHelperMain.SaveAs: Boolean;
+begin
+  Result:= False;
+  dlgSave.FileName:= FFilename;
+  if dlgSave.Execute then begin
+    Result:= SaveToFile(dlgSave.FileName);
+  end;
+end;
+
+function TfrmHoardHelperMain.SaveToFile(const Filename: String): Boolean;
+begin
+  txtScript.Lines.SaveToFile(Filename);
+  FFilename:= Filename;
+  FModified:= False;
+  Result:= True;
+  UpdateActions;
+end;
+
+procedure TfrmHoardHelperMain.PrintLn(Sender: TObject; Context: THHContext;
+  const Text: String);
+begin
+  txtOutput.Lines.Append(Text);
+
+end;
+
+procedure TfrmHoardHelperMain.Started(Sender: TObject);
+begin
+  FExecuting:= True;
+  UpdateActions;
+end;
+
+procedure TfrmHoardHelperMain.Stopped(Sender: TObject);
+begin
+  FExecuting:= False;
+  UpdateActions;
+end;
+
+procedure TfrmHoardHelperMain.txtScriptChange(Sender: TObject);
+begin
+  FModified:= True;
+  UpdateActions;
+end;
+
+procedure TfrmHoardHelperMain.txtScriptKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  UpdateActions;
+end;
+
+procedure TfrmHoardHelperMain.txtScriptMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  UpdateActions;
 end;
 
 procedure TfrmHoardHelperMain.actOpenCommonExecute(Sender: TObject);
@@ -271,124 +421,44 @@ begin
   UpdateActions;
 end;
 
-function TfrmHoardHelperMain.Load(const Filename: String): Boolean;
+function TfrmHoardHelperMain.GetScript: String;
 begin
-  if FModified then begin
-    case MessageDlg('Save changes to current script?', mtConfirmation, [mbYes,mbNo,mbCancel], 0) of
-      mrYes: begin
-        Result:= Save;
-      end;
-      mrNo: begin
-        Result:= True;
-      end;
-      else begin
-        Result:= False;
-      end;
-    end;
+  if txtScript.SelAvail then begin
+    Result:= txtScript.SelText;
   end else begin
-    Result:= True;
-  end;
-  if Result then begin
-    //Open script from file...
-    FFilename:= Filename;
-    txtScript.Lines.LoadFromFile(FFilename);
-    txtOutput.Lines.Clear;
-    FModified:= False;
-    txtScript.UndoList.Clear;
-    txtScript.SetFocus;
-  end;
-  UpdateActions;
-end;
-
-function TfrmHoardHelperMain.New: Boolean;
-begin
-  if FModified then begin
-    case MessageDlg('Save changes to current script?', mtConfirmation, [mbYes,mbNo,mbCancel], 0) of
-      mrYes: begin
-        Result:= Save;
-      end;
-      mrNo: begin
-        Result:= True;
-      end;
-      else begin
-        Result:= False;
-      end;
-    end;
-  end else begin
-    Result:= True;
-  end;
-  if Result then begin
-    //Prepare new blank script...
-    txtScript.Lines.Clear;
-    txtOutput.Lines.Clear;
-    FFilename:= '';
-    FModified:= False;
-    txtScript.UndoList.Clear;
-    txtScript.SetFocus;
-  end;
-  UpdateActions;
-end;
-
-procedure TfrmHoardHelperMain.PrintLn(Sender: TObject; Context: THHContext;
-  const Text: String);
-begin
-  txtOutput.Lines.Append(Text);
-end;
-
-function TfrmHoardHelperMain.Save: Boolean;
-begin
-  if FFilename = '' then begin
-    Result:= SaveAs;
-  end else begin
-    Result:= SaveToFile(FFilename);
+    Result:= txtScript.Lines.Text;
   end;
 end;
 
-function TfrmHoardHelperMain.SaveAs: Boolean;
+procedure TfrmHoardHelperMain.actCheckSyntaxExecute(Sender: TObject);
 begin
-  Result:= False;
-  dlgSave.FileName:= FFilename;
-  if dlgSave.Execute then begin
-    Result:= SaveToFile(dlgSave.FileName);
-  end;
-end;
-
-function TfrmHoardHelperMain.SaveToFile(const Filename: String): Boolean;
-begin
-  txtScript.Lines.SaveToFile(Filename);
-  FFilename:= Filename;
-  FModified:= False;
-  Result:= True;
+  txtOutput.Lines.Clear;
+  HH.Compile(GetScript, not CommonIsLoaded);
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.Started(Sender: TObject);
+procedure TfrmHoardHelperMain.actCopyExecute(Sender: TObject);
 begin
-  FExecuting:= True;
+  txtScript.CopyToClipboard;
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.Stopped(Sender: TObject);
+procedure TfrmHoardHelperMain.actCutExecute(Sender: TObject);
 begin
-  FExecuting:= False;
+  txtScript.CutToClipboard;
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.txtScriptChange(Sender: TObject);
+procedure TfrmHoardHelperMain.actDeleteExecute(Sender: TObject);
 begin
-  FModified:= True;
+  txtScript.SelText:= '';
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.txtScriptKeyUp(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TfrmHoardHelperMain.actExecExecute(Sender: TObject);
 begin
-  UpdateActions;
-end;
-
-procedure TfrmHoardHelperMain.txtScriptMouseUp(Sender: TObject;
-  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-begin
+  txtOutput.Lines.Clear;
+  HH.Execute(GetScript);
   UpdateActions;
 end;
 
@@ -405,6 +475,7 @@ begin
   actOpen.Enabled:= (not FExecuting);
   actSave.Enabled:= FModified and (not FExecuting);
   actSaveAs.Enabled:= (not FExecuting);
+  actCheckSyntax.Enabled:= (not FExecuting);
   actExec.Enabled:= (not FExecuting) and (not CommonIsLoaded);
   actStop.Enabled:= FExecuting;
 
@@ -434,29 +505,7 @@ begin
   end;
 end;
 
-procedure TfrmHoardHelperMain.actCopyExecute(Sender: TObject);
-begin
-  txtScript.CopyToClipboard;
-  UpdateActions;
-end;
-
-procedure TfrmHoardHelperMain.actCutExecute(Sender: TObject);
-begin
-  txtScript.CutToClipboard;
-  UpdateActions;
-end;
-
-procedure TfrmHoardHelperMain.actDeleteExecute(Sender: TObject);
-begin
-  txtScript.SelText:= '';
-  UpdateActions;
-end;
-
-procedure TfrmHoardHelperMain.actExecExecute(Sender: TObject);
-begin
-  txtOutput.Lines.Clear;
-  HH.Execute(txtScript.Lines.Text);
-  UpdateActions;
-end;
+initialization
+  UseLatestCommonDialogs:= True;
 
 end.

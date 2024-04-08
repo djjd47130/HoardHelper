@@ -7,15 +7,16 @@ uses
   Vcl.Themes,
   Vcl.Styles,
   JD.HoardHelper in 'JD.HoardHelper.pas',
-  uHoardHelperLibs in 'uHoardHelperLibs.pas' {frmLibs};
+  uHoardHelperLibs in 'uHoardHelperLibs.pas' {frmLibs},
+  JD.CmdLine in 'JD.CmdLine.pas';
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
+  TStyleManager.TrySetStyle('Glossy');
   Application.Title := 'JD Hoard Helper';
-  TStyleManager.TrySetStyle('Charcoal Dark Slate');
   Application.CreateForm(TfrmHoardHelperMain, frmHoardHelperMain);
   Application.Run;
 end.

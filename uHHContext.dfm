@@ -3,7 +3,9 @@ object HHContext: THHContext
   Height = 259
   Width = 353
   object DWS: TDelphiWebScript
-    Left = 56
+    Config.Conditionals.Strings = (
+      'DEMO')
+    Left = 40
     Top = 32
   end
   object FileUtils: TdwsUnit
@@ -400,7 +402,7 @@ object HHContext: THHContext
       end>
     UnitName = 'IMDBUtils'
     StaticSymbols = False
-    Left = 224
-    Top = 80
+    Left = 216
+    Top = 32
   end
 end

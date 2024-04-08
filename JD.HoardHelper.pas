@@ -82,6 +82,8 @@ type
     procedure SetRightLine(const Value: Integer);
     procedure SetBackupDirectory(const Value: String);
     procedure SetBackupsEnabled(const Value: Boolean);
+    function LibPathToLocalPath(const Value: String): String;
+    function LocalPathToLibPath(const Value: String; const Lib: THHLibrary): String;
     procedure EnsureCommonFile;
   protected
 
@@ -99,7 +101,8 @@ type
     procedure DeleteLibrary(const Index: Integer);
     function TranslateLibPath(const Path: String): String;
 
-    procedure Execute(const Script: String);
+    procedure Execute(const Script: String; const IncludeCommon: Boolean = True);
+    procedure Compile(const Script: String; const IncludeCommon: Boolean = True);
 
     property Libraries[const Index: Integer]: THHLibrary read GetLibrary;
     property Executing: Boolean read FExecuting;
@@ -260,7 +263,7 @@ begin
   end;
 end;
 
-procedure THoardHelper.Execute(const Script: String);
+procedure THoardHelper.Execute(const Script: String; const IncludeCommon: Boolean = True);
 var
   T: THHScriptThread;
   L: TStringList;
@@ -273,8 +276,10 @@ begin
     L:= TStringList.Create;
     try
       //Load the common script first...
-      EnsureCommonFile;
-      L.LoadFromFile(CommonFilename);
+      if IncludeCommon then begin
+        EnsureCommonFile;
+        L.LoadFromFile(CommonFilename);
+      end;
       
       //Inject new script...
       L.Add(Script);
@@ -353,6 +358,27 @@ begin
   O:= Config.O['backups'];
   FBackupsEnabled:= O.B['enabled'];
   FBackupDirectory:= O.S['directory'];
+
+end;
+
+function THoardHelper.LibPathToLocalPath(const Value: String): String;
+begin
+  //TODO: Translate relative library path to absolute local path...
+  //Split string by backslash (\) characters into array of String.
+  //Require that first string in array be a unique library name.
+  //The rest of the string is the relative path from that library.
+  //Example: "D:\Media\Movies\SomeMovie.avi" --> ""Movies\SomeMovie.avi"
+
+end;
+
+function THoardHelper.LocalPathToLibPath(const Value: String;
+  const Lib: THHLibrary): String;
+begin
+  //TODO: Translate absolute local path to relative library path...
+  //Split string by backslash (\) characters into array of String.
+  //Convert absolute path to relative path within library.
+  //The rest of the string is the relative path from that library.
+  //Example: "Movies\SomeMovie.avi" --> "D:\Media\Movies\SomeMovie.avi"
 
 end;
 
@@ -439,6 +465,30 @@ begin
   Result:= TPath.Combine(Result, 'JD Software');
   Result:= TPath.Combine(Result, 'JD Hoard Helper');
   Result:= TPath.Combine(Result, 'Common.hhs');
+end;
+
+procedure THoardHelper.Compile(const Script: String; const IncludeCommon: Boolean = True);
+var
+  L: TStringList;
+  C: THHContext;
+begin
+  C:= THHContext.Create(nil);
+  try
+    C.OnPrintLn:= PrintLn;
+    L:= TStringList.Create;
+    try
+      if IncludeCommon then begin
+        EnsureCommonFile;
+        L.LoadFromFile(CommonFilename);
+      end;
+      L.Add(Script);
+      C.Compile(L.Text);
+    finally
+      L.Free;
+    end;
+  finally
+    C.Free;
+  end;
 end;
 
 procedure THoardHelper.SetWrapType(const Value: THHWrapType);

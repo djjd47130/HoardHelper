@@ -67,6 +67,24 @@ implementation
 
 {$R *.dfm}
 
+procedure TfrmLibs.FormCreate(Sender: TObject);
+begin
+  pMain.Align:= alClient;
+  lstLibraries.Align:= alClient;
+
+  UpdateActions;
+end;
+
+procedure TfrmLibs.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  if FEditing then begin
+    CanClose:= False;
+    MessageDlg('Please save or cancel your changes first.', mtError, [mbOK], 0);
+  end else begin
+    CanClose:= True;
+  end;
+end;
+
 procedure TfrmLibs.actCancelExecute(Sender: TObject);
 var
   I: Integer;
@@ -179,6 +197,8 @@ begin
   if cboType.ItemIndex = -1 then
     raise Exception.Create('Please select a library type');
 
+  //TODO: Illegal chars in name...
+
 
   if FIsNew then begin
     L:= THHLibrary.Create;
@@ -191,24 +211,6 @@ begin
   FEditing:= False;
   FIsNew:= False;
   Load;
-  UpdateActions;
-end;
-
-procedure TfrmLibs.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-begin
-  if FEditing then begin
-    CanClose:= False;
-    MessageDlg('Please save or cancel your changes first.', mtError, [mbOK], 0);
-  end else begin
-    CanClose:= True;
-  end;
-end;
-
-procedure TfrmLibs.FormCreate(Sender: TObject);
-begin
-  pMain.Align:= alClient;
-  lstLibraries.Align:= alClient;
-
   UpdateActions;
 end;
 

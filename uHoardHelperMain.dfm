@@ -3,7 +3,7 @@ object frmHoardHelperMain: TfrmHoardHelperMain
   Top = 0
   Caption = 'JD Hoard Helper'
   ClientHeight = 570
-  ClientWidth = 930
+  ClientWidth = 965
   Color = clBlack
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -21,11 +21,12 @@ object frmHoardHelperMain: TfrmHoardHelperMain
   object Toolbar: TPanel
     Left = 0
     Top = 0
-    Width = 930
+    Width = 965
     Height = 41
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = -6
     object Bevel1: TBevel
       AlignWithMargins = True
       Left = 199
@@ -46,6 +47,17 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Align = alLeft
       Shape = bsLeftLine
       ExplicitLeft = 266
+      ExplicitTop = 0
+    end
+    object Bevel3: TBevel
+      AlignWithMargins = True
+      Left = 474
+      Top = 3
+      Width = 9
+      Height = 35
+      Align = alLeft
+      Shape = bsLeftLine
+      ExplicitLeft = 477
       ExplicitTop = 0
     end
     object JDFontButton1: TJDFontButton
@@ -218,7 +230,7 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Text = 'Save Script As...'
     end
     object JDFontButton5: TJDFontButton
-      Left = 324
+      Left = 373
       Top = 0
       Width = 49
       Height = 41
@@ -258,6 +270,8 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 4
       Text = 'Execute Script'
+      ExplicitLeft = 379
+      ExplicitTop = -6
     end
     object JDFontButton6: TJDFontButton
       Left = 211
@@ -302,7 +316,7 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Text = 'Undo'
     end
     object JDFontButton7: TJDFontButton
-      Left = 373
+      Left = 422
       Top = 0
       Width = 49
       Height = 41
@@ -343,6 +357,8 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 6
       Text = 'Stop Exec'
+      ExplicitLeft = 438
+      ExplicitTop = 3
     end
     object JDFontButton8: TJDFontButton
       Left = 260
@@ -386,11 +402,99 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       TabOrder = 7
       Text = 'Redo'
     end
+    object JDFontButton9: TJDFontButton
+      Left = 324
+      Top = 0
+      Width = 49
+      Height = 41
+      Cursor = crHandPoint
+      Action = actCheckSyntax
+      Align = alLeft
+      DrawStyle = fdTransparent
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Image.AutoSize = False
+      Image.Text = #61528
+      Image.Font.Charset = DEFAULT_CHARSET
+      Image.Font.Color = clWindowText
+      Image.Font.Height = -21
+      Image.Font.Name = 'FontAwesome'
+      Image.Font.Style = []
+      Image.Font.Quality = fqAntialiased
+      Image.StandardColor = fcGreen
+      Overlay.Text = #57715
+      Overlay.Font.Charset = DEFAULT_CHARSET
+      Overlay.Font.Color = clWindowText
+      Overlay.Font.Height = -7
+      Overlay.Font.Name = 'FontAwesome'
+      Overlay.Font.Style = []
+      Overlay.Font.Quality = fqAntialiased
+      Overlay.Position = foNone
+      Overlay.Margin = 3
+      ImagePosition = fpImgOnly
+      ShowHint = True
+      SubTextFont.Charset = DEFAULT_CHARSET
+      SubTextFont.Color = clGray
+      SubTextFont.Height = -11
+      SubTextFont.Name = 'Tahoma'
+      SubTextFont.Style = []
+      TabOrder = 8
+      Text = 'Check Syntax (Compile)'
+      ExplicitLeft = 327
+      ExplicitTop = -6
+    end
+    object JDFontButton10: TJDFontButton
+      Left = 486
+      Top = 0
+      Width = 49
+      Height = 41
+      Cursor = crHandPoint
+      Action = actLibraries
+      Align = alLeft
+      DrawStyle = fdTransparent
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Image.AutoSize = False
+      Image.Text = #61474
+      Image.Font.Charset = DEFAULT_CHARSET
+      Image.Font.Color = clWindowText
+      Image.Font.Height = -21
+      Image.Font.Name = 'FontAwesome'
+      Image.Font.Style = []
+      Image.Font.Quality = fqAntialiased
+      Image.StandardColor = fcBlue
+      Overlay.Text = #57715
+      Overlay.Font.Charset = DEFAULT_CHARSET
+      Overlay.Font.Color = clWindowText
+      Overlay.Font.Height = -7
+      Overlay.Font.Name = 'FontAwesome'
+      Overlay.Font.Style = []
+      Overlay.Font.Quality = fqAntialiased
+      Overlay.Position = foNone
+      Overlay.Margin = 3
+      ImagePosition = fpImgOnly
+      ShowHint = True
+      SubTextFont.Charset = DEFAULT_CHARSET
+      SubTextFont.Color = clGray
+      SubTextFont.Height = -11
+      SubTextFont.Name = 'Tahoma'
+      SubTextFont.Style = []
+      TabOrder = 9
+      Text = 'Manage Libraries'
+      ExplicitLeft = 489
+      ExplicitTop = -6
+    end
   end
   object Stat: TStatusBar
     Left = 0
     Top = 551
-    Width = 930
+    Width = 965
     Height = 19
     Panels = <
       item
@@ -405,11 +509,12 @@ object frmHoardHelperMain: TfrmHoardHelperMain
         Text = '[Filename]'
         Width = 50
       end>
+    ExplicitWidth = 930
   end
   object pMain: TPanel
     Left = 0
     Top = 41
-    Width = 863
+    Width = 929
     Height = 510
     Align = alLeft
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -417,19 +522,20 @@ object frmHoardHelperMain: TfrmHoardHelperMain
     TabOrder = 2
     object Splitter1: TSplitter
       Left = 0
-      Top = 305
-      Width = 863
+      Top = 297
+      Width = 929
       Height = 7
       Cursor = crVSplit
       Align = alBottom
       Beveled = True
       ResizeStyle = rsUpdate
       ExplicitTop = 309
+      ExplicitWidth = 863
     end
     object txtScript: TSynEdit
       Left = 0
       Top = 0
-      Width = 863
+      Width = 929
       Height = 265
       Align = alTop
       Color = clBlack
@@ -465,22 +571,8 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Gutter.GradientStartColor = clBlack
       Gutter.GradientEndColor = 4539717
       Highlighter = SynDWSSyn1
-      Lines.Strings = (
-        'procedure ListFilesInFolder(Dir: String);'
-        'var'
-        '  F: Array of String;'
-        '  X: Integer;'
-        'begin'
-        '  F:= GetFiles(Dir, '#39'*.avi;*.mp4;*.mkv'#39', True);'
-        '  PrintLn('#39'Files found: '#39'+IntToStr(Length(F)));'
-        '  for X := 0 to Length(F)-1 do begin'
-        '    PrintLn('#39'- '#39'+ExtractFileName(F[X]));'
-        '  end;'
-        'end;'
-        ''
-        'ListFilesInFolder('#39'M:\Media\Videos\Movies'#39');')
-      Options = [eoAutoIndent, eoDragDropEditing, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs, eoTabsToSpaces]
-      RightEdge = 70
+      Options = [eoAutoIndent, eoDragDropEditing, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoTabsToSpaces]
+      RightEdge = 100
       RightEdgeColor = 4539717
       ScrollHintColor = 6828847
       SelectedColor.Background = 9201502
@@ -488,26 +580,55 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       WantTabs = True
       OnChange = txtScriptChange
       FontSmoothing = fsmClearType
+      ExplicitTop = 3
     end
-    object txtOutput: TMemo
+    object txtOutput: TSynEdit
       Left = 0
-      Top = 312
-      Width = 863
-      Height = 198
+      Top = 304
+      Width = 929
+      Height = 206
       Align = alBottom
-      BorderStyle = bsNone
       Color = clBlack
+      ActiveLineColor = 3158064
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWhite
       Font.Height = -16
       Font.Name = 'Consolas'
       Font.Style = []
-      ParentFont = False
-      ReadOnly = True
-      ScrollBars = ssBoth
       TabOrder = 1
-      WordWrap = False
-      StyleElements = [seFont, seBorder]
+      CodeFolding.GutterShapeSize = 11
+      CodeFolding.CollapsedLineColor = clGrayText
+      CodeFolding.FolderBarLinesColor = clGrayText
+      CodeFolding.IndentGuidesColor = clGray
+      CodeFolding.IndentGuides = True
+      CodeFolding.ShowCollapsedLine = False
+      CodeFolding.ShowHintMark = True
+      UseCodeFolding = False
+      BorderStyle = bsNone
+      Gutter.BorderStyle = gbsNone
+      Gutter.Color = clBlack
+      Gutter.BorderColor = clSilver
+      Gutter.Font.Charset = DEFAULT_CHARSET
+      Gutter.Font.Color = clWhite
+      Gutter.Font.Height = -16
+      Gutter.Font.Name = 'Consolas'
+      Gutter.Font.Style = []
+      Gutter.Font.Quality = fqClearTypeNatural
+      Gutter.ShowLineNumbers = True
+      Gutter.Gradient = True
+      Gutter.GradientStartColor = clBlack
+      Gutter.GradientEndColor = 4539717
+      Options = [eoAutoIndent, eoDragDropEditing, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs, eoTabsToSpaces]
+      ReadOnly = True
+      RightEdge = 0
+      RightEdgeColor = 4539717
+      ScrollHintColor = 6828847
+      SelectedColor.Background = 9201502
+      TabWidth = 2
+      WantTabs = True
+      FontSmoothing = fsmClearType
+      ExplicitTop = 298
+      ExplicitWidth = 863
     end
   end
   object SynDWSSyn1: TSynDWSSyn
@@ -633,21 +754,13 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       ShortCut = 24655
       OnExecute = actOpenCommonExecute
     end
-  end
-  object dlgOpen: TOpenTextFileDialog
-    DefaultExt = '.hhs'
-    Filter = 'JD Hoard Helper Script (*.hhs)|*.hhs|All Fies (*.*)|*.*'
-    Title = 'Open Script File'
-    Left = 528
-    Top = 57
-  end
-  object dlgSave: TSaveTextFileDialog
-    DefaultExt = '.hhs'
-    Filter = 'JD Hoard Helper Script (*.hhs)|*.hhs|All Fies (*.*)|*.*'
-    Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
-    Title = 'Save Script File'
-    Left = 584
-    Top = 57
+    object actCheckSyntax: TAction
+      Category = 'Script'
+      Caption = 'Check Syntax (Compile)'
+      Hint = 'Check Syntax (Compile)'
+      ShortCut = 16504
+      OnExecute = actCheckSyntaxExecute
+    end
   end
   object MM: TMainMenu
     Left = 712
@@ -725,7 +838,7 @@ object frmHoardHelperMain: TfrmHoardHelperMain
         Caption = '-'
       end
       object N9: TMenuItem
-        Caption = 'Compile Only'
+        Action = actCheckSyntax
       end
     end
     object Options1: TMenuItem
@@ -792,5 +905,20 @@ object frmHoardHelperMain: TfrmHoardHelperMain
     object Options2: TMenuItem
       Caption = 'Help'
     end
+  end
+  object dlgOpen: TOpenDialog
+    DefaultExt = '.hhs'
+    Filter = 'JD Hoard Helper Script (*.hhs)|*.hhs|All Fies (*.*)|*.*'
+    Title = 'Open Script File'
+    Left = 528
+    Top = 113
+  end
+  object dlgSave: TSaveDialog
+    DefaultExt = '.hhs'
+    Filter = 'JD Hoard Helper Script (*.hhs)|*.hhs|All Fies (*.*)|*.*'
+    Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
+    Title = 'Save Script File'
+    Left = 584
+    Top = 113
   end
 end
