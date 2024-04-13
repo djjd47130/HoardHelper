@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Classes,
   Winapi.Windows,
   Vcl.Forms,
-  dwsComp, dwsCompiler, dwsExprs, dwsSymbols, dwsErrors;
+  dwsComp, dwsCompiler, dwsExprs, dwsSymbols, dwsErrors, dwsDebugger;
 
 type
   THHContext = class;
@@ -20,25 +20,29 @@ type
     StrUtils: TdwsUnit;
     HHUtils: TdwsUnit;
     IMDBUtils: TdwsUnit;
-    procedure FileUtilsFunctionsListFilesEval(info: TProgramInfo);
-    procedure FileUtilsFunctionsExtractFileNameEval(info: TProgramInfo);
-    procedure FileUtilsFunctionsExtractFilePathEval(info: TProgramInfo);
-    procedure FileUtilsFunctionsExtractFileExtEval(info: TProgramInfo);
+    dwsSimpleDebugger1: TdwsSimpleDebugger;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure HHUtilsFunctionsGetTickCountEval(info: TProgramInfo);
+    procedure HHUtilsFunctionsPrintLnEval(info: TProgramInfo);
     procedure StrUtilsFunctionsCopyEval(info: TProgramInfo);
     procedure StrUtilsFunctionsPosEval(info: TProgramInfo);
     procedure StrUtilsFunctionsUpperCaseEval(info: TProgramInfo);
     procedure StrUtilsFunctionsLowerCaseEval(info: TProgramInfo);
     procedure StrUtilsFunctionsDeleteEval(info: TProgramInfo);
+    procedure StrUtilsFunctionssLineBreakEval(info: TProgramInfo);
+    procedure FileUtilsFunctionsListFilesEval(info: TProgramInfo);
+    procedure FileUtilsFunctionsExtractFileNameEval(info: TProgramInfo);
+    procedure FileUtilsFunctionsExtractFilePathEval(info: TProgramInfo);
+    procedure FileUtilsFunctionsExtractFileExtEval(info: TProgramInfo);
     procedure FileUtilsFunctionsGetFileSizeEval(info: TProgramInfo);
     procedure FileUtilsFunctionsGetFileSizeStrEval(info: TProgramInfo);
-    procedure HHUtilsFunctionsGetTickCountEval(info: TProgramInfo);
     procedure FileUtilsFunctionsFileExistsEval(info: TProgramInfo);
     procedure FileUtilsFunctionsDirExistsEval(info: TProgramInfo);
     procedure FileUtilsFunctionsPathCombineEval(info: TProgramInfo);
     procedure FileUtilsFunctionsGetParentDirEval(info: TProgramInfo);
     procedure FileUtilsFunctionsGetDirsEval(info: TProgramInfo);
     procedure FileUtilsFunctionsCopyFileEval(info: TProgramInfo);
-    procedure HHUtilsFunctionsPrintLnEval(info: TProgramInfo);
     procedure FileUtilsFunctionsFileInUseEval(info: TProgramInfo);
     procedure FileUtilsFunctionsCreateDirEval(info: TProgramInfo);
     procedure FileUtilsFunctionsExtractFileNameWithoutExtEval(
@@ -46,12 +50,15 @@ type
     procedure FileUtilsFunctionsOpenFileEval(info: TProgramInfo);
     procedure FileUtilsFunctionsGetGenericFileTypeEval(info: TProgramInfo);
     procedure FileUtilsFunctionsMoveFileEval(info: TProgramInfo);
+    procedure FileUtilsFunctionsGetFileDateModifiedEval(info: TProgramInfo);
   private
     FOnPrintLn: THHPrintEvent;
+    FExec: IdwsProgramExecution;
     procedure DoPrintLn(const S: String);
   public
     function Exec(const Expr: String): String;
     function Compile(const Expr: String): String;
+    procedure StopExec;
     procedure BackupFile(Context: THHContext; const Filename: String);
   published
     property OnPrintLn: THHPrintEvent read FOnPrintLn write FOnPrintLn;
@@ -69,9 +76,10 @@ implementation
 uses
   System.IOUtils, System.StrUtils, System.Math, System.Masks,
   System.Types,
-  ShellAPI;
+  ShellAPI,
+  JD.HoardHelper;
 
-function GetGenericFileType( AExtension: string ): string;
+function GetGenericFileType(AExtension: string): string;
 { Get file type for an extension }
 var
   AInfo: TSHFileInfo;
@@ -97,8 +105,18 @@ end;
 procedure THHContext.BackupFile(Context: THHContext; const Filename: String);
 begin
   //TODO: If backups are enabled, copy this file to identical structure in backup directory.
+  //TODO: Translate path...
 
+end;
 
+procedure THHContext.DataModuleCreate(Sender: TObject);
+begin
+  //
+end;
+
+procedure THHContext.DataModuleDestroy(Sender: TObject);
+begin
+  FExec:= nil;
 end;
 
 procedure THHContext.DoPrintLn(const S: String);
@@ -127,26 +145,29 @@ function THHContext.Exec(const Expr: String): String;
 var
   E: String;
   Prog: IdwsProgram;
-  Exec: IdwsProgramExecution;
   Res: String;
 begin
   E:= Expr;
-
   Prog:= DWS.Compile(E, '');
   if Prog.Msgs.Count > 0 then begin
     raise Exception.Create(Prog.Msgs.AsInfo);
   end else begin
-    Exec:= prog.Execute;
-    if Exec.Msgs.HasErrors then begin
-      raise Exception.Create(Exec.Msgs.AsInfo);
+    FExec:= prog.Execute;
+    if FExec.Msgs.HasErrors then begin
+      raise Exception.Create(FExec.Msgs.AsInfo);
     end else begin
-      Res:= Exec.Result.ToString;
+      Res:= FExec.Result.ToString;
       //Res:= StringReplace(Res,#$D,'',[rfReplaceAll]);
       //Res:= StringReplace(Res,#$A,'',[rfReplaceAll]);
       Result:= Res;
     end;
   end;
 
+end;
+
+procedure THHContext.StopExec;
+begin
+  FExec.Stop;
 end;
 
 procedure THHContext.StrUtilsFunctionsCopyEval(info: TProgramInfo);
@@ -191,6 +212,11 @@ begin
   Info.ResultAsInteger:= Pos(SS, S, O);
 end;
 
+procedure THHContext.StrUtilsFunctionssLineBreakEval(info: TProgramInfo);
+begin
+  Info.ResultAsString:= sLineBreak;
+end;
+
 procedure THHContext.StrUtilsFunctionsUpperCaseEval(info: TProgramInfo);
 begin
   Info.ResultAsString:= UpperCase(Info.ParamAsString[0]);
@@ -198,33 +224,51 @@ end;
 
 procedure THHContext.FileUtilsFunctionsCopyFileEval(info: TProgramInfo);
 var
+  L: THHLibrary;
   S, D: String;
   O: Boolean;
 begin
   Info.ResultAsBoolean:= False;
   try
-    S:= Info.ParamAsString[0];
-    D:= Info.ParamAsString[1];
+    L:= HH.FindLib(Info.ParamAsString[0]);
+    if L = nil then
+      raise Exception.Create('Failed to find library for path '+Info.ParamAsString[0]);
+    S:= L.LibPathToLocalPath(Info.ParamAsString[0]);
+    D:= L.LibPathToLocalPath(Info.ParamAsString[1]);
     O:= Info.ParamAsBoolean[2];
     TFile.Copy(S, D, O);
     Info.ResultAsBoolean:= True;
   except
     on E: Exception do begin
       //TODO
-
+      raise Exception.Create('Failed to copy file: '+E.Message);
     end;
   end;
 end;
 
 procedure THHContext.FileUtilsFunctionsCreateDirEval(info: TProgramInfo);
+var
+  L: THHLibrary;
+  T: String;
 begin
-  TDirectory.CreateDirectory(Info.ParamAsString[0]);
+  L:= HH.FindLib(Info.ParamAsString[0]);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+Info.ParamAsString[0]);
+  T:= L.LibPathToLocalPath(Info.ParamAsString[0]);
+  TDirectory.CreateDirectory(T);
 end;
 
 procedure THHContext.FileUtilsFunctionsDirExistsEval(
   info: TProgramInfo);
+var
+  L: THHLibrary;
+  T: String;
 begin
-  Info.ResultAsBoolean:= DirectoryExists(Info.ParamAsString[0]);
+  L:= HH.FindLib(Info.ParamAsString[0]);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+Info.ParamAsString[0]);
+  T:= L.LibPathToLocalPath(Info.ParamAsString[0]);
+  Info.ResultAsBoolean:= DirectoryExists(T);
 end;
 
 procedure THHContext.FileUtilsFunctionsExtractFileExtEval(
@@ -253,18 +297,30 @@ end;
 
 procedure THHContext.FileUtilsFunctionsFileExistsEval(
   info: TProgramInfo);
+var
+  L: THHLibrary;
+  T: String;
 begin
-  Info.ResultAsBoolean:= FileExists(Info.ParamAsString[0]);
+  L:= HH.FindLib(Info.ParamAsString[0]);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+Info.ParamAsString[0]);
+  T:= L.LibPathToLocalPath(Info.ParamAsString[0]);
+  Info.ResultAsBoolean:= FileExists(T);
 end;
 
 procedure THHContext.FileUtilsFunctionsFileInUseEval(info: TProgramInfo);
 var
+  L: THHLibrary;
   FN: String;
   F: File;
   R: Boolean;
+  T: String;
 begin
   R := False;
-  FN:= Info.ParamAsString[0];
+  L:= HH.FindLib(Info.ParamAsString[0]);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+Info.ParamAsString[0]);
+  FN:= L.LibPathToLocalPath(Info.ParamAsString[0]);
   try
     AssignFile(F, FN);
     FileMode := fmOpenRead;
@@ -286,8 +342,13 @@ var
   MaskArray: TStringDynArray;
   Pred: TDirectory.TFilterPredicate;
   Arr: TArray<String>;
+  X: Integer;
+  L: THHLibrary;
 begin
-  Path:= Info.ParamAsString[0];
+  L:= HH.FindLib(Info.ParamAsString[0]);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+Path);
+  Path:= L.LibPathToLocalPath(Info.ParamAsString[0]);
   Mask:= Info.ParamAsString[1];
   Recurse:= Info.ParamAsBoolean[2];
 
@@ -310,33 +371,76 @@ begin
   else
     Arr:= TDirectory.GetDirectories(Path, Pred);
 
+  //Translate all array items to relative lib paths...
+  for X := 0 to Length(Arr)-1 do begin
+    Arr[X]:= L.LocalPathToLibPath(Arr[X]);
+  end;
+
   //Set scripted function result
   Info.SetResultAsStringArray(Arr);
 
 end;
 
+procedure THHContext.FileUtilsFunctionsGetFileDateModifiedEval(
+  info: TProgramInfo);
+var
+  L: THHLibrary;
+  T: String;
+  DT: TDateTime;
+begin
+  L:= HH.FindLib(Info.ParamAsString[0]);
+  T:= L.LibPathToLocalPath(Info.ParamAsString[0]);
+  if FileAge(T, DT) then begin
+    Info.ResultAsString:= FormatDateTime('yyyy-mm-dd hh:nn:ss', DT);
+  end else begin
+    Info.ResultAsString:= '';
+  end;
+end;
+
 procedure THHContext.FileUtilsFunctionsGetFileSizeEval(
   info: TProgramInfo);
 var
+  L: THHLibrary;
   FN: String;
   FS: Int64;
 begin
-  FN:= Info.ParamAsString[0];
+  L:= HH.FindLib(Info.ParamAsString[0]);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+Info.ParamAsString[0]);
+  FN:= L.LibPathToLocalPath(Info.ParamAsString[0]);
   FS:= FileSize(FN);
   Info.ResultAsInteger:= FS;
+end;
+
+function FormatFileSize(const bytes: Int64): string;
+const
+  KB = 1024;
+  MB = KB * 1024;
+  GB = MB * 1024;
+begin
+  if bytes < KB then
+    Result := Format('%d bytes', [bytes])
+  else if bytes < MB then
+    Result := Format('%.2f KB', [bytes / KB])
+  else if bytes < GB then
+    Result := Format('%.2f MB', [bytes / MB])
+  else
+    Result := Format('%.2f GB', [bytes / GB]);
 end;
 
 procedure THHContext.FileUtilsFunctionsGetFileSizeStrEval(
   info: TProgramInfo);
 var
+  L: THHLibrary;
   FN: String;
   FS: Int64;
-  R: String;
 begin
-  FN:= Info.ParamAsString[0];
+  L:= HH.FindLib(Info.ParamAsString[0]);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+Info.ParamAsString[0]);
+  FN:= L.LibPathToLocalPath(Info.ParamAsString[0]);
   FS:= FileSize(FN);
-  R:= FormatFloat('#,###,###,###,###,##0 B', FS);
-  Info.ResultAsString:= R;
+  Info.ResultAsString:= FormatFileSize(FS);
 end;
 
 procedure THHContext.FileUtilsFunctionsGetGenericFileTypeEval(
@@ -348,11 +452,16 @@ end;
 procedure THHContext.FileUtilsFunctionsGetParentDirEval(
   info: TProgramInfo);
 var
+  L: THHLibrary;
   R: String;
 begin
-  R:= Info.ParamAsString[0];
+  L:= HH.FindLib(Info.ParamAsString[0]);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+Info.ParamAsString[0]);
+  R:= L.LibPathToLocalPath(Info.ParamAsString[0]);
   R:= ExcludeTrailingPathDelimiter(R);
   R:= TDirectory.GetParent(R);
+  R:= L.LocalPathToLibPath(R);
   Info.ResultAsString:= R;
 end;
 
@@ -366,8 +475,15 @@ var
   MaskArray: TStringDynArray;
   Pred: TDirectory.TFilterPredicate;
   Arr: TArray<String>;
+  L: THHLibrary;
+  X: Integer;
 begin
-  Path:= Info.ParamAsString[0];
+  //TODO: Translate path...
+  L:= HH.FindLib(Info.ParamAsString[0]);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+Path);
+  Path:= L.LibPathToLocalPath(Info.ParamAsString[0]);
+
   Mask:= Info.ParamAsString[1];
   Recurse:= Info.ParamAsBoolean[2];
 
@@ -390,6 +506,11 @@ begin
   else
     Arr:= TDirectory.GetFiles(Path, Pred);
 
+  //Translate all array items to relative lib paths...
+  for X := 0 to Length(Arr)-1 do begin
+    Arr[X]:= L.LocalPathToLibPath(Arr[X]);
+  end;
+
   //Set scripted function result
   Info.SetResultAsStringArray(Arr);
 
@@ -398,13 +519,18 @@ end;
 procedure THHContext.FileUtilsFunctionsMoveFileEval(info: TProgramInfo);
 begin
   //
+  //TODO: Translate path...
 end;
 
 procedure THHContext.FileUtilsFunctionsOpenFileEval(info: TProgramInfo);
 var
+  L: THHLibrary;
   FN: String;
 begin
-  FN:= Info.ParamAsString[0];
+  L:= HH.FindLib(Info.ParamAsString[0]);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+Info.ParamAsString[0]);
+  FN:= L.LibPathToLocalPath(Info.ParamAsString[0]);
   ShellExecute(Application.Handle, 'open',
     PChar(FN),nil,nil,SW_SHOWNORMAL) ;
 end;
@@ -412,7 +538,7 @@ end;
 procedure THHContext.FileUtilsFunctionsPathCombineEval(
   info: TProgramInfo);
 begin
-  Info.ResultAsString:= TPath.Combine(Info.ParamAsString[0], Info.ParamAsString[1]);
+  Info.ResultAsString:= PathCombine(Info.ParamAsString[0], Info.ParamAsString[1]);
 end;
 
 procedure THHContext.HHUtilsFunctionsGetTickCountEval(
@@ -422,8 +548,13 @@ begin
 end;
 
 procedure THHContext.HHUtilsFunctionsPrintLnEval(info: TProgramInfo);
+var
+  T: String;
 begin
-  DoPrintLn(Info.ParamAsString[0]);
+  T:= Info.ParamAsString[0];
+  //TODO: Ensure line breaks are retained...
+  //T:= StringReplace(T, 'sLineBreak', sLineBreak, [rfReplaceAll]);
+  DoPrintLn(T);
 end;
 
 end.

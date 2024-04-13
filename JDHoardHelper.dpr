@@ -8,7 +8,8 @@ uses
   Vcl.Styles,
   JD.HoardHelper in 'JD.HoardHelper.pas',
   uHoardHelperLibs in 'uHoardHelperLibs.pas' {frmLibs},
-  JD.CmdLine in 'JD.CmdLine.pas';
+  JD.CmdLine in 'JD.CmdLine.pas',
+  uHoardHelperFind in 'uHoardHelperFind.pas' {frmFind};
 
 {$R *.res}
 
@@ -18,5 +19,6 @@ begin
   TStyleManager.TrySetStyle('Glossy');
   Application.Title := 'JD Hoard Helper';
   Application.CreateForm(TfrmHoardHelperMain, frmHoardHelperMain);
+  Application.CreateForm(TfrmFind, frmFind);
   Application.Run;
 end.

@@ -14,6 +14,8 @@ type
   THoardHelper = class;
   THHScriptThread = class;
 
+  TKillProc = procedure of object;
+
   THHLibraryType = (hhlGeneral, hhlMovies, hhlShows, hhlVideos, hhlMusic,
     hhlPictures, hhlDocuments, hhlApplications);
 
@@ -48,6 +50,9 @@ type
     property LibraryType: THHLibraryType read FLibraryType write SetLibraryType;
     property Location: String read FLocation write SetLocation;
     property Name: String read FName write SetName;
+
+    function LibPathToLocalPath(const Value: String): String;
+    function LocalPathToLibPath(const Value: String): String;
   end;
 
   THoardHelper = class(TComponent)
@@ -65,6 +70,7 @@ type
     FRightLine: Integer;
     FBackupsEnabled: Boolean;
     FBackupDirectory: String;
+    FCommonLOC: Integer;
     procedure SetProfileName(const Value: String);
     procedure SetBackupEnabled(const Value: Boolean);
     procedure SetBackupLocation(const Value: String);
@@ -82,8 +88,6 @@ type
     procedure SetRightLine(const Value: Integer);
     procedure SetBackupDirectory(const Value: String);
     procedure SetBackupsEnabled(const Value: Boolean);
-    function LibPathToLocalPath(const Value: String): String;
-    function LocalPathToLibPath(const Value: String; const Lib: THHLibrary): String;
     procedure EnsureCommonFile;
   protected
 
@@ -99,13 +103,15 @@ type
     function LibraryByName(const N: String): THHLibrary;
     procedure AddLibrary(L: THHLibrary);
     procedure DeleteLibrary(const Index: Integer);
-    function TranslateLibPath(const Path: String): String;
 
-    procedure Execute(const Script: String; const IncludeCommon: Boolean = True);
+    function FindLib(const Filename: String): THHLibrary;
+
+    function Execute(const Script: String; const IncludeCommon: Boolean = True): TKillProc;
     procedure Compile(const Script: String; const IncludeCommon: Boolean = True);
 
     property Libraries[const Index: Integer]: THHLibrary read GetLibrary;
     property Executing: Boolean read FExecuting;
+    property CommonLOC: Integer read FCommonLOC;
   published
     property ProfileName: String read FProfileName write SetProfileName;
     property BackupEnabled: Boolean read FBackupEnabled write SetBackupEnabled;
@@ -146,21 +152,26 @@ type
     constructor Create(AHoardHelper: THoardHelper; const AScript: String); reintroduce;
     destructor Destroy; override;
 
+    procedure Kill;
+
     property OnStart: TNotifyEvent read FOnStart write SetOnStart;
     property OnStop: TNotifyEvent read FOnStop write SetOnStop;
     property OnPrintLn: THHPrintEvent read FOnPrintLn write FOnPrintLn;
   end;
 
 function HH: THoardHelper;
+function TweakErrorLines(S: String; Offset: Integer): String;
 function StrToLibType(const S: String): THHLibraryType;
 function LibTypeToStr(const T: THHLibraryType): String;
 function StrToWrapType(const S: String): THHWrapType;
 function WrapTypeToStr(const T: THHWrapType): String;
+function PathCombine(P1, P2: String): String;
 
 implementation
 
 uses
-  System.IOUtils;
+  System.IOUtils,
+  System.StrUtils;
 
 var
   _HH: THoardHelper;
@@ -170,6 +181,47 @@ begin
   if _HH = nil then
     _HH:= THoardHelper.Create(nil);
   Result:= _HH;
+end;
+
+function TweakErrorLines(S: String; Offset: Integer): String;
+const
+  TXT = '[line: ';
+var
+  SP: Integer;
+  P: Integer;
+  T: String;
+  LN: Integer;
+begin
+  //TODO: Tweak line # of errors to its offset...
+  //EXCEPTION in script execution: Syntax Error: Argument 0 expects type "String" instead of "array of TRow" [line: 321, column: 13]
+  //   [line: 321,
+  //   Find "[line: "
+  Result:= S;
+  SP:= 1;
+  while SP < Length(Result) do begin
+    //Find next instance of TXT...
+    P:= Pos(TXT, Result, SP);
+    if P > 0 then begin
+      //Found...
+      SP:= P + Length(TXT);
+      //Identify number just after it
+      P:= Pos(',', Result, SP-1);
+      T:= Copy(Result, SP, (P - SP));
+      Delete(Result, SP, (P - SP));
+      LN:= StrToIntDef(T, -1);
+      if LN = -1 then Continue;
+
+      //Convert line number with offset...
+      LN:= LN - Offset;
+      T:= IntToStr(LN);
+      Insert(T, Result, SP);
+
+    end else begin
+      //Not found
+      Exit;
+    end;
+  end;
+
 end;
 
 function StrToLibType(const S: String): THHLibraryType;
@@ -226,6 +278,25 @@ begin
   end;
 end;
 
+function PathCombine(P1, P2: String): String;
+var
+  T: String;
+begin
+  //Last char of P1
+  T:= Copy(P1, Length(P1), 1);
+  if T = '\' then
+    Delete(P1, Length(P1), 1);
+
+  //First char of P2
+  T:= Copy(P2, 1, 1);
+  if T <> '\' then
+    P2:= '\' + P2;
+
+  //Combine
+  Result:= P1 + P2;
+
+end;
+
 { THoardHelper }
 
 constructor THoardHelper.Create(AOwner: TComponent);
@@ -263,10 +334,11 @@ begin
   end;
 end;
 
-procedure THoardHelper.Execute(const Script: String; const IncludeCommon: Boolean = True);
+function THoardHelper.Execute(const Script: String; const IncludeCommon: Boolean = True): TKillProc;
 var
   T: THHScriptThread;
   L: TStringList;
+  Tmp: String;
 begin
   if FExecuting then
     raise Exception.Create('Cannot execute script while already executing.');
@@ -280,6 +352,7 @@ begin
         EnsureCommonFile;
         L.LoadFromFile(CommonFilename);
       end;
+      FCommonLOC:= L.Count;
       
       //Inject new script...
       L.Add(Script);
@@ -290,6 +363,7 @@ begin
       T.OnStart:= Started;
       T.OnStop:= Stopped;
       T.FreeOnTerminate:= True;
+      Result:= T.Kill;
       T.Start;
       //DO NOT REFERENCE T AFTER THIS POINT!!!
       
@@ -299,7 +373,8 @@ begin
   except
     on E: Exception do begin
       FExecuting:= False;
-      PrintLn(Self, nil, E.Message);
+      Tmp:= TweakErrorLines(E.Message, FCommonLOC);
+      PrintLn(Self, nil, Tmp);
     end;
   end;
 end;
@@ -361,25 +436,97 @@ begin
 
 end;
 
+{
 function THoardHelper.LibPathToLocalPath(const Value: String): String;
+var
+  L: THHLibrary;
 begin
-  //TODO: Translate relative library path to absolute local path...
+  //Translate relative library path to absolute local path...
   //Split string by backslash (\) characters into array of String.
   //Require that first string in array be a unique library name.
   //The rest of the string is the relative path from that library.
   //Example: "D:\Media\Movies\SomeMovie.avi" --> ""Movies\SomeMovie.avi"
-
+  L:= HH.FindLib(Value);
+  if Assigned(L) then begin
+    //Use library's path...
+    Result:= Value;
+    Delete(Result, 1, Length(L.Name));
+    //For some reason TPath.Combine(L.Location, '\') returns just '\'!!!
+    if Copy(Result, 1, 1) = '\' then
+      Delete(Result, 1, 1);
+    Result:= TPath.Combine(L.FLocation, Result);
+  end;
 end;
 
 function THoardHelper.LocalPathToLibPath(const Value: String;
   const Lib: THHLibrary): String;
 begin
-  //TODO: Translate absolute local path to relative library path...
+  //Translate absolute local path to relative library path...
   //Split string by backslash (\) characters into array of String.
   //Convert absolute path to relative path within library.
   //The rest of the string is the relative path from that library.
   //Example: "Movies\SomeMovie.avi" --> "D:\Media\Movies\SomeMovie.avi"
+  Result:= Value;
+  //Remove lib path from filename...
+  Delete(Result, 1, Length(Lib.FLocation));
+  //Insert lib name instead...
+  Result:= TPath.Combine(Lib.Name, Result);
+end;
+}
 
+function THoardHelper.FindLib(const Filename: String): THHLibrary;
+var
+  Tmp: String;
+  //P: Integer;
+  LibName: String;
+  X: Integer;
+  Found: Boolean;
+
+  Arr: TArray<String>;
+
+begin
+  Result:= nil;
+  Arr:= SplitString(Filename+' ', '\');
+
+  //First array element SHOULD be the library name...
+  LibName:= Arr[0];
+
+  {
+  Tmp:= Filename;
+  P:= Pos('\', Tmp);
+  if P > 0 then begin
+    if P = 1 then begin
+      //First char is \...
+      Delete(Tmp, 1, 1);
+    end else begin
+      //Copy text up to first \
+      LibName:= Copy(Tmp, 1, P-1);
+      Delete(Tmp, 1, P);
+    end;
+  end else begin
+    //No \ was found, entire text is presumably library name...
+    LibName:= Tmp;
+  end;
+  LibName:= Trim(LibName);
+  }
+
+  //Library name cannot be blank
+  if LibName = '' then begin
+    raise Exception.Create('Missing library name in path "'+Filename+'".');
+  end;
+
+  //Lookup library name...
+  Found:= False;
+  for X := 0 to FLibraries.Count-1 do begin
+    if SameText(LibName, FLibraries[X].Name) then begin
+      Result:= FLibraries[X];
+      Found:= True;
+      Break;
+    end;
+  end;
+  if not Found then begin
+    raise Exception.Create('Invalid library name "'+LibName+'".');
+  end;
 end;
 
 procedure THoardHelper.SaveSettings;
@@ -553,17 +700,36 @@ begin
   FRightLine := Value;
 end;
 
-function THoardHelper.TranslateLibPath(const Path: String): String;
-begin
-  //TODO: Return a translated absolute path based on libraries
-  //For example, if there's a library named "Movies" at "D:\Media\Movies\", then
-  //a path of "Movies\Star Wars" would become "D:\Media\Movies\Star Wars\".
-  //This is necessary for filesystem security, restricting users to ONLY
-  //perform file operations on files within registered libraries.
+{ THoardHelperLibrary }
 
+function THHLibrary.LibPathToLocalPath(const Value: String): String;
+begin
+  //Use library's path...
+  Result:= Value;
+  Delete(Result, 1, Length(FName));
+  //For some reason TPath.Combine(L.Location, '\') returns just '\'!!!
+  if Copy(Result, 1, 1) = '\' then
+    Delete(Result, 1, 1);
+  Result:= TPath.Combine(FLocation, Result);
 end;
 
-{ THoardHelperLibrary }
+function THHLibrary.LocalPathToLibPath(const Value: String): String;
+begin
+  Result:= Value;
+  //Remove lib path from filename...
+  Delete(Result, 1, Length(FLocation));
+  //Insert lib name instead...
+  //Result:= TPath.Combine(FName, Result);
+  Result:= PathCombine(FName, Result);
+
+  {
+  if Length(Result) = 0 then
+    Result:= '\';
+  if Result[1] <> '\' then
+    Result:= '\' + Result;
+  Result:= FName + Result;
+  }
+end;
 
 procedure THHLibrary.SetLibraryType(
   const Value: THHLibraryType);
@@ -643,7 +809,9 @@ begin
           Res:= FContext.Exec(FScript);
         except
           on E: Exception do begin
-            Self.ContextPrintLn(Self, FContext, 'EXCEPTION in script execution: '+E.Message);
+            Res:= 'EXCEPTION in script execution: '+E.Message;
+            Res:= TweakErrorLines(Res, HH.CommonLOC);
+            Self.ContextPrintLn(Self, FContext, Res);
           end;
         end;
       finally
@@ -655,6 +823,12 @@ begin
   finally
     Synchronize(SYNC_Stop);
   end;
+end;
+
+procedure THHScriptThread.Kill;
+begin
+  FContext.StopExec;
+  Terminate;
 end;
 
 procedure THHScriptThread.SetOnStart(const Value: TNotifyEvent);

@@ -27,7 +27,7 @@ uses
   Vcl.Styles.Utils.ComCtrls,
   Vcl.Styles.Utils.ScreenTips,
   Vcl.Styles.Utils.SysControls,
-  Vcl.Styles.Utils.SysStyleHook;
+  Vcl.Styles.Utils.SysStyleHook, SynEditMiscClasses, SynEditSearch;
 
 type
   TfrmHoardHelperMain = class(TForm)
@@ -35,7 +35,7 @@ type
     Stat: TStatusBar;
     pMain: TPanel;
     txtScript: TSynEdit;
-    SynDWSSyn1: TSynDWSSyn;
+    DWSSyn: TSynDWSSyn;
     Acts: TActionList;
     JDFontButton1: TJDFontButton;
     JDFontButton2: TJDFontButton;
@@ -69,7 +69,6 @@ type
     Cut2: TMenuItem;
     Paste1: TMenuItem;
     Paste2: TMenuItem;
-    N3: TMenuItem;
     ExecuteScript1: TMenuItem;
     WordWrap1: TMenuItem;
     None1: TMenuItem;
@@ -115,6 +114,42 @@ type
     dlgSave: TSaveDialog;
     Bevel3: TBevel;
     JDFontButton10: TJDFontButton;
+    popScript: TPopupMenu;
+    Undo2: TMenuItem;
+    Redo3: TMenuItem;
+    N10: TMenuItem;
+    ExecuteScript2: TMenuItem;
+    CheckSyntaxCompile1: TMenuItem;
+    N11: TMenuItem;
+    Cut3: TMenuItem;
+    Copy1: TMenuItem;
+    Paste3: TMenuItem;
+    Delete1: TMenuItem;
+    N12: TMenuItem;
+    SelectAll2: TMenuItem;
+    SynEditSearch1: TSynEditSearch;
+    actFindNext: TAction;
+    actFind: TAction;
+    actFindPrev: TAction;
+    actFindReplace: TAction;
+    Search1: TMenuItem;
+    Find1: TMenuItem;
+    FindNext1: TMenuItem;
+    FindPrevious1: TMenuItem;
+    N13: TMenuItem;
+    N14: TMenuItem;
+    Replace1: TMenuItem;
+    actFindReset: TAction;
+    actFindCaseSensitive: TAction;
+    ResetSearch1: TMenuItem;
+    CaseSensitive1: TMenuItem;
+    HelpContents1: TMenuItem;
+    HelpContents2: TMenuItem;
+    AboutJDHoardHelper1: TMenuItem;
+    N3: TMenuItem;
+    actExit: TAction;
+    Exit1: TMenuItem;
+    Wrap1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure actExecExecute(Sender: TObject);
     procedure actNewExecute(Sender: TObject);
@@ -139,10 +174,19 @@ type
     procedure actSelectAllExecute(Sender: TObject);
     procedure actOpenCommonExecute(Sender: TObject);
     procedure actCheckSyntaxExecute(Sender: TObject);
+    procedure actFindNextExecute(Sender: TObject);
+    procedure actFindExecute(Sender: TObject);
+    procedure actFindPrevExecute(Sender: TObject);
+    procedure actFindReplaceExecute(Sender: TObject);
+    procedure actFindCaseSensitiveExecute(Sender: TObject);
+    procedure actExitExecute(Sender: TObject);
   private
     FFilename: String;
     FModified: Boolean;
     FExecuting: Boolean;
+    FFindText: String;
+    FFindPos: Integer;
+    FKillProc: TKillProc;
     procedure PrintLn(Sender: TObject; Context: THHContext;
       const Text: String);
     procedure Started(Sender: TObject);
@@ -167,7 +211,9 @@ implementation
 {$R *.dfm}
 
 uses
-  uHoardHelperLibs;
+  uHoardHelperLibs,
+  Clipbrd,
+  StrUtils;
 
 procedure TfrmHoardHelperMain.FormCreate(Sender: TObject);
 begin
@@ -175,6 +221,7 @@ begin
   ReportMemoryLeaksOnShutdown:= True;
   {$ENDIF}
 
+  FFindPos:= 0;
   TStyleManager.Engine.RegisterStyleHook(TCustomSynEdit, TScrollingStyleHook);
 
   pMain.Align:= alClient;
@@ -190,6 +237,11 @@ begin
   if CmdLine.OpenFilename <> '' then begin
     Self.Load(CmdLine.OpenFilename);
   end;
+
+  //WindowState:= wsMaximized;
+  //TODO: Remember window state / size...
+  Width:= 1100;
+  Height:= 700;
 
   UpdateActions;
 end;
@@ -332,9 +384,21 @@ end;
 
 procedure TfrmHoardHelperMain.PrintLn(Sender: TObject; Context: THHContext;
   const Text: String);
+var
+  L: TStringList;
+  X: Integer;
 begin
-  txtOutput.Lines.Append(Text);
+  L:= TStringList.Create;
+  try
 
+    //Arr := SplitString(Text, 'sLineBreak');
+    //for X := 0 to Length(Arr)-1 do begin
+      //txtOutput.Lines.Append(Arr[X]);
+    //end;
+    txtOutput.Lines.Append(Text);
+  finally
+    L.Free;
+  end;
 end;
 
 procedure TfrmHoardHelperMain.Started(Sender: TObject);
@@ -383,6 +447,7 @@ end;
 
 procedure TfrmHoardHelperMain.actPasteExecute(Sender: TObject);
 begin
+  if not txtScript.Focused then Exit;
   txtScript.PasteFromClipboard;
   UpdateActions;
 end;
@@ -391,6 +456,11 @@ procedure TfrmHoardHelperMain.actRedoExecute(Sender: TObject);
 begin
   Self.txtScript.Redo;
   UpdateActions;
+end;
+
+procedure TfrmHoardHelperMain.actFindReplaceExecute(Sender: TObject);
+begin
+  //
 end;
 
 procedure TfrmHoardHelperMain.actSaveAsExecute(Sender: TObject);
@@ -405,14 +475,18 @@ end;
 
 procedure TfrmHoardHelperMain.actSelectAllExecute(Sender: TObject);
 begin
-  txtScript.SelectAll;
+  if txtScript.Focused then
+    txtScript.SelectAll
+  else if txtOutput.Focused then
+    txtOutput.SelectAll;
   UpdateActions;
 end;
 
 procedure TfrmHoardHelperMain.actStopExecute(Sender: TObject);
 begin
   //TODO: Stop executing script (in thread)...
-
+  if FExecuting then
+    FKillProc;
 end;
 
 procedure TfrmHoardHelperMain.actUndoExecute(Sender: TObject);
@@ -439,27 +513,72 @@ end;
 
 procedure TfrmHoardHelperMain.actCopyExecute(Sender: TObject);
 begin
-  txtScript.CopyToClipboard;
+  if txtScript.Focused then
+    txtScript.CopyToClipboard
+  else if txtOutput.Focused then
+    txtOutput.CopyToClipboard;
   UpdateActions;
 end;
 
 procedure TfrmHoardHelperMain.actCutExecute(Sender: TObject);
 begin
+  if not txtScript.Focused then Exit;
   txtScript.CutToClipboard;
   UpdateActions;
 end;
 
 procedure TfrmHoardHelperMain.actDeleteExecute(Sender: TObject);
 begin
+  if not txtScript.Focused then Exit;
   txtScript.SelText:= '';
+
   UpdateActions;
 end;
 
 procedure TfrmHoardHelperMain.actExecExecute(Sender: TObject);
 begin
   txtOutput.Lines.Clear;
-  HH.Execute(GetScript);
+  FKillProc:= HH.Execute(GetScript);
   UpdateActions;
+end;
+
+procedure TfrmHoardHelperMain.actExitExecute(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmHoardHelperMain.actFindCaseSensitiveExecute(Sender: TObject);
+begin
+  actFindCaseSensitive.Checked:= not actFindCaseSensitive.Checked;
+end;
+
+procedure TfrmHoardHelperMain.actFindExecute(Sender: TObject);
+begin
+  //Open find window (show on top)...
+
+end;
+
+procedure TfrmHoardHelperMain.actFindNextExecute(Sender: TObject);
+var
+  S: String;
+  P: Integer;
+  T: String;
+begin
+  //TODO: Find text...
+  S:= txtScript.Lines.Text;
+  if FFindPos >= Length(S) then begin
+    //Search pos is at the end, reset?
+
+  end;
+  //Find next instance...
+  P:= Pos(FFindText, S);
+
+
+end;
+
+procedure TfrmHoardHelperMain.actFindPrevExecute(Sender: TObject);
+begin
+  //
 end;
 
 procedure TfrmHoardHelperMain.UpdateActions;

@@ -1,5 +1,7 @@
 object HHContext: THHContext
   OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
   Height = 259
   Width = 353
   object DWS: TDelphiWebScript
@@ -44,6 +46,7 @@ object HHContext: THHContext
             Name = 'SearchPattern'
             DataType = 'String'
             HasDefaultValue = True
+            DefaultValue = '*'
           end
           item
             Name = 'Recursive'
@@ -205,6 +208,16 @@ object HHContext: THHContext
         OnEval = FileUtilsFunctionsGetFileSizeStrEval
       end
       item
+        Name = 'GetFileDateModified'
+        Parameters = <
+          item
+            Name = 'Filename'
+            DataType = 'String'
+          end>
+        ResultType = 'String'
+        OnEval = FileUtilsFunctionsGetFileDateModifiedEval
+      end
+      item
         Name = 'FileExists'
         Parameters = <
           item
@@ -261,7 +274,7 @@ object HHContext: THHContext
     UnitName = 'FileUtils'
     StaticSymbols = False
     Left = 144
-    Top = 80
+    Top = 88
   end
   object StrUtils: TdwsUnit
     Script = DWS
@@ -341,11 +354,16 @@ object HHContext: THHContext
             DataType = 'Integer'
           end>
         OnEval = StrUtilsFunctionsDeleteEval
+      end
+      item
+        Name = 'sLineBreak'
+        ResultType = 'String'
+        OnEval = StrUtilsFunctionssLineBreakEval
       end>
     UnitName = 'StrUtils'
     StaticSymbols = False
     Left = 144
-    Top = 128
+    Top = 136
   end
   object HHUtils: TdwsUnit
     Script = DWS
@@ -404,5 +422,9 @@ object HHContext: THHContext
     StaticSymbols = False
     Left = 216
     Top = 32
+  end
+  object dwsSimpleDebugger1: TdwsSimpleDebugger
+    Left = 40
+    Top = 112
   end
 end
