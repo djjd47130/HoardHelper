@@ -285,7 +285,7 @@ begin
     lblEditing.Caption:= 'Edit Library';
     lblEditing.Font.Color:= clYellow;
   end else begin
-    lblEditing.Caption:= 'View Library';
+    lblEditing.Caption:= '';
     lblEditing.Font.Color:= clLime;
   end;
 
