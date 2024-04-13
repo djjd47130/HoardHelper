@@ -255,7 +255,8 @@ begin
   if L = nil then
     raise Exception.Create('Failed to find library for path '+Info.ParamAsString[0]);
   T:= L.LibPathToLocalPath(Info.ParamAsString[0]);
-  TDirectory.CreateDirectory(T);
+  Info.ResultAsBoolean:= ForceDirectories(T);
+  //TDirectory.CreateDirectory(T);
 end;
 
 procedure THHContext.FileUtilsFunctionsDirExistsEval(
