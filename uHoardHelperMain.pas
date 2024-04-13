@@ -27,7 +27,8 @@ uses
   Vcl.Styles.Utils.ComCtrls,
   Vcl.Styles.Utils.ScreenTips,
   Vcl.Styles.Utils.SysControls,
-  Vcl.Styles.Utils.SysStyleHook, SynEditMiscClasses, SynEditSearch;
+  Vcl.Styles.Utils.SysStyleHook, SynEditMiscClasses, SynEditSearch,
+  SynEditOptionsDialog;
 
 type
   TfrmHoardHelperMain = class(TForm)
@@ -127,7 +128,7 @@ type
     Delete1: TMenuItem;
     N12: TMenuItem;
     SelectAll2: TMenuItem;
-    SynEditSearch1: TSynEditSearch;
+    SynSearch: TSynEditSearch;
     actFindNext: TAction;
     actFind: TAction;
     actFindPrev: TAction;
@@ -150,6 +151,7 @@ type
     actExit: TAction;
     Exit1: TMenuItem;
     Wrap1: TMenuItem;
+    actFindWholeWords: TAction;
     procedure FormCreate(Sender: TObject);
     procedure actExecExecute(Sender: TObject);
     procedure actNewExecute(Sender: TObject);
@@ -180,12 +182,13 @@ type
     procedure actFindReplaceExecute(Sender: TObject);
     procedure actFindCaseSensitiveExecute(Sender: TObject);
     procedure actExitExecute(Sender: TObject);
+    procedure actFindWholeWordsExecute(Sender: TObject);
   private
     FFilename: String;
     FModified: Boolean;
     FExecuting: Boolean;
     FFindText: String;
-    FFindPos: Integer;
+    //FFindPos: Integer;
     FKillProc: TKillProc;
     procedure PrintLn(Sender: TObject; Context: THHContext;
       const Text: String);
@@ -193,6 +196,7 @@ type
     procedure Stopped(Sender: TObject);
     function CommonIsLoaded: Boolean;
     function GetScript: String;
+    procedure HighlightMatch(const Position, Length: Integer);
   public
     function New: Boolean;
     function Load(const Filename: String): Boolean;
@@ -221,7 +225,7 @@ begin
   ReportMemoryLeaksOnShutdown:= True;
   {$ENDIF}
 
-  FFindPos:= 0;
+  //FFindPos:= 0;
   TStyleManager.Engine.RegisterStyleHook(TCustomSynEdit, TScrollingStyleHook);
 
   pMain.Align:= alClient;
@@ -463,6 +467,12 @@ begin
   //
 end;
 
+procedure TfrmHoardHelperMain.actFindWholeWordsExecute(Sender: TObject);
+begin
+  actFindWholeWords.Checked:= not actFindWholeWords.Checked;
+  SynSearch.Whole:= actFindWholeWords.Checked;
+end;
+
 procedure TfrmHoardHelperMain.actSaveAsExecute(Sender: TObject);
 begin
   SaveAs;
@@ -550,12 +560,28 @@ end;
 procedure TfrmHoardHelperMain.actFindCaseSensitiveExecute(Sender: TObject);
 begin
   actFindCaseSensitive.Checked:= not actFindCaseSensitive.Checked;
+  SynSearch.CaseSensitive:= actFindCaseSensitive.Checked;
+end;
+
+procedure TfrmHoardHelperMain.HighlightMatch(const Position, Length: Integer);
+begin
+  txtScript.SelStart:= Position;
+  txtScript.SelLength:= Length;
 end;
 
 procedure TfrmHoardHelperMain.actFindExecute(Sender: TObject);
+var
+  S: String;
+  P: Integer;
 begin
   //Open find window (show on top)...
-
+  S:= InputBox('Find', 'Enter your search:', txtScript.SelText);
+  if S <> '' then begin
+    Self.FFindText:= S;
+    SynSearch.Pattern:= S;
+    P:= SynSearch.FindFirst(S);
+    HighlightMatch(P, Length(FFindText));
+  end;
 end;
 
 procedure TfrmHoardHelperMain.actFindNextExecute(Sender: TObject);
@@ -565,20 +591,23 @@ var
   T: String;
 begin
   //TODO: Find text...
-  S:= txtScript.Lines.Text;
-  if FFindPos >= Length(S) then begin
+  //S:= txtScript.Lines.Text;
+  //if FFindPos >= Length(S) then begin
     //Search pos is at the end, reset?
 
-  end;
+  //end;
   //Find next instance...
-  P:= Pos(FFindText, S);
+  //P:= Pos(FFindText, S);
 
+  P:= SynSearch.Next;
+  HighlightMatch(P, Length(FFindText));
 
 end;
 
 procedure TfrmHoardHelperMain.actFindPrevExecute(Sender: TObject);
 begin
   //
+  SynSearch.Next
 end;
 
 procedure TfrmHoardHelperMain.UpdateActions;

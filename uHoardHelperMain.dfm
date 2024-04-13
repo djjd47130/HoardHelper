@@ -26,7 +26,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 872
     object Bevel1: TBevel
       AlignWithMargins = True
       Left = 199
@@ -264,7 +263,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 4
       Text = 'Execute Script'
-      ExplicitLeft = 373
     end
     object JDFontButton6: TJDFontButton
       Left = 208
@@ -307,7 +305,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 5
       Text = 'Undo'
-      ExplicitLeft = 211
     end
     object JDFontButton7: TJDFontButton
       Left = 416
@@ -351,7 +348,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 6
       Text = 'Stop Exec'
-      ExplicitLeft = 422
     end
     object JDFontButton8: TJDFontButton
       Left = 257
@@ -394,7 +390,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 7
       Text = 'Redo'
-      ExplicitLeft = 260
     end
     object JDFontButton9: TJDFontButton
       Left = 318
@@ -437,7 +432,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 8
       Text = 'Check Syntax (Compile)'
-      ExplicitLeft = 324
     end
     object JDFontButton10: TJDFontButton
       Left = 477
@@ -480,7 +474,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 9
       Text = 'Manage Libraries'
-      ExplicitLeft = 486
     end
   end
   object Stat: TStatusBar
@@ -501,8 +494,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
         Text = '[Filename]'
         Width = 50
       end>
-    ExplicitTop = 539
-    ExplicitWidth = 872
   end
   object pMain: TPanel
     Left = 0
@@ -513,8 +504,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitWidth = 836
-    ExplicitHeight = 498
     object Splitter1: TSplitter
       Left = 0
       Top = 195
@@ -572,13 +561,12 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       RightEdge = 100
       RightEdgeColor = 4539717
       ScrollHintColor = 6828847
-      SearchEngine = SynEditSearch1
+      SearchEngine = SynSearch
       SelectedColor.Background = 9201502
       TabWidth = 2
       WantTabs = True
       OnChange = txtScriptChange
       FontSmoothing = fsmClearType
-      ExplicitHeight = 153
     end
     object txtOutput: TSynEdit
       Left = 0
@@ -625,7 +613,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       TabWidth = 2
       WantTabs = True
       FontSmoothing = fsmClearType
-      ExplicitTop = 196
     end
   end
   object DWSSyn: TSynDWSSyn
@@ -776,12 +763,14 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Category = 'Search'
       Caption = 'Find Previous'
       Hint = 'Find Previous'
+      ShortCut = 8306
       OnExecute = actFindPrevExecute
     end
     object actFindReplace: TAction
       Category = 'Search'
       Caption = 'Replace'
       Hint = 'Replace'
+      ShortCut = 16456
       OnExecute = actFindReplaceExecute
     end
     object actFindReset: TAction
@@ -801,6 +790,13 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Hint = 'Exit Application'
       OnExecute = actExitExecute
     end
+    object actFindWholeWords: TAction
+      Category = 'Search'
+      Caption = 'Whole Words'
+      Checked = True
+      Hint = 'Whole Words'
+      OnExecute = actFindWholeWordsExecute
+    end
   end
   object MM: TMainMenu
     Left = 272
@@ -816,6 +812,9 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       object N1: TMenuItem
         Caption = '-'
       end
+      object N2: TMenuItem
+        Action = actOpen
+      end
       object OpenRecent1: TMenuItem
         Caption = 'Open Recent'
         object ManageRecents1: TMenuItem
@@ -825,9 +824,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
         object ManageRecents2: TMenuItem
           Caption = '-'
         end
-      end
-      object N2: TMenuItem
-        Action = actOpen
       end
       object SaveScript1: TMenuItem
         Action = actSave
@@ -886,6 +882,9 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       object Replace1: TMenuItem
         Action = actFindReplace
       end
+      object ResetSearch1: TMenuItem
+        Action = actFindReset
+      end
       object N14: TMenuItem
         Caption = '-'
       end
@@ -895,9 +894,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       object Wrap1: TMenuItem
         Caption = 'Wrap'
         Checked = True
-      end
-      object ResetSearch1: TMenuItem
-        Action = actFindReset
       end
     end
     object Script1: TMenuItem
@@ -1044,8 +1040,8 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Action = actSelectAll
     end
   end
-  object SynEditSearch1: TSynEditSearch
-    Left = 408
+  object SynSearch: TSynEditSearch
+    Left = 416
     Top = 73
   end
 end
