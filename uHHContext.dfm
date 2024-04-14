@@ -5,6 +5,7 @@ object HHContext: THHContext
   Height = 259
   Width = 353
   object DWS: TDelphiWebScript
+    Config.MaxExceptionDepth = 20
     Config.Conditionals.Strings = (
       'DEMO')
     Left = 40
@@ -359,11 +360,30 @@ object HHContext: THHContext
         Name = 'sLineBreak'
         ResultType = 'String'
         OnEval = StrUtilsFunctionssLineBreakEval
+      end
+      item
+        Name = 'sTab'
+        ResultType = 'String'
+        OnEval = StrUtilsFunctionssTabEval
+      end
+      item
+        Name = 'SplitString'
+        Parameters = <
+          item
+            Name = 'S'
+            DataType = 'String'
+          end
+          item
+            Name = 'Delimiter'
+            DataType = 'String'
+          end>
+        ResultType = 'array of String'
+        OnEval = StrUtilsFunctionsSplitStringEval
       end>
     UnitName = 'StrUtils'
     StaticSymbols = False
     Left = 144
-    Top = 136
+    Top = 144
   end
   object HHUtils: TdwsUnit
     Script = DWS
@@ -381,6 +401,14 @@ object HHContext: THHContext
             DataType = 'String'
           end>
         OnEval = HHUtilsFunctionsPrintLnEval
+      end
+      item
+        Name = 'BeginPrintLn'
+        OnEval = HHUtilsFunctionsBeginPrintLnEval
+      end
+      item
+        Name = 'EndPrintLn'
+        OnEval = HHUtilsFunctionsEndPrintLnEval
       end>
     UnitName = 'HHUtils'
     StaticSymbols = False
@@ -422,9 +450,5 @@ object HHContext: THHContext
     StaticSymbols = False
     Left = 216
     Top = 32
-  end
-  object dwsSimpleDebugger1: TdwsSimpleDebugger
-    Left = 40
-    Top = 112
   end
 end

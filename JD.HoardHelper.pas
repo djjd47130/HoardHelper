@@ -71,6 +71,8 @@ type
     FBackupsEnabled: Boolean;
     FBackupDirectory: String;
     FCommonLOC: Integer;
+    FOnBeginUpdate: TNotifyEvent;
+    FOnEndUpdate: TNotifyEvent;
     procedure SetProfileName(const Value: String);
     procedure SetBackupEnabled(const Value: Boolean);
     procedure SetBackupLocation(const Value: String);
@@ -80,6 +82,8 @@ type
       const Text: String);
     procedure Started(Sender: TObject);
     procedure Stopped(Sender: TObject);
+    procedure ThreadBeginUpdate(Sender: TObject);
+    procedure ThreadEndUpdate(Sender: TObject);
     
     function GetLibrary(const Index: Integer): THHLibrary;
     procedure SaveLibs(var A: ISuperArray);
@@ -127,6 +131,8 @@ type
     property OnPrintLn: THHPrintEvent read FOnPrintLn write FOnPrintLn;
     property OnStarted: TNotifyEvent read FOnStarted write FOnStarted;
     property OnStopped: TNotifyEvent read FOnStopped write FOnStopped;
+    property OnBeginUpdate: TNotifyEvent read FOnBeginUpdate write FOnBeginUpdate;
+    property OnEndUpdate: TNotifyEvent read FOnEndUpdate write FOnEndUpdate;
   end;
 
   //TODO: Change all scripting to execute within thread...
@@ -139,11 +145,17 @@ type
     FSYNC_PrintLn: String;
     FOnStop: TNotifyEvent;
     FOnStart: TNotifyEvent;
+    FOnBeginUpdate: TNotifyEvent;
+    FOnEndUpdate: TNotifyEvent;
     procedure SYNC_PrintLn;
     procedure SYNC_Start;
     procedure SYNC_Stop;
+    procedure SYNC_BeginUpdate;
+    procedure SYNC_EndUpdate;
     procedure ContextPrintLn(Sender: TObject; Context: THHContext;
       const Text: String);
+    procedure ContextBeginUpdate(Sender: TObject);
+    procedure ContextEndUpdate(Sender: TObject);
     procedure SetOnStart(const Value: TNotifyEvent);
     procedure SetOnStop(const Value: TNotifyEvent);
   protected
@@ -157,6 +169,8 @@ type
     property OnStart: TNotifyEvent read FOnStart write SetOnStart;
     property OnStop: TNotifyEvent read FOnStop write SetOnStop;
     property OnPrintLn: THHPrintEvent read FOnPrintLn write FOnPrintLn;
+    property OnBeginUpdate: TNotifyEvent read FOnBeginUpdate write FOnBeginUpdate;
+    property OnEndUpdate: TNotifyEvent read FOnEndUpdate write FOnEndUpdate;
   end;
 
 function HH: THoardHelper;
@@ -362,6 +376,8 @@ begin
       T.OnPrintLn:= PrintLn;
       T.OnStart:= Started;
       T.OnStop:= Stopped;
+      T.OnBeginUpdate:= ThreadBeginUpdate;
+      T.OnEndUpdate:= ThreadEndUpdate;
       T.FreeOnTerminate:= True;
       Result:= T.Kill;
       T.Start;
@@ -665,6 +681,20 @@ begin
     FOnStopped(Self);
 end;
 
+procedure THoardHelper.ThreadBeginUpdate(Sender: TObject);
+begin
+  //TODO
+  if Assigned(FOnBeginUpdate) then
+    FOnBeginUpdate(Self);
+end;
+
+procedure THoardHelper.ThreadEndUpdate(Sender: TObject);
+begin
+  //TODO
+  if Assigned(FOnEndUpdate) then
+    FOnEndUpdate(Self);
+end;
+
 procedure THoardHelper.SetBackupDirectory(const Value: String);
 begin
   FBackupDirectory := Value;
@@ -787,6 +817,16 @@ begin
   inherited;
 end;
 
+procedure THHScriptThread.ContextBeginUpdate(Sender: TObject);
+begin
+  Synchronize(SYNC_BeginUpdate);
+end;
+
+procedure THHScriptThread.ContextEndUpdate(Sender: TObject);
+begin
+  Synchronize(SYNC_EndUpdate);
+end;
+
 procedure THHScriptThread.ContextPrintLn(Sender: TObject; Context: THHContext;
   const Text: String);
 begin
@@ -805,6 +845,8 @@ begin
       FContext:= THHContext.Create(nil);
       try
         FContext.OnPrintLn:= ContextPrintLn;
+        FContext.OnBeginUpdate:= ContextBeginUpdate;
+        FContext.OnEndUpdate:= ContextEndUpdate;
         try
           Res:= FContext.Exec(FScript);
         except
@@ -839,6 +881,18 @@ end;
 procedure THHScriptThread.SetOnStop(const Value: TNotifyEvent);
 begin
   FOnStop := Value;
+end;
+
+procedure THHScriptThread.SYNC_BeginUpdate;
+begin
+  if Assigned(FOnBeginUpdate) then
+    FOnBeginUpdate(Self);
+end;
+
+procedure THHScriptThread.SYNC_EndUpdate;
+begin
+  if Assigned(FOnEndUpdate) then
+    FOnEndUpdate(Self)
 end;
 
 procedure THHScriptThread.SYNC_PrintLn;

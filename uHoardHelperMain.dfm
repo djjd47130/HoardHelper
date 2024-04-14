@@ -620,6 +620,7 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       TabWidth = 2
       WantTabs = True
       FontSmoothing = fsmClearType
+      ExplicitTop = 203
     end
   end
   object DWSSyn: TSynDWSSyn

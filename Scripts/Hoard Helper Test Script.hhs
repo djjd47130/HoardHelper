@@ -1,0 +1,163 @@
+
+//Demo mode is enabled by default internally in the scripting engine.
+//  This is a safety measure so you can be sure you know
+//  what will happen before you commit to it. 
+//  Enable this line (by removing the dot) to undefine demo mode and use production mode instead:
+{.$UNDEF DEMO}               
+//NOTE: Even if you enable this, highlighting a line below and executing it will only execute
+//  your selection, and this will still be ignored anyway. 
+//IF YOU ARE 100% CONFIDENT AND READY, you can undefine demo mode from the common script.
+
+
+                                                          
+PrintLn('');
+PrintLn('Highlight any line or block of script and execute it.');
+PrintLn('');
+
+
+(*
+                              
+//Searching files...      
+                        
+//- All video files in movie library:
+Search('Movies\', VideoFilter);
+                     
+//- Files in movie library with the word "star" found:                                    
+Search('Movies\', '*star*');                                
+                              
+//- All audio files in music library:
+Search('Music\', AudioFilter);   
+
+//- All video files in Pics library:
+Search('Pics\', VideoFilter);
+                                              
+                                   
+Search('Inno\', '*');                                   
+                                   
+                                   
+                              
+//Working with datasets and CSV...
+                                             
+//Perform search returning TDataSet...
+var DS: TDataset = DSGetFilesInDataset('Apps\', '*windows*', True);
+DSPrintDataset(DS);
+
+//Convert TDataSet to TCSV...                         
+var CSV: Array of String = DataSetAsCSV(DS);
+PrintLn('');
+PrintLn('CSV Format:');
+PrintCSV(CSV);
+  
+//Save CSV to file...
+//TODO                              
+                                   
+                                                                     
+
+//Get description of a specific file extension      
+
+var Ext: String = '.zip';
+var ExtInfo: String = GetGenericFileType(Ext); 
+PrintLn('File type lookup for extension "'+Ext+'": "'+ExtInfo+'"');
+                                  
+                                    
+
+//Get count of files or folders in a given directory matching a given filter   
+   
+//- File count
+PrintLn(IntToStr(FindFilesCount('Movies\', VideoFilter, True))+' Files Found');
+
+//- Folder count
+PrintLn(IntToStr(FindDirsCount('Movies\', '*', True))+' Directories Found');
+
+//- File and Folder count
+PrintLn(IntToStr(FindItemsCount('Movies\', '*', True))+' Items Found');
+
+
+                                   
+//Search Movies library for folders with more than 1 video file within      
+FindFoldersWithMultipleFiles('Movies\', VideoFilter, '*', True);
+
+
+
+//List directories with "sample" in its name...
+
+PrintLn('');
+PrintLn('Searching directories...');
+var Dirs: Array of String = GetDirs('Movies\', '*sample*', True);
+for var X := 0 to Length(Dirs)-1 do begin
+  PrintLn(Dirs[X]);
+end;
+
+
+
+//Open file or folder based on extension and its default program   
+
+//- Open a video file...
+OpenFile('Movies\Other\Joker (2019) 2160p.mkv'); 
+
+//- Open a directory...
+OpenFile('Movies\Other\');
+                                    
+                                    
+                   
+//Move file up to its parent directory     
+MoveFileUpAFolder('Movies\Other\Friday.mpg');     
+                                                  
+                    
+                    
+//Move a file into a subdirectory of its own  
+    
+//- Using filename for folder name... 
+MoveIntoSubdir('Movies\Other\Joker (2019) 2160p.mkv');
+
+//- Using your own folder name...                  
+MoveIntoSubdir('Movies\Other\Joker (2019) 2160p.mkv', 'Joker (2019)');  
+
+          
+          
+//Move all movie files in a directory up to its parent directory...      
+MoveAllFilesUpAFolder('Movies\Other\', VideoFilter);
+               
+//TODO: MoveAllDirsUpAFolder          
+                                       
+                                                   
+                                                   
+//Move all movie files in a directory into a subdirectory of their own...      
+MoveAllFilesIntoSubdirs('Movies\Other\', VideoFilter);
+                                                  
+                                                                         
+
+//Delete files recursively in a given filter
+procedure DeleteUnnecessaryFiles;
+begin 
+  PrintLn('');
+  PrintLn('Deleting unnecessary files...');
+  DeleteFiles('Movies\', '*.nfo', True);
+  DeleteFiles('Movies\', 'Desktop.ini', True);
+  
+end;
+DeleteUnnecessaryFiles;                                       
+                             
+
+                                       
+//Delete empty directories from Movies library recursively     
+DeleteEmptyDirs('Movies\', True);
+
+
+
+//String manipulation
+
+//- Copy text up to a given string...
+var FindTxt: String = 'a';
+var T: String = 'This is just a random test.';
+var P: Integer = Pos(FindTxt, T);
+var Tmp: String = Copy(T, 1, P-1);
+PrintLn(Tmp);
+Delete(T, 1, P-(Length(FindTxt)));
+PrintLn(T);
+
+
+
+
+*)
+

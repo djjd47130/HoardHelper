@@ -197,6 +197,8 @@ type
     function CommonIsLoaded: Boolean;
     function GetScript: String;
     procedure HighlightMatch(const Position, Length: Integer);
+    procedure HHBeginUpdate(Sender: TObject);
+    procedure HHEndUpdate(Sender: TObject);
   public
     function New: Boolean;
     function Load(const Filename: String): Boolean;
@@ -236,6 +238,8 @@ begin
   HH.OnPrintLn:= PrintLn;
   HH.OnStarted:= Started;
   HH.OnStopped:= Stopped;
+  HH.OnBeginUpdate:= HHBeginUpdate;
+  HH.OnEndUpdate:= HHEndUpdate;
   HH.LoadSettings;
 
   if CmdLine.OpenFilename <> '' then begin
@@ -562,6 +566,16 @@ procedure TfrmHoardHelperMain.actFindCaseSensitiveExecute(Sender: TObject);
 begin
   actFindCaseSensitive.Checked:= not actFindCaseSensitive.Checked;
   SynSearch.CaseSensitive:= actFindCaseSensitive.Checked;
+end;
+
+procedure TfrmHoardHelperMain.HHBeginUpdate(Sender: TObject);
+begin
+  txtScript.Lines.BeginUpdate;
+end;
+
+procedure TfrmHoardHelperMain.HHEndUpdate(Sender: TObject);
+begin
+  txtScript.Lines.EndUpdate;
 end;
 
 procedure TfrmHoardHelperMain.HighlightMatch(const Position, Length: Integer);

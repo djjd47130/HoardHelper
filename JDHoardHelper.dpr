@@ -16,7 +16,7 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  TStyleManager.TrySetStyle('Glossy');
+  TStyleManager.TrySetStyle('Carbon');
   Application.Title := 'JD Hoard Helper';
   Application.CreateForm(TfrmHoardHelperMain, frmHoardHelperMain);
   Application.CreateForm(TfrmFind, frmFind);

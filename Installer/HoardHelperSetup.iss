@@ -55,7 +55,7 @@ Source: "C:\Users\djjd4\AppData\Roaming\JD Software\JD Hoard Helper\Common.hhs";
 ; TODO: Install Windows service application...
 
 ; TODO: Install FontAwesome font...
-
+Source: "D:\Development\GitHub\HoardHelper\Installer\fontawesome.ttf"; DestDir: "{autofonts}"; FontInstall: "FontAwesome"; Components: fontawesome; Flags: onlyifdoesntexist uninsneveruninstall
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]

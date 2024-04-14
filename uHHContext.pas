@@ -20,7 +20,6 @@ type
     StrUtils: TdwsUnit;
     HHUtils: TdwsUnit;
     IMDBUtils: TdwsUnit;
-    dwsSimpleDebugger1: TdwsSimpleDebugger;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
     procedure HHUtilsFunctionsGetTickCountEval(info: TProgramInfo);
@@ -51,10 +50,19 @@ type
     procedure FileUtilsFunctionsGetGenericFileTypeEval(info: TProgramInfo);
     procedure FileUtilsFunctionsMoveFileEval(info: TProgramInfo);
     procedure FileUtilsFunctionsGetFileDateModifiedEval(info: TProgramInfo);
+    procedure StrUtilsFunctionssTabEval(info: TProgramInfo);
+    procedure StrUtilsFunctionsSplitStringEval(info: TProgramInfo);
+    procedure HHUtilsFunctionsBeginPrintLnEval(info: TProgramInfo);
+    procedure HHUtilsFunctionsEndPrintLnEval(info: TProgramInfo);
   private
-    FOnPrintLn: THHPrintEvent;
     FExec: IdwsProgramExecution;
-    procedure DoPrintLn(const S: String);
+    FOnPrintLn: THHPrintEvent;
+    FOnBeginUpdate: TNotifyEvent;
+    FOnEndUpdate: TNotifyEvent;
+  protected
+    procedure DoPrintLn(const S: String); virtual;
+    procedure DoBeginUpdate; virtual;
+    procedure DoEndUpdate; virtual;
   public
     function Exec(const Expr: String): String;
     function Compile(const Expr: String): String;
@@ -62,6 +70,8 @@ type
     procedure BackupFile(Context: THHContext; const Filename: String);
   published
     property OnPrintLn: THHPrintEvent read FOnPrintLn write FOnPrintLn;
+    property OnBeginUpdate: TNotifyEvent read FOnBeginUpdate write FOnBeginUpdate;
+    property OnEndUpdate: TNotifyEvent read FOnEndUpdate write FOnEndUpdate;
   end;
 
 var
@@ -119,6 +129,18 @@ begin
   FExec:= nil;
 end;
 
+procedure THHContext.DoBeginUpdate;
+begin
+  if Assigned(FOnBeginUpdate) then
+    FOnBeginUpdate(Self);
+end;
+
+procedure THHContext.DoEndUpdate;
+begin
+  if Assigned(FOnEndUpdate) then
+    FOnEndUpdate(Self);
+end;
+
 procedure THHContext.DoPrintLn(const S: String);
 begin
   if Assigned(FOnPrintLn) then
@@ -162,7 +184,6 @@ begin
       Result:= Res;
     end;
   end;
-
 end;
 
 procedure THHContext.StopExec;
@@ -215,6 +236,16 @@ end;
 procedure THHContext.StrUtilsFunctionssLineBreakEval(info: TProgramInfo);
 begin
   Info.ResultAsString:= sLineBreak;
+end;
+
+procedure THHContext.StrUtilsFunctionsSplitStringEval(info: TProgramInfo);
+begin
+  Info.ResultAsStringArray:= SplitString(Info.ParamAsString[0], Info.ParamAsString[1]);
+end;
+
+procedure THHContext.StrUtilsFunctionssTabEval(info: TProgramInfo);
+begin
+  Info.ResultAsString:= #9;
 end;
 
 procedure THHContext.StrUtilsFunctionsUpperCaseEval(info: TProgramInfo);
@@ -540,6 +571,20 @@ procedure THHContext.FileUtilsFunctionsPathCombineEval(
   info: TProgramInfo);
 begin
   Info.ResultAsString:= PathCombine(Info.ParamAsString[0], Info.ParamAsString[1]);
+end;
+
+procedure THHContext.HHUtilsFunctionsBeginPrintLnEval(info: TProgramInfo);
+begin
+  //TODO
+  if Assigned(FOnBeginUpdate) then
+    FOnBeginUpdate(Self);
+end;
+
+procedure THHContext.HHUtilsFunctionsEndPrintLnEval(info: TProgramInfo);
+begin
+  //TODO
+  if Assigned(FOnEndUpdate) then
+    FOnEndUpdate(Self);
 end;
 
 procedure THHContext.HHUtilsFunctionsGetTickCountEval(
