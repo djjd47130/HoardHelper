@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "JD Hoard Helper"
-#define MyAppVersion "0.2"
+#define MyAppVersion "0.4"
 #define MyAppPublisher "Jerry Dodge"
 #define MyAppURL "https://jerryszone.com"
 #define MyAppExeName "JDHoardHelper.exe"
@@ -25,7 +25,7 @@ DefaultDirName={autopf}\{#MyAppName}
 ChangesAssociations=yes
 DefaultGroupName={#MyAppName}
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
-;PrivilegesRequired=lowest
+PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputBaseFilename=JDHoardHelperSetup
 Compression=lzma
@@ -35,15 +35,31 @@ WizardStyle=modern
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
+[Types]
+Name: "full"; Description: "Full Installation"
+Name: "minimal"; Description: "Minimal Installation"
+Name: "custom"; Description: "Custom Installation"; Flags: iscustom
+
+[Components]
+Name: "app"; Description: "Hoard Helper Application"; Types: full minimal custom; Flags: fixed checkablealone
+Name: "fontawesome"; Description: "FontAwesome Font"; Types: full minimal custom; Flags: fixed checkablealone
+Name: "service"; Description: "Hoard Helper Service"; Types: full custom; Flags: checkablealone
+
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "D:\Development\GitHub\HoardHelper\Bin32\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-; TODO: Default common.hhs script file...
+Source: "D:\Development\GitHub\HoardHelper\Bin32\{#MyAppExeName}"; DestDir: "{app}"; Components: app; Flags: ignoreversion
+; Default common.hhs script file...
+Source: "C:\Users\djjd4\AppData\Roaming\JD Software\JD Hoard Helper\Common.hhs"; DestDir: "{userappdata}\JD Software\JD Hoard Helper"; Components: app; Flags: ignoreversion onlyifdoesntexist
+; TODO: Install Windows service application...
+
+; TODO: Install FontAwesome font...
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
+; Associate .hhs files with application
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey}"; ValueData: ""; Flags: uninsdeletevalue
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocName}"; Flags: uninsdeletekey
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},0"
@@ -56,5 +72,6 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
+; Run application after installation
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 

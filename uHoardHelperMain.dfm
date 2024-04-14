@@ -2,8 +2,8 @@ object frmHoardHelperMain: TfrmHoardHelperMain
   Left = 0
   Top = 0
   Caption = 'JD Hoard Helper'
-  ClientHeight = 516
-  ClientWidth = 796
+  ClientHeight = 530
+  ClientWidth = 918
   Color = clBlack
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -21,11 +21,12 @@ object frmHoardHelperMain: TfrmHoardHelperMain
   object Toolbar: TPanel
     Left = 0
     Top = 0
-    Width = 796
+    Width = 918
     Height = 41
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 796
     object Bevel1: TBevel
       AlignWithMargins = True
       Left = 199
@@ -478,8 +479,8 @@ object frmHoardHelperMain: TfrmHoardHelperMain
   end
   object Stat: TStatusBar
     Left = 0
-    Top = 497
-    Width = 796
+    Top = 511
+    Width = 918
     Height = 19
     Panels = <
       item
@@ -494,20 +495,24 @@ object frmHoardHelperMain: TfrmHoardHelperMain
         Text = '[Filename]'
         Width = 50
       end>
+    ExplicitTop = 497
+    ExplicitWidth = 796
   end
   object pMain: TPanel
     Left = 0
     Top = 41
-    Width = 760
-    Height = 456
+    Width = 882
+    Height = 470
     Align = alLeft
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitWidth = 760
+    ExplicitHeight = 456
     object Splitter1: TSplitter
       Left = 0
-      Top = 195
-      Width = 760
+      Top = 202
+      Width = 882
       Height = 7
       Cursor = crVSplit
       Align = alBottom
@@ -519,8 +524,8 @@ object frmHoardHelperMain: TfrmHoardHelperMain
     object txtScript: TSynEdit
       Left = 0
       Top = 0
-      Width = 760
-      Height = 179
+      Width = 882
+      Height = 193
       Align = alTop
       Anchors = [akLeft, akTop, akRight, akBottom]
       Color = 1907997
@@ -567,12 +572,14 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       WantTabs = True
       OnChange = txtScriptChange
       FontSmoothing = fsmClearType
+      ExplicitWidth = 760
+      ExplicitHeight = 179
     end
     object txtOutput: TSynEdit
       Left = 0
-      Top = 202
-      Width = 760
-      Height = 254
+      Top = 209
+      Width = 882
+      Height = 261
       Align = alBottom
       Color = 1907997
       ActiveLineColor = 3158064

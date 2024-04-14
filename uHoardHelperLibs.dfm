@@ -25,8 +25,6 @@ object frmLibs: TfrmLibs
     Height = 45
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 405
-    ExplicitWidth = 602
     object btnDone: TJDFontButton
       Left = 673
       Top = 1
@@ -68,7 +66,6 @@ object frmLibs: TfrmLibs
       SubTextFont.Style = []
       TabOrder = 0
       Text = 'Done'
-      ExplicitLeft = 517
     end
   end
   object pMain: TPanel
@@ -80,8 +77,6 @@ object frmLibs: TfrmLibs
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 602
-    ExplicitHeight = 361
     object Label1: TLabel
       Left = 0
       Top = 0
@@ -111,7 +106,6 @@ object frmLibs: TfrmLibs
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
-      ExplicitWidth = 602
       object lblEditing: TLabel
         AlignWithMargins = True
         Left = 581
@@ -376,7 +370,6 @@ object frmLibs: TfrmLibs
       TabOrder = 1
       ViewStyle = vsReport
       OnSelectItem = lstLibrariesSelectItem
-      ExplicitLeft = 5
     end
     object Panel2: TPanel
       Left = 0
@@ -385,8 +378,6 @@ object frmLibs: TfrmLibs
       Height = 89
       Align = alBottom
       TabOrder = 2
-      ExplicitTop = 272
-      ExplicitWidth = 602
       DesignSize = (
         758
         89)
@@ -421,7 +412,6 @@ object frmLibs: TfrmLibs
         Anchors = [akLeft, akTop, akRight]
         ReadOnly = True
         TabOrder = 0
-        ExplicitWidth = 202
       end
       object txtDir: TEdit
         Left = 112
@@ -431,7 +421,6 @@ object frmLibs: TfrmLibs
         Anchors = [akLeft, akTop, akRight]
         ReadOnly = True
         TabOrder = 1
-        ExplicitWidth = 440
       end
       object cboType: TComboBox
         Left = 597
@@ -451,7 +440,6 @@ object frmLibs: TfrmLibs
           'Pictures'
           'Documents'
           'Applications')
-        ExplicitLeft = 441
       end
       object btnSelectDir: TJDFontButton
         Left = 714
@@ -495,7 +483,6 @@ object frmLibs: TfrmLibs
         TabOrder = 3
         Text = 'btnSelectDir'
         OnClick = btnSelectDirClick
-        ExplicitLeft = 558
       end
     end
   end

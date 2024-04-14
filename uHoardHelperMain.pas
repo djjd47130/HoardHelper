@@ -246,6 +246,7 @@ begin
   //TODO: Remember window state / size...
   Width:= 1100;
   Height:= 700;
+  txtOutput.Height:= 350;
 
   UpdateActions;
 end;

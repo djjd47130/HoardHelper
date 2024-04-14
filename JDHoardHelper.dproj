@@ -4,7 +4,7 @@
         <ProjectVersion>19.1</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -131,8 +131,8 @@
         <UWP_DelphiLogo150>Media\trash-icon.png</UWP_DelphiLogo150>
         <DCC_ExeOutput>.\Bin32</DCC_ExeOutput>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
-        <VerInfo_MinorVer>2</VerInfo_MinorVer>
-        <VerInfo_Keys>CompanyName=Jerry Dodge;FileDescription=$(MSBuildProjectName);FileVersion=0.2.0.0;InternalName=HoardHelper;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.jerrydodge.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=0.2;Comments=</VerInfo_Keys>
+        <VerInfo_MinorVer>4</VerInfo_MinorVer>
+        <VerInfo_Keys>CompanyName=Jerry Dodge;FileDescription=$(MSBuildProjectName);FileVersion=0.4.0.0;InternalName=HoardHelper;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.jerrydodge.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=0.4;Comments=</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
