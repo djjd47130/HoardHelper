@@ -1,14 +1,4 @@
 
-//Demo mode is enabled by default internally in the scripting engine.
-//  This is a safety measure so you can be sure you know
-//  what will happen before you commit to it. 
-//  Enable this line (by removing the dot) to undefine demo mode and use production mode instead:
-{.$UNDEF DEMO}               
-//NOTE: Even if you enable this, highlighting a line below and executing it will only execute
-//  your selection, and this will still be ignored anyway. 
-//IF YOU ARE 100% CONFIDENT AND READY, you can undefine demo mode from the common script.
-
-
                                                           
 PrintLn('');
 PrintLn('Highlight any line or block of script and execute it.');
@@ -20,23 +10,29 @@ PrintLn('');
 //Searching files...      
                         
 //- All video files in movie library:
-Search('Movies\', VideoFilter);
+SearchMovies('Movies\', VideoFilter);
                      
-//- Files in movie library with the word "star" found:                                    
-Search('Movies\', '*star*');                                
+//- Files in movie library with the word "star" found:
+SearchMovies('Movies\', '*star*');
                               
 //- All audio files in music library:
 Search('Music\', AudioFilter);   
 
 //- All video files in Pics library:
-Search('Pics\', VideoFilter);
-                                              
-                                   
-Search('Inno\', '*');                                   
-                                   
-                                   
+Search('Pics\', VideoFilter);                                                                                                       
+
+
+
+//Check whether a file is in use...
+PrintLn('');
+if FileInUse('Movies\ISO\A Good Day To Die Hard.iso') then
+  PrintLn('File is in use')
+else
+  PrintLn('File is NOT in use');
+
+
                               
-//Working with datasets and CSV...
+//Working with datasets...
                                              
 //Perform search returning TDataSet...
 var DS: TDataset = DSGetFilesInDataset('Apps\', '*windows*', True);
@@ -49,15 +45,28 @@ PrintLn('CSV Format:');
 PrintCSV(CSV);
   
 //Save CSV to file...
-//TODO                              
+SaveTextFile('Apps\Test Dataset.csv', CSV);
                                    
                                                                      
 
 //Get description of a specific file extension      
 
-var Ext: String = '.zip';
+var Ext: String = '.vhdx';
 var ExtInfo: String = GetGenericFileType(Ext); 
 PrintLn('File type lookup for extension "'+Ext+'": "'+ExtInfo+'"');
+                                  
+                                  
+                                  
+//Get tag metadata from a file...
+//var Filename: String = 'Movies\Other\The Hitchhikers Guide to the Galaxy (2005).mp4';
+var Filename: String = 'Movies\Low Quality\Iron Man 2008.mp4';
+//var Filename: String = 'Music\Classic Rock Music\ACDC\Back in Black\Hells Bells.mp3';
+var Data: Array of String = GetTags(Filename);
+PrintLn('');
+PrintLn('Tag data for "'+Filename+'":');
+for var X:= 0 to Length(Data)-1 do begin
+  PrintLn('- '+Data[X]);
+end;
                                   
                                     
 
@@ -155,7 +164,6 @@ var Tmp: String = Copy(T, 1, P-1);
 PrintLn(Tmp);
 Delete(T, 1, P-(Length(FindTxt)));
 PrintLn(T);
-
 
 
 
