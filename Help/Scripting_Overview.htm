@@ -1,0 +1,198 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Scripting Overview</title>
+<meta name="GENERATOR" content="WinCHM">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+html,body { 
+	/* Default Font */
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+}
+</style>
+
+</head>
+
+<body>
+<H2>    DWScript Syntax</H2>
+<P>The Hoard Helper system uses&nbsp;<A 
+href="https://github.com/EricGrange/DWScript" target=_blank>DWScript (Delphi Web 
+Script)</A>         for its scripting 
+language. This is primarily Pascal based, and supports pretty much all basic Pascal / Delphi 
+syntax, with several additions.</P>
+<P>         
+  The DWScript syntax is too large to document here, but as an example, 
+you can&nbsp;implement things like:</P>
+<UL>
+  <LI>
+<DIV>         
+               
+ Arrays / lists</DIV>
+  <LI>
+<DIV>         
+               
+   Loops</DIV>
+  <LI>
+<DIV>         
+               
+   Functions</DIV>
+  <LI>
+<DIV>         
+               
+   Classes /         
+               
+   Objects</DIV>
+  <LI>
+<DIV>         
+               
+   Enumerations</DIV>
+  <LI>
+<DIV>         
+               
+   Records</DIV>
+  <LI>
+<DIV>         
+               
+   Constants</DIV>
+  <LI>
+<DIV>         
+               
+   Conditionals</DIV>
+  <LI>
+<DIV>         
+               
+   try/finally         
+               
+   and         
+               
+   try/except&nbsp;blocks</DIV>
+  <LI>
+<DIV>         
+               
+   And         
+               
+   much         
+               
+   more</DIV></LI></UL>
+<P>         
+         Please refer to the official&nbsp;<A 
+href="https://bitbucket.org/egrange/dwscript/wiki/Home" 
+target=_blank>documentation of DWScript</A>         
+               
+  for details.</P>
+<P>         
+               
+   &nbsp;</P>
+<H2>         
+   Scripted         
+   Types</H2>
+<P>         
+   Certain data         
+   types are hard-coded into the scripting language, such         
+   as:</P>
+<UL>
+  <LI>
+<DIV><STRONG>String</STRONG> - Text data (array of 
+  characters).         
+                   
+   </DIV>         
+                   
+         
+  <LI>
+  <DIV><STRONG>Integer</STRONG> - Whole number (no decimals).</DIV>
+<LI>
+<DIV><STRONG>Float</STRONG>
+ - Decimal number.
+
+</DIV>
+<LI>
+<DIV ><STRONG>Boolean</STRONG>
+  - True or False.</DIV>
+  <LI>
+etc. 
+  <DIV></DIV>
+</LI></UL>
+<A href="Scripted_Types.htm" ><STRONG>More Info</STRONG></A>
+<P>         
+   &nbsp;</P>
+<H2>         
+   Scripted         
+   Functions</H2>
+<P>         
+   There are         
+   many functions hard-coded into the scripting language, such         
+   as:</P>
+<UL>
+  <LI>
+<DIV><STRONG>GetFiles</STRONG>         
+                   
+    - Returns an array of filenames matching 
+  search         
+                   
+   criteria.</DIV>
+  <LI>
+<DIV><STRONG>ExtractFilePath</STRONG>         
+                   
+    - Returns a string containing the 
+  path where a file is         
+                   
+   located.</DIV>
+  <LI>
+<DIV><STRONG>CreateDir</STRONG>         
+                   
+    - Creates a new         
+                   
+   directory.</DIV>
+  <LI>
+<DIV><STRONG>DeleteFile</STRONG>         
+                   
+    - Deletes a given         
+                   
+   file.</DIV>
+  <LI>
+<DIV><STRONG>GetTags</STRONG>         
+                   
+    - Returns array containing name/value pairs 
+  of file tags /         
+                   
+   metadata.</DIV>
+  <LI>
+<DIV><STRONG>GetFileSize</STRONG>         
+                   
+       - Returns the 
+  size of a given         
+                   
+   file.</DIV>
+  <LI>
+<DIV>         
+                   
+   etc.</DIV></LI></UL>
+<P>
+<A href="Scripted_Functions.htm" ><STRONG>More Info</STRONG></A>         
+   </P>
+<P>         
+   &nbsp;</P>
+<H2>         
+   Library         
+   Paths</H2>
+<P>         
+            
+    The Hoard Helper scripting language does not allow you 
+to reference file paths directly in your filesystem. Instead, you must reference 
+files by using the name of one of your registered media         
+   libraries.</P>
+<P>         
+            
+             
+           For example, instead of referencing 
+"<STRONG>D:\Media\Videos\Movies\SomeMovie.MP4</STRONG>", you would access it 
+more like "<STRONG>Movies\SomeMovie.MP4</STRONG>         
+            
+             
+            
+                   
+   ".</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P></body>
+</html>

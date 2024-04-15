@@ -1,0 +1,473 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Scripted Functions</title>
+<meta name="GENERATOR" content="WinCHM">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+html,body { 
+	/* Default Font */
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+}
+</style>
+
+</head>
+
+<body>
+<P> The following functions are available within the 
+scripting language:</P>
+<P><STRONG>Hoard Helper Utils:</STRONG>  </P>
+<UL>
+  <LI>
+  <DIV>function <STRONG>GetTickCount</STRONG> : Integer;</DIV>
+  <UL>
+  <LI>
+  <DIV>Returns number of milliseconds of CPU runtime - 
+    useful for measuring time spent on scripted operations.</DIV></LI></UL>
+  <LI>
+  <DIV>procedure <STRONG>PrintLn</STRONG> (S: String);</DIV>
+  <UL>
+  <LI>
+  <DIV> Prints a line of text into the output control.</DIV>
+  <LI>
+  <DIV> Param <STRONG>S</STRONG> - The string to be printed into the output control.</DIV></LI></UL>
+  <LI>
+  <DIV>procedure <STRONG>BeginPrintLn</STRONG> ;</DIV>
+  <UL>
+  <LI>
+  <DIV> Triggers output control to pause rendering until 
+    <STRONG>EndPrintLn</STRONG>       
+      is called.</DIV></LI></UL>
+  <LI>
+  <DIV>procedure <STRONG>EndPrintLn</STRONG> ;</DIV>
+  <UL>
+  <LI>
+  <DIV> Triggers output control to resume rendering after 
+    <STRONG>BeginPrintLn</STRONG>       
+      was called.</DIV></LI></UL></LI></UL>
+<P><STRONG>String Utils:</STRONG> </P>
+<UL>
+<LI>
+<DIV>function <STRONG>Copy</STRONG> (S: String; Index: Integer; Count: 
+  Integer): String;
+
+</DIV>
+  <UL>
+<LI>
+<DIV>Copies a selection of text from 
+  a string.
+
+</DIV>
+<LI>
+<DIV>Param <STRONG>S</STRONG> - The string containing the text to 
+  be copied.
+
+</DIV>
+<LI>
+<DIV>Param <STRONG>Index</STRONG> - The starting character index within the string 
+  to copy.
+
+</DIV>
+<LI>
+<DIV>Param <STRONG>Count</STRONG> - The number of 
+    chracters to copy from <STRONG>Index</STRONG>      
+   .
+
+</DIV></LI></UL>
+<LI>
+<DIV>function <STRONG>Pos</STRONG> (SubStr: String; Str: String; Offset: 
+  Integer = 1): Integer;
+
+</DIV>
+  <UL>
+<LI>
+<DIV> Finds the position of text 
+  within  a string.
+
+</DIV>
+<DIV>      
+     
+
+</DIV>
+<LI>
+<DIV>Param <STRONG>SubStr</STRONG>    - The string you're 
+  looking for.
+
+</DIV>
+<LI>
+<DIV>Param <STRONG>Str</STRONG>    - The larger string you're 
+  searching in.
+
+</DIV>
+<LI>
+<DIV>Param <STRONG>Offset</STRONG>-&nbsp;The number of characters to offset the search 
+ 
+   from.&nbsp;
+
+</DIV>
+    <DIV></DIV></LI></UL>
+<LI>
+<DIV> function <STRONG>UpperCase</STRONG>  (Str: String): String;
+
+</DIV>
+  <UL>
+<LI>
+<DIV> Returns a string  in UPPER CASE.
+
+</DIV>
+<LI>
+<DIV> Param <STRONG>Str</STRONG> - The string to be converted  to upper case.
+
+</DIV></LI></UL>
+<LI>
+<DIV>function <STRONG>LowerCase</STRONG> (Str: String): String;
+
+</DIV>
+  <UL>
+<LI>
+<DIV>Returns a string in lower case.&nbsp;
+
+</DIV>
+<LI>
+<DIV>Param <STRONG>Str</STRONG> - The string to be converted to&nbsp;lower case.
+
+</DIV></LI></UL>
+<LI>
+<DIV>procedure <STRONG>Delete</STRONG> (var S: String; Index: Integer; 
+  Count: Integer);
+
+</DIV>
+  <UL>
+<LI>
+<DIV>Deletes a section of text from 
+  a string.
+
+</DIV>
+<DIV>      
+   
+
+</DIV>
+<LI>
+<DIV>Param <STRONG>S</STRONG> - The string containing the text to 
+  be deleted.
+
+</DIV>
+<LI>
+<DIV>Param <STRONG>Index</STRONG> - 
+    The starting character index within the string to 
+  delete from.
+
+</DIV>
+<LI>
+<DIV>Param <STRONG>Count</STRONG> - The number of 
+    chracters to delete from <STRONG>Index</STRONG>      
+   .
+
+</DIV>
+    <DIV></DIV></LI></UL>
+<LI>
+<DIV>function <STRONG>sLineBreak</STRONG> : String;
+
+</DIV>
+  <UL>
+<LI>
+<DIV>Returns ANSII characters for a line break (#10 #13).
+
+</DIV></LI></UL>
+<LI>
+<DIV>function <STRONG>sTab</STRONG> : String;
+
+</DIV>
+  <UL>
+<LI>
+<DIV>Returns ANSII character for a tab (#9).
+
+</DIV></LI></UL>
+<LI>
+<DIV>function <STRONG>SplitString</STRONG> (S: String; Delimiter: String): 
+  Array of String;
+
+</DIV>
+  <UL>
+<LI>
+<DIV>Returns an array of string containing elements of 
+    a given string split 
+  by a delimiter.
+
+</DIV>
+<LI>
+<DIV>       Param <STRONG>S</STRONG>        
+     - The string 
+  to be split.
+
+</DIV>
+<LI>
+<DIV>Param <STRONG>Delimiter</STRONG>  - The delimiter to use to 
+    split S into an 
+  array of Strings.
+
+</DIV>
+</LI></UL>
+</LI></UL>
+<P><STRONG>File Utils:</STRONG> </P>
+<UL>
+  <LI>
+<DIV> function <STRONG>FileExists</STRONG>  (Filename: String): 
+Boolean;</DIV>
+  <UL>
+  <LI>
+<DIV> Returns whether a  given filename 
+exists.</DIV></LI></UL>
+  <LI>
+<DIV> function <STRONG>DirExists</STRONG>  (Filename: String): Boolean;</DIV>
+  <UL>
+  <LI>
+<DIV> Returns whether a given  directory name exists.</DIV></LI></UL>
+  <LI>
+<DIV> function <STRONG>GetFiles</STRONG> (Dir: String; SearchPattern: String =      
+   '*.*'; Recursive: Boolean = False): Array of String;</DIV>
+  <UL>
+  <LI>
+<DIV>   Returns an       
+   array containing filenames  matching a file search.</DIV></LI></UL>
+  <LI>
+<DIV> function <STRONG>GetDirs</STRONG> (Dir: String; SearchPattern: String =      
+   '*'; Recursive: Boolean = False): Array of String;</DIV>
+  <UL>
+  <LI>
+<DIV>   Returns an       
+   array containing directories  matching a directory search.</DIV></LI></UL>
+  <LI>   function <STRONG>ExtractFileName</STRONG> (Filename: String): String; 
+  <UL>
+  <LI>   Returns a string containing only the filename 
+    portion of a full path / filename    with 
+  its extension.
+  <DIV></DIV></LI></UL>
+  <LI>   function 
+  <STRONG>ExtractFileNameWithoutExt</STRONG> (Filename: String): 
+  String; 
+  <UL>
+  <LI>   Returns a string containing only the filename 
+    portion of a full path / filename    
+  without its extension.
+  <DIV></DIV></LI></UL>
+  <LI>   function <STRONG>ExtractFilePath</STRONG> (Filename: String): String; 
+  <UL>
+  <LI>   Returns a string containing only the path portion of 
+    a full path / filename.</LI></UL>
+  <LI>  function <STRONG>ExtractFileExt</STRONG> (Filename: String): String; 
+  <UL>
+  <LI>  Returns a string containing only the last extension 
+    found in a filename including the dot.</LI></UL>     
+  <LI>function <STRONG>PathCombine</STRONG> (P1: String; P2: String): String; 
+  <UL>     
+  <LI>Returns a string combining two path strings into one 
+    using appropriate path delimiter automatically.</LI></UL>       
+  <LI>function <STRONG>GetParentDir</STRONG> (Path: String): String; 
+  <UL>       
+  <LI>Returns a string containing the parent directory of 
+    a given directory.</LI></UL>     
+  <LI>function <STRONG>GetGenericFileType</STRONG> (Ext: String): String; 
+  <UL>     
+  <LI>Returns a string describing the file association of 
+    a   given file extension.
+  <LI>Param <STRONG>Ext</STRONG>  - The file extension to be looked up 
+    (including the '.').</LI></UL>     
+  <LI>function <STRONG>FileInUse</STRONG> (Filename: String): Boolean; 
+  <UL>     
+  <LI>Returns whether or not a file is currently in use 
+    (locked from editing).</LI></UL>     
+  <LI>procedure <STRONG>OpenFile</STRONG> (Filename: String); 
+  <UL>     
+  <LI>Opens a given file (or folder) in the default 
+    application associated with it.</LI></UL>     
+  <LI>function <STRONG>MoveFile</STRONG> 
+  (Source: String; Dest: String; Overwrite: Boolean = 
+       False):  Boolean;&lt; /LI 
+       &gt;    
+  <UL>     
+  <LI>Moves a file from a source path to a destination 
+    path.&lt; /UL &gt;&lt; /UL &gt;&lt; /UL &gt;&lt; /UL &gt;</LI></UL>
+  <LI>          
+             
+     
+  <DIV>function <STRONG>CopyFile</STRONG> 
+(Source: String; Dest: String; Overwrite: Boolean = False): Boolean; &lt; UL 
+       &gt;   </DIV>
+  <UL>
+    <LI>     
+         
+  <DIV>Copies a file from a source path to a destination 
+path.&lt; /UL &gt;&lt; /UL &gt;</DIV></LI></UL>
+  <LI>          
+            
+         
+  <DIV>     
+  function <STRONG>DeleteFile</STRONG> 
+(Filename: Boolean): Boolean; &lt; UL &gt;</DIV>
+  <UL>
+    <LI>          
+            
+         
+  <DIV>     
+         
+  Deletes a file.</DIV></LI></UL>
+  <LI>
+<DIV>     
+  function <STRONG>CreateDir</STRONG> (Path: String): Boolean;</DIV>
+  <UL>
+    <LI>     
+         
+  <DIV>     
+         
+  Creates a new directory.</DIV></LI></UL>
+  <LI>
+<DIV>function <STRONG>MoveDir</STRONG> 
+  (Source: String; Dest: String; Overwrite: Boolean = False): 
+Boolean;</DIV>
+  <UL>
+    <LI>     
+         
+  <DIV>Movies a directory and its contents&nbsp;from a source 
+path to a destination path.</DIV></LI></UL>
+  <LI>       
+                   
+         
+  <DIV>function <STRONG>CopyDir</STRONG> 
+(Source: String; Dest: String; Overwrite: Boolean = False): Boolean;</DIV>
+  <UL>
+    <LI>
+<DIV>Copies a directory and its contents&nbsp;from a source path to a destination 
+path.&lt; /UL &gt;&lt; /UL &gt; </DIV></LI></UL>
+  <LI>       
+                     
+         
+  <DIV>     
+  function <STRONG>DeleteDir</STRONG> 
+(Dir: String): Boolean; &lt; UL &gt;</DIV>
+  <UL>
+    <LI>       
+                     
+         
+  <DIV>     
+         
+  Deletes a directory and its contents.</DIV></LI></UL>
+  <LI>
+<DIV>     
+  function <STRONG>GetFileSize</STRONG> (Filename: String): 
+  Integer;</DIV>
+  <UL>
+    <LI>     
+         
+  <DIV>     
+         
+  Returns the size of a given file in 
+    Bytes.</DIV></LI></UL>
+  <LI>
+<DIV>     
+  function <STRONG>GetFileSizeStr</STRONG> (Filename: String): 
+  String;</DIV>
+  <UL>
+    <LI>     
+         
+  <DIV>     
+         
+  Returns a user-friendly string containing the size 
+    of a given file.</DIV></LI></UL>
+  <LI>
+<DIV>   
+function 
+  <STRONG>GetFileDateModified</STRONG> (Filename: String): 
+  String;</DIV>
+  <UL>
+    <LI>     
+         
+  <DIV>     
+         
+  Returns the date modified of a given 
+    file.</DIV></LI></UL>
+  <LI>
+<DIV>   
+function <STRONG>SaveTextFile</STRONG>(Filename: String; Data: Array of 
+  String; Overwrite: Boolean = Falsae): Boolean;</DIV>
+  <UL>
+    <LI>     
+         
+  <DIV> 
+      
+   Saves a string array to a    
+  given 
+  file.   
+</DIV>
+    <LI>     
+         
+  <DIV> 
+      
+   Param <STRONG>Filename</STRONG> 
+      
+    
+      
+    - The filename to save    
+  text 
+  to.   
+</DIV>
+    <LI>     
+         
+  <DIV> 
+      
+   Param <STRONG>Data</STRONG> 
+      
+     - The 
+      
+   string array to be written to    
+  the 
+  file.   
+</DIV>
+    <LI>     
+         
+  <DIV> 
+      
+   Param <STRONG>Overwrite</STRONG> 
+      
+     - 
+      
+   Whether to overwrite an existing file,    
+  if 
+  applicable.   
+</DIV></LI></UL></LI></UL>     
+         
+  <P> 
+      
+            
+   
+     
+</P>
+<P ><STRONG>Tags Utils:</STRONG>     
+     &nbsp;    
+ 
+  <UL>
+  <LI>
+<DIV> function <STRONG>ExtractID3v1</STRONG>  (Filename: String): Array of 
+  String;</DIV>
+  <UL>
+  <LI>
+<DIV> Returns an array of string&nbsp;containing name/value 
+    pairs of&nbsp;the  ID3v1 tags&nbsp;within a given&nbsp;audio 
+  file.</DIV></LI></UL>
+  <LI>
+<DIV> function <STRONG>GetTags</STRONG>  (Filename: String): Array of 
+  String;</DIV>
+  <UL>
+  <LI>
+<DIV> Returns an array of string containing name/value 
+    pairs of all tags / metadata  found within a given 
+  file.</DIV></LI></UL></LI></UL>
+<P></P>     
+         
+  <P>
+<P>      
+  &nbsp;</P>
+<P>      
+  &nbsp;</P></body>
+</html>

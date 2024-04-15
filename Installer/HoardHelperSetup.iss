@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "JD Hoard Helper"
-#define MyAppVersion "0.4"
+#define MyAppVersion "0.5"
 #define MyAppPublisher "Jerry Dodge"
 #define MyAppURL "https://jerryszone.com"
 #define MyAppExeName "JDHoardHelper.exe"
@@ -44,18 +44,19 @@ Name: "custom"; Description: "Custom Installation"; Flags: iscustom
 Name: "app"; Description: "Hoard Helper Application"; Types: full minimal custom; Flags: fixed checkablealone
 Name: "fontawesome"; Description: "FontAwesome Font"; Types: full minimal custom; Flags: fixed checkablealone
 Name: "service"; Description: "Hoard Helper Service"; Types: full custom; Flags: checkablealone
+Name: "samples"; Description: "Sample Scripts"; Types: full custom; Flags: checkablealone
+Name: "help"; Description: "Help File"; Types: full custom; Flags: checkablealone
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
 Source: "D:\Development\GitHub\HoardHelper\Bin32\{#MyAppExeName}"; DestDir: "{app}"; Components: app; Flags: ignoreversion
-; Default common.hhs script file...
+Source: "D:\Development\GitHub\HoardHelper\Scripts\Hoard Helper Sample Script.hhs"; DestDir: "{app}"; Components: samples; Flags: ignoreversion
 Source: "C:\Users\djjd4\AppData\Roaming\JD Software\JD Hoard Helper\Common.hhs"; DestDir: "{userappdata}\JD Software\JD Hoard Helper"; Components: app; Flags: ignoreversion onlyifdoesntexist
-; TODO: Install Windows service application...
-
-; TODO: Install FontAwesome font...
+; TODO: Install Windows service application...        
 Source: "D:\Development\GitHub\HoardHelper\Installer\fontawesome.ttf"; DestDir: "{autofonts}"; FontInstall: "FontAwesome"; Components: fontawesome; Flags: onlyifdoesntexist uninsneveruninstall
+Source: "D:\Development\GitHub\HoardHelper\Help_output\JD Hoard Helper Help.chm"; DestDir: "{app}"; Components: help; Flags: ignoreversion 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
