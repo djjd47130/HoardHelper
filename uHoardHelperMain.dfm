@@ -26,7 +26,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 796
     object Bevel1: TBevel
       AlignWithMargins = True
       Left = 199
@@ -264,6 +263,8 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 4
       Text = 'Execute Script'
+      ExplicitLeft = 361
+      ExplicitTop = -5
     end
     object JDFontButton6: TJDFontButton
       Left = 208
@@ -449,7 +450,7 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Font.Name = 'Tahoma'
       Font.Style = []
       Image.AutoSize = False
-      Image.Text = #61474
+      Image.Text = #61485
       Image.Font.Charset = DEFAULT_CHARSET
       Image.Font.Color = clWindowText
       Image.Font.Height = -21
@@ -477,41 +478,19 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Text = 'Manage Libraries'
     end
   end
-  object Stat: TStatusBar
-    Left = 0
-    Top = 511
-    Width = 918
-    Height = 19
-    Panels = <
-      item
-        Text = '[Cur Pos]'
-        Width = 100
-      end
-      item
-        Text = '[Modified]'
-        Width = 100
-      end
-      item
-        Text = '[Filename]'
-        Width = 50
-      end>
-    ExplicitTop = 497
-    ExplicitWidth = 796
-  end
   object pMain: TPanel
     Left = 0
     Top = 41
     Width = 882
-    Height = 470
+    Height = 489
     Align = alLeft
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelOuter = bvNone
-    TabOrder = 2
-    ExplicitWidth = 760
-    ExplicitHeight = 456
+    TabOrder = 1
+    ExplicitHeight = 470
     object Splitter1: TSplitter
       Left = 0
-      Top = 202
+      Top = 221
       Width = 882
       Height = 7
       Cursor = crVSplit
@@ -521,63 +500,9 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       ExplicitTop = 309
       ExplicitWidth = 863
     end
-    object txtScript: TSynEdit
-      Left = 0
-      Top = 0
-      Width = 882
-      Height = 193
-      Align = alTop
-      Anchors = [akLeft, akTop, akRight, akBottom]
-      Color = 1907997
-      ActiveLineColor = 3158064
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWhite
-      Font.Height = -16
-      Font.Name = 'Consolas'
-      Font.Style = []
-      PopupMenu = popScript
-      TabOrder = 0
-      OnKeyUp = txtScriptKeyUp
-      OnMouseUp = txtScriptMouseUp
-      CodeFolding.GutterShapeSize = 11
-      CodeFolding.CollapsedLineColor = clGrayText
-      CodeFolding.FolderBarLinesColor = clGrayText
-      CodeFolding.IndentGuidesColor = clGray
-      CodeFolding.IndentGuides = True
-      CodeFolding.ShowCollapsedLine = False
-      CodeFolding.ShowHintMark = True
-      UseCodeFolding = False
-      BorderStyle = bsNone
-      Gutter.BorderStyle = gbsNone
-      Gutter.Color = clBlack
-      Gutter.BorderColor = clSilver
-      Gutter.Font.Charset = DEFAULT_CHARSET
-      Gutter.Font.Color = clWhite
-      Gutter.Font.Height = -16
-      Gutter.Font.Name = 'Consolas'
-      Gutter.Font.Style = []
-      Gutter.Font.Quality = fqClearTypeNatural
-      Gutter.ShowLineNumbers = True
-      Gutter.Gradient = True
-      Gutter.GradientStartColor = clBlack
-      Gutter.GradientEndColor = 4539717
-      Highlighter = DWSSyn
-      Options = [eoAutoIndent, eoDragDropEditing, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoTabsToSpaces]
-      RightEdge = 100
-      RightEdgeColor = 4539717
-      ScrollHintColor = 6828847
-      SearchEngine = SynSearch
-      SelectedColor.Background = 9201502
-      TabWidth = 2
-      WantTabs = True
-      OnChange = txtScriptChange
-      FontSmoothing = fsmClearType
-      ExplicitWidth = 760
-      ExplicitHeight = 179
-    end
     object txtOutput: TSynEdit
       Left = 0
-      Top = 209
+      Top = 228
       Width = 882
       Height = 261
       Align = alBottom
@@ -588,7 +513,8 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Font.Height = -16
       Font.Name = 'Consolas'
       Font.Style = []
-      TabOrder = 1
+      TabOrder = 0
+      OnDblClick = txtOutputDblClick
       CodeFolding.GutterShapeSize = 11
       CodeFolding.CollapsedLineColor = clGrayText
       CodeFolding.FolderBarLinesColor = clGrayText
@@ -620,7 +546,94 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       TabWidth = 2
       WantTabs = True
       FontSmoothing = fsmClearType
-      ExplicitTop = 203
+      ExplicitTop = 209
+    end
+    object pScript: TPanel
+      Left = 0
+      Top = 0
+      Width = 882
+      Height = 201
+      Align = alTop
+      Caption = 'pScript'
+      TabOrder = 1
+      object Stat: TStatusBar
+        Left = 1
+        Top = 181
+        Width = 880
+        Height = 19
+        Panels = <
+          item
+            Text = '[Cur Pos]'
+            Width = 100
+          end
+          item
+            Text = '[Modified]'
+            Width = 100
+          end
+          item
+            Text = '[Demo Mode]'
+            Width = 100
+          end
+          item
+            Text = '[Filename]'
+            Width = 50
+          end>
+        ExplicitLeft = 0
+        ExplicitTop = 470
+        ExplicitWidth = 882
+      end
+      object txtScript: TSynEdit
+        Left = 1
+        Top = 1
+        Width = 880
+        Height = 152
+        Align = alTop
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        Color = 1907997
+        ActiveLineColor = 4473924
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -16
+        Font.Name = 'Consolas'
+        Font.Style = []
+        PopupMenu = popScript
+        TabOrder = 1
+        OnKeyUp = txtScriptKeyUp
+        OnMouseUp = txtScriptMouseUp
+        CodeFolding.GutterShapeSize = 11
+        CodeFolding.CollapsedLineColor = clGrayText
+        CodeFolding.FolderBarLinesColor = clGrayText
+        CodeFolding.IndentGuidesColor = clGray
+        CodeFolding.IndentGuides = True
+        CodeFolding.ShowCollapsedLine = False
+        CodeFolding.ShowHintMark = True
+        UseCodeFolding = False
+        BorderStyle = bsNone
+        Gutter.BorderStyle = gbsNone
+        Gutter.Color = clBlack
+        Gutter.BorderColor = clSilver
+        Gutter.Font.Charset = DEFAULT_CHARSET
+        Gutter.Font.Color = clWhite
+        Gutter.Font.Height = -16
+        Gutter.Font.Name = 'Consolas'
+        Gutter.Font.Style = []
+        Gutter.Font.Quality = fqClearTypeNatural
+        Gutter.ShowLineNumbers = True
+        Gutter.Gradient = True
+        Gutter.GradientStartColor = clBlack
+        Gutter.GradientEndColor = 4539717
+        Highlighter = DWSSyn
+        Options = [eoAutoIndent, eoDragDropEditing, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoTabsToSpaces, eoTrimTrailingSpaces]
+        RightEdge = 100
+        RightEdgeColor = 4539717
+        ScrollHintColor = 6828847
+        SearchEngine = SynSearch
+        SelectedColor.Background = 9201502
+        TabWidth = 2
+        WantTabs = True
+        OnChange = txtScriptChange
+        FontSmoothing = fsmClearType
+      end
     end
   end
   object DWSSyn: TSynDWSSyn
@@ -805,6 +818,19 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Hint = 'Whole Words'
       OnExecute = actFindWholeWordsExecute
     end
+    object actGoToPos: TAction
+      Caption = 'Go to Position'
+      Hint = 'Go to Position'
+      OnExecute = actGoToPosExecute
+    end
+    object actDemoMode: TAction
+      Category = 'Script'
+      Caption = 'Demo Mode'
+      Checked = True
+      Hint = 'Demo Mode'
+      ShortCut = 16452
+      OnExecute = actDemoModeExecute
+    end
   end
   object MM: TMainMenu
     Left = 272
@@ -918,6 +944,12 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       object N9: TMenuItem
         Action = actCheckSyntax
       end
+      object N15: TMenuItem
+        Caption = '-'
+      end
+      object DemoMode1: TMenuItem
+        Action = actDemoMode
+      end
     end
     object Options1: TMenuItem
       Caption = 'Options'
@@ -984,12 +1016,14 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Caption = 'Help'
       object HelpContents1: TMenuItem
         Caption = 'Help Contents'
+        ShortCut = 16496
       end
       object HelpContents2: TMenuItem
         Caption = '-'
       end
       object AboutJDHoardHelper1: TMenuItem
         Caption = 'About JD Hoard Helper...'
+        ShortCut = 24641
       end
     end
   end

@@ -6,14 +6,34 @@ object HHContext: THHContext
   Width = 353
   object DWS: TDelphiWebScript
     Config.MaxExceptionDepth = 20
-    Config.Conditionals.Strings = (
-      'DEMO')
+    Config.CompileFileSystem = dwsNoFileSystem1
+    Config.RuntimeFileSystem = dwsNoFileSystem1
     Left = 40
     Top = 32
   end
   object FileUtils: TdwsUnit
     Script = DWS
     Functions = <
+      item
+        Name = 'FileExists'
+        Parameters = <
+          item
+            Name = 'Filename'
+            DataType = 'String'
+          end>
+        ResultType = 'Boolean'
+        OnEval = FileUtilsFunctionsFileExistsEval
+      end
+      item
+        Name = 'DirExists'
+        Parameters = <
+          item
+            Name = 'Filename'
+            DataType = 'String'
+          end>
+        ResultType = 'Boolean'
+        OnEval = FileUtilsFunctionsDirExistsEval
+      end
       item
         Name = 'GetFiles'
         Parameters = <
@@ -99,6 +119,59 @@ object HHContext: THHContext
         OnEval = FileUtilsFunctionsExtractFileExtEval
       end
       item
+        Name = 'PathCombine'
+        Parameters = <
+          item
+            Name = 'P1'
+            DataType = 'String'
+          end
+          item
+            Name = 'P2'
+            DataType = 'String'
+          end>
+        ResultType = 'String'
+        OnEval = FileUtilsFunctionsPathCombineEval
+      end
+      item
+        Name = 'GetParentDir'
+        Parameters = <
+          item
+            Name = 'Path'
+            DataType = 'String'
+          end>
+        ResultType = 'String'
+        OnEval = FileUtilsFunctionsGetParentDirEval
+      end
+      item
+        Name = 'GetGenericFileType'
+        Parameters = <
+          item
+            Name = 'Ext'
+            DataType = 'String'
+          end>
+        ResultType = 'String'
+        OnEval = FileUtilsFunctionsGetGenericFileTypeEval
+      end
+      item
+        Name = 'FileInUse'
+        Parameters = <
+          item
+            Name = 'Filename'
+            DataType = 'String'
+          end>
+        ResultType = 'Boolean'
+        OnEval = FileUtilsFunctionsFileInUseEval
+      end
+      item
+        Name = 'OpenFile'
+        Parameters = <
+          item
+            Name = 'Filename'
+            DataType = 'String'
+          end>
+        OnEval = FileUtilsFunctionsOpenFileEval
+      end
+      item
         Name = 'MoveFile'
         Parameters = <
           item
@@ -140,16 +213,12 @@ object HHContext: THHContext
       end
       item
         Name = 'DeleteFile'
-        ResultType = 'Boolean'
-      end
-      item
-        Name = 'OpenFile'
         Parameters = <
           item
             Name = 'Filename'
             DataType = 'String'
           end>
-        OnEval = FileUtilsFunctionsOpenFileEval
+        ResultType = 'Boolean'
       end
       item
         Name = 'CreateDir'
@@ -177,16 +246,6 @@ object HHContext: THHContext
             DataType = 'String'
           end>
         ResultType = 'Boolean'
-      end
-      item
-        Name = 'GetGenericFileType'
-        Parameters = <
-          item
-            Name = 'Ext'
-            DataType = 'String'
-          end>
-        ResultType = 'String'
-        OnEval = FileUtilsFunctionsGetGenericFileTypeEval
       end
       item
         Name = 'GetFileSize'
@@ -219,58 +278,34 @@ object HHContext: THHContext
         OnEval = FileUtilsFunctionsGetFileDateModifiedEval
       end
       item
-        Name = 'FileExists'
+        Name = 'SaveTextFile'
         Parameters = <
           item
             Name = 'Filename'
-            DataType = 'String'
-          end>
-        ResultType = 'Boolean'
-        OnEval = FileUtilsFunctionsFileExistsEval
-      end
-      item
-        Name = 'DirExists'
-        Parameters = <
-          item
-            Name = 'Filename'
-            DataType = 'String'
-          end>
-        ResultType = 'Boolean'
-        OnEval = FileUtilsFunctionsDirExistsEval
-      end
-      item
-        Name = 'PathCombine'
-        Parameters = <
-          item
-            Name = 'P1'
             DataType = 'String'
           end
           item
-            Name = 'P2'
-            DataType = 'String'
-          end>
-        ResultType = 'String'
-        OnEval = FileUtilsFunctionsPathCombineEval
-      end
-      item
-        Name = 'GetParentDir'
-        Parameters = <
+            Name = 'Data'
+            DataType = 'array of String'
+          end
           item
-            Name = 'Path'
-            DataType = 'String'
+            Name = 'Overwrite'
+            DataType = 'Boolean'
+            HasDefaultValue = True
+            DefaultValue = 'False'
           end>
-        ResultType = 'String'
-        OnEval = FileUtilsFunctionsGetParentDirEval
+        ResultType = 'Boolean'
+        OnEval = FileUtilsFunctionsSaveTextFileEval
       end
       item
-        Name = 'FileInUse'
+        Name = 'BackupFile'
         Parameters = <
           item
             Name = 'Filename'
             DataType = 'String'
           end>
-        ResultType = 'Boolean'
-        OnEval = FileUtilsFunctionsFileInUseEval
+        ResultType = 'String'
+        OnEval = FileUtilsFunctionsBackupFileEval
       end>
     UnitName = 'FileUtils'
     StaticSymbols = False
@@ -415,40 +450,36 @@ object HHContext: THHContext
     Left = 144
     Top = 32
   end
-  object IMDBUtils: TdwsUnit
+  object TagUtils: TdwsUnit
     Script = DWS
     Functions = <
       item
-        Name = 'SearchIMDB'
-        ResultType = 'TIMDBInfo'
-      end
-      item
         Name = 'ExtractID3v1'
-        ResultType = 'TID3v1Info'
+        Parameters = <
+          item
+            Name = 'Filename'
+            DataType = 'String'
+          end>
+        ResultType = 'array of String'
+        OnEval = TagUtilsFunctionsExtractID3v1Eval
       end
       item
-        Name = 'ExtractID3v2'
-        ResultType = 'TID3v2Info'
+        Name = 'GetTags'
+        Parameters = <
+          item
+            Name = 'Filename'
+            DataType = 'String'
+          end>
+        ResultType = 'array of String'
+        OnEval = TagUtilsFunctionsGetTagsEval
       end>
-    Records = <
-      item
-        Name = 'TID3v1Info'
-        Members = <>
-        Properties = <>
-      end
-      item
-        Name = 'TID3v2Info'
-        Members = <>
-        Properties = <>
-      end
-      item
-        Name = 'TIMDBInfo'
-        Members = <>
-        Properties = <>
-      end>
-    UnitName = 'IMDBUtils'
+    UnitName = 'TagUtils'
     StaticSymbols = False
     Left = 216
     Top = 32
+  end
+  object dwsNoFileSystem1: TdwsNoFileSystem
+    Left = 40
+    Top = 104
   end
 end

@@ -110,7 +110,8 @@ type
 
     function FindLib(const Filename: String): THHLibrary;
 
-    function Execute(const Script: String; const IncludeCommon: Boolean = True): TKillProc;
+    function Execute(const Script: String; const IncludeCommon: Boolean = True;
+      const DemoMode: Boolean = True): TKillProc;
     procedure Compile(const Script: String; const IncludeCommon: Boolean = True);
 
     property Libraries[const Index: Integer]: THHLibrary read GetLibrary;
@@ -147,6 +148,7 @@ type
     FOnStart: TNotifyEvent;
     FOnBeginUpdate: TNotifyEvent;
     FOnEndUpdate: TNotifyEvent;
+    FDemoMode: Boolean;
     procedure SYNC_PrintLn;
     procedure SYNC_Start;
     procedure SYNC_Stop;
@@ -158,6 +160,7 @@ type
     procedure ContextEndUpdate(Sender: TObject);
     procedure SetOnStart(const Value: TNotifyEvent);
     procedure SetOnStop(const Value: TNotifyEvent);
+    procedure SetDemoMode(const Value: Boolean);
   protected
     procedure Execute; override;
   public
@@ -165,6 +168,8 @@ type
     destructor Destroy; override;
 
     procedure Kill;
+
+    property DemoMode: Boolean read FDemoMode write SetDemoMode;
 
     property OnStart: TNotifyEvent read FOnStart write SetOnStart;
     property OnStop: TNotifyEvent read FOnStop write SetOnStop;
@@ -348,12 +353,15 @@ begin
   end;
 end;
 
-function THoardHelper.Execute(const Script: String; const IncludeCommon: Boolean = True): TKillProc;
+function THoardHelper.Execute(const Script: String;
+  const IncludeCommon: Boolean = True; const DemoMode: Boolean = True): TKillProc;
 var
   T: THHScriptThread;
   L: TStringList;
   Tmp: String;
 begin
+  Result:= nil;
+
   if FExecuting then
     raise Exception.Create('Cannot execute script while already executing.');
     
@@ -373,6 +381,7 @@ begin
       
       //Create and start thread...
       T:= THHScriptThread.Create(nil, L.Text);
+      T.DemoMode:= DemoMode;
       T.OnPrintLn:= PrintLn;
       T.OnStart:= Started;
       T.OnStop:= Stopped;
@@ -492,8 +501,6 @@ end;
 
 function THoardHelper.FindLib(const Filename: String): THHLibrary;
 var
-  Tmp: String;
-  //P: Integer;
   LibName: String;
   X: Integer;
   Found: Boolean;
@@ -506,25 +513,6 @@ begin
 
   //First array element SHOULD be the library name...
   LibName:= Arr[0];
-
-  {
-  Tmp:= Filename;
-  P:= Pos('\', Tmp);
-  if P > 0 then begin
-    if P = 1 then begin
-      //First char is \...
-      Delete(Tmp, 1, 1);
-    end else begin
-      //Copy text up to first \
-      LibName:= Copy(Tmp, 1, P-1);
-      Delete(Tmp, 1, P);
-    end;
-  end else begin
-    //No \ was found, entire text is presumably library name...
-    LibName:= Tmp;
-  end;
-  LibName:= Trim(LibName);
-  }
 
   //Library name cannot be blank
   if LibName = '' then begin
@@ -848,7 +836,7 @@ begin
         FContext.OnBeginUpdate:= ContextBeginUpdate;
         FContext.OnEndUpdate:= ContextEndUpdate;
         try
-          Res:= FContext.Exec(FScript);
+          Res:= FContext.Exec(FScript, FDemoMode);
         except
           on E: Exception do begin
             Res:= 'EXCEPTION in script execution: '+E.Message;
@@ -871,6 +859,11 @@ procedure THHScriptThread.Kill;
 begin
   FContext.StopExec;
   Terminate;
+end;
+
+procedure THHScriptThread.SetDemoMode(const Value: Boolean);
+begin
+  FDemoMode := Value;
 end;
 
 procedure THHScriptThread.SetOnStart(const Value: TNotifyEvent);

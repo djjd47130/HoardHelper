@@ -6,7 +6,15 @@ uses
   System.SysUtils, System.Classes,
   Winapi.Windows,
   Vcl.Forms,
-  dwsComp, dwsCompiler, dwsExprs, dwsSymbols, dwsErrors, dwsDebugger;
+  dwsComp, dwsCompiler, dwsExprs, dwsSymbols, dwsErrors, dwsDebugger,
+  TagsLibrary,
+  ID3v1Library,
+  WMATagLibrary,
+  WAVTagLibrary,
+  OggVorbisAndOpusTagLibrary,
+  MP4TagLibrary,
+  FlacTagLibrary,
+  APEv2Library, dwsFileSystem;
 
 type
   THHContext = class;
@@ -19,7 +27,8 @@ type
     FileUtils: TdwsUnit;
     StrUtils: TdwsUnit;
     HHUtils: TdwsUnit;
-    IMDBUtils: TdwsUnit;
+    TagUtils: TdwsUnit;
+    dwsNoFileSystem1: TdwsNoFileSystem;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
     procedure HHUtilsFunctionsGetTickCountEval(info: TProgramInfo);
@@ -54,6 +63,10 @@ type
     procedure StrUtilsFunctionsSplitStringEval(info: TProgramInfo);
     procedure HHUtilsFunctionsBeginPrintLnEval(info: TProgramInfo);
     procedure HHUtilsFunctionsEndPrintLnEval(info: TProgramInfo);
+    procedure TagUtilsFunctionsExtractID3v1Eval(info: TProgramInfo);
+    procedure TagUtilsFunctionsGetTagsEval(info: TProgramInfo);
+    procedure FileUtilsFunctionsSaveTextFileEval(info: TProgramInfo);
+    procedure FileUtilsFunctionsBackupFileEval(info: TProgramInfo);
   private
     FExec: IdwsProgramExecution;
     FOnPrintLn: THHPrintEvent;
@@ -64,8 +77,8 @@ type
     procedure DoBeginUpdate; virtual;
     procedure DoEndUpdate; virtual;
   public
-    function Exec(const Expr: String): String;
-    function Compile(const Expr: String): String;
+    function Exec(const Expr: String; const DemoMode: Boolean = True): String;
+    function Compile(const Expr: String; const DemoMode: Boolean = True): String;
     procedure StopExec;
     procedure BackupFile(Context: THHContext; const Filename: String);
   published
@@ -147,28 +160,41 @@ begin
     FOnPrintLn(Self, Self, S);
 end;
 
-function THHContext.Compile(const Expr: String): String;
+function THHContext.Compile(const Expr: String; const DemoMode: Boolean = True): String;
 var
-  E: String;
   Prog: IdwsProgram;
 begin
   DoPrintLn('Compiling script...');
-  E:= Expr;
-  Prog:= DWS.Compile(E, '');
+
+  //Populate conditionals...
+  DWS.Config.Conditionals.Clear;
+  if DemoMode then begin
+    DWS.Config.Conditionals.Add('DEMO');
+  end;
+
+  //Compile script...
+  Prog:= DWS.Compile(Expr, '');
   if Prog.Msgs.Count > 0 then begin
     Result:= 'FAILED TO COMPILE:'+sLineBreak+sLineBreak+Prog.Msgs.AsInfo;
   end else begin
     Result:= 'Compiled successfully.';
   end;
+
   DoPrintLn(Result);
 end;
 
-function THHContext.Exec(const Expr: String): String;
+function THHContext.Exec(const Expr: String; const DemoMode: Boolean = True): String;
 var
   E: String;
   Prog: IdwsProgram;
   Res: String;
 begin
+  //Populate conditionals...
+  DWS.Config.Conditionals.Clear;
+  if DemoMode then begin
+    DWS.Config.Conditionals.Add('DEMO');
+  end;
+
   E:= Expr;
   Prog:= DWS.Compile(E, '');
   if Prog.Msgs.Count > 0 then begin
@@ -251,6 +277,20 @@ end;
 procedure THHContext.StrUtilsFunctionsUpperCaseEval(info: TProgramInfo);
 begin
   Info.ResultAsString:= UpperCase(Info.ParamAsString[0]);
+end;
+
+procedure THHContext.FileUtilsFunctionsBackupFileEval(info: TProgramInfo);
+var
+  L: THHLibrary;
+  SFN, DFN: String;
+begin
+  L:= HH.FindLib(Info.ParamAsString[0]);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+Info.ParamAsString[0]);
+  SFN:= L.LibPathToLocalPath(Info.ParamAsString[0]);
+
+  //TODO: Backup file (manually)...
+
 end;
 
 procedure THHContext.FileUtilsFunctionsCopyFileEval(info: TProgramInfo);
@@ -346,7 +386,6 @@ var
   FN: String;
   F: File;
   R: Boolean;
-  T: String;
 begin
   R := False;
   L:= HH.FindLib(Info.ParamAsString[0]);
@@ -355,7 +394,7 @@ begin
   FN:= L.LibPathToLocalPath(Info.ParamAsString[0]);
   try
     AssignFile(F, FN);
-    FileMode := fmOpenRead;
+    FileMode := fmOpenReadWrite; //fmOpenRead
     Reset(F);
     CloseFile(F);
   except
@@ -573,6 +612,41 @@ begin
   Info.ResultAsString:= PathCombine(Info.ParamAsString[0], Info.ParamAsString[1]);
 end;
 
+procedure THHContext.FileUtilsFunctionsSaveTextFileEval(info: TProgramInfo);
+var
+  FN: String;
+  L: THHLibrary;
+  SL: TStringList;
+  Arr: TArray<String>;
+  X: Integer;
+  T: String;
+begin
+  FN:= Info.ParamAsString[0];
+  L:= HH.FindLib(FN);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+Info.ParamAsString[0]);
+  FN:= L.LibPathToLocalPath(FN);
+
+  if not ForceDirectories(ExtractFilePath(FN)) then
+    raise Exception.Create('Failed to create file directory.');
+
+  if (Info.ParamAsBoolean[2] = False) and FileExists(FN) then
+    raise Exception.Create('Cannot overwrite file.');
+
+  SL:= TStringList.Create;
+  try
+    Arr:= Info.ParamAsVariant[1]; //TODO: How to read as string array?
+    for X := 0 to Length(Arr)-1 do begin
+      T:= Arr[X];
+      SL.Append(T);
+    end;
+    SL.SaveToFile(FN);
+  finally
+    SL.Free;
+  end;
+
+end;
+
 procedure THHContext.HHUtilsFunctionsBeginPrintLnEval(info: TProgramInfo);
 begin
   //TODO
@@ -601,6 +675,97 @@ begin
   //TODO: Ensure line breaks are retained...
   //T:= StringReplace(T, 'sLineBreak', sLineBreak, [rfReplaceAll]);
   DoPrintLn(T);
+end;
+
+procedure THHContext.TagUtilsFunctionsExtractID3v1Eval(info: TProgramInfo);
+var
+  FN: String;
+  L: THHLibrary;
+  Data: TID3v1Tag;
+  Arr: TArray<String>;
+  procedure A(const N, V: String);
+  begin
+    SetLength(Arr, Length(Arr)+1);
+    Arr[Length(Arr)-1]:= N+'='+V;
+  end;
+begin
+  FN:= Info.ParamAsString[0];
+  L:= HH.FindLib(FN);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+FN);
+  FN:= L.LibPathToLocalPath(FN);
+  if not FileExists(FN) then
+    raise Exception.Create('File not found at path '+Info.ParamAsString[0]);
+
+  Data:= TID3v1Tag.Create;
+  try
+    Data.LoadFromFile(FN);
+    SetLength(Arr, 0);
+    A('Filename', Info.ParamAsString[0]);
+    A('Title', Data.Title);
+    A('Artist', Data.Artist);
+    A('Album', Data.Album);
+    A('Year', Data.Year);
+    A('Comment', Data.Comment);
+    A('Track', Data.TrackString);
+    A('Genre', Data.Genre);
+    //TODO: Lyrics...
+  finally
+    Data.Free;
+  end;
+
+  Info.ResultAsStringArray:= Arr;
+
+end;
+
+procedure THHContext.TagUtilsFunctionsGetTagsEval(info: TProgramInfo);
+var
+  Tags: TTags;
+  FN: String;
+  L: THHLibrary;
+  E: Integer;
+  X: Integer;
+  Arr: TArray<String>;
+  procedure A(const N, V: String);
+  begin
+    SetLength(Arr, Length(Arr)+1);
+    Arr[Length(Arr)-1]:= N+'='+V;
+  end;
+  procedure AN(const N: String);
+  begin
+    SetLength(Arr, Length(Arr)+1);
+    Arr[Length(Arr)-1]:= N+'='+Tags.GetTag(N);
+  end;
+begin
+  FN:= Info.ParamAsString[0];
+  L:= HH.FindLib(FN);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+FN);
+  FN:= L.LibPathToLocalPath(FN);
+  if not FileExists(FN) then
+    raise Exception.Create('File not found at path '+Info.ParamAsString[0]);
+
+  Tags:= TTags.Create;
+  try
+    Tags.LoadTags;
+    E:= Tags.LoadFromFile(FN);
+    if E = 0 then begin
+      A('Filename', Info.ParamAsString[0]);
+      //Populate array with name/value pairs of all tags...
+      for X := 0 to Tags.Count-1 do begin
+        A(Tags.Tags[X].Name, Tags.Tags[X].Value);
+      end;
+    end else begin
+      //Error
+      raise Exception.Create('Error code '+IntToStr(E)+' in loading tag data.');
+    end;
+
+  finally
+    Tags.Free;
+  end;
+
+  Info.ResultAsStringArray:= Arr;
+
 end;
 
 end.

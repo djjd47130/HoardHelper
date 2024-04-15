@@ -27,13 +27,14 @@ uses
   Vcl.Styles.Utils.ComCtrls,
   Vcl.Styles.Utils.ScreenTips,
   Vcl.Styles.Utils.SysControls,
-  Vcl.Styles.Utils.SysStyleHook, SynEditMiscClasses, SynEditSearch,
+  Vcl.Styles.Utils.SysStyleHook,
+
+  SynEditMiscClasses, SynEditSearch,
   SynEditOptionsDialog;
 
 type
   TfrmHoardHelperMain = class(TForm)
     Toolbar: TPanel;
-    Stat: TStatusBar;
     pMain: TPanel;
     txtScript: TSynEdit;
     DWSSyn: TSynDWSSyn;
@@ -152,6 +153,12 @@ type
     Exit1: TMenuItem;
     Wrap1: TMenuItem;
     actFindWholeWords: TAction;
+    actGoToPos: TAction;
+    Stat: TStatusBar;
+    pScript: TPanel;
+    actDemoMode: TAction;
+    N15: TMenuItem;
+    DemoMode1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure actExecExecute(Sender: TObject);
     procedure actNewExecute(Sender: TObject);
@@ -183,6 +190,9 @@ type
     procedure actFindCaseSensitiveExecute(Sender: TObject);
     procedure actExitExecute(Sender: TObject);
     procedure actFindWholeWordsExecute(Sender: TObject);
+    procedure txtOutputDblClick(Sender: TObject);
+    procedure actGoToPosExecute(Sender: TObject);
+    procedure actDemoModeExecute(Sender: TObject);
   private
     FFilename: String;
     FModified: Boolean;
@@ -190,6 +200,7 @@ type
     FFindText: String;
     //FFindPos: Integer;
     FKillProc: TKillProc;
+    //FGotoPos: TPoint;
     procedure PrintLn(Sender: TObject; Context: THHContext;
       const Text: String);
     procedure Started(Sender: TObject);
@@ -232,6 +243,7 @@ begin
 
   pMain.Align:= alClient;
   txtScript.Align:= alClient;
+  pScript.Align:= alClient;
   FFilename:= '';
   FModified:= False;
 
@@ -248,8 +260,8 @@ begin
 
   //WindowState:= wsMaximized;
   //TODO: Remember window state / size...
-  Width:= 1100;
-  Height:= 700;
+  Width:= 1180;
+  Height:= 780;
   txtOutput.Height:= 350;
 
   UpdateActions;
@@ -393,21 +405,17 @@ end;
 
 procedure TfrmHoardHelperMain.PrintLn(Sender: TObject; Context: THHContext;
   const Text: String);
-var
-  L: TStringList;
-  X: Integer;
+//var
+  //X: Integer;
 begin
-  L:= TStringList.Create;
-  try
+  //TODO: Detect associated action to attach to line...
 
-    //Arr := SplitString(Text, 'sLineBreak');
-    //for X := 0 to Length(Arr)-1 do begin
-      //txtOutput.Lines.Append(Arr[X]);
-    //end;
-    txtOutput.Lines.Append(Text);
-  finally
-    L.Free;
-  end;
+  //TODO: Auto-separate line breaks...
+  //Arr := SplitString(Text, sLineBreak);
+  //for X := 0 to Length(Arr)-1 do begin
+    //txtOutput.Lines.Append(Arr[X]);
+  //end;
+  txtOutput.Lines.Add(Text);
 end;
 
 procedure TfrmHoardHelperMain.Started(Sender: TObject);
@@ -420,6 +428,20 @@ procedure TfrmHoardHelperMain.Stopped(Sender: TObject);
 begin
   FExecuting:= False;
   UpdateActions;
+end;
+
+procedure TfrmHoardHelperMain.txtOutputDblClick(Sender: TObject);
+var
+  R: Integer;
+  A: TAction;
+begin
+  //TODO: Triggery any action attached to row at caret...
+  R:= txtOutput.CaretY;
+  A:= TAction(txtOutput.Lines.Objects[R]);
+  if Assigned(A) then begin
+    if A.Enabled and A.Visible then
+      A.Execute;
+  end;
 end;
 
 procedure TfrmHoardHelperMain.txtScriptChange(Sender: TObject);
@@ -476,6 +498,12 @@ procedure TfrmHoardHelperMain.actFindWholeWordsExecute(Sender: TObject);
 begin
   actFindWholeWords.Checked:= not actFindWholeWords.Checked;
   SynSearch.Whole:= actFindWholeWords.Checked;
+end;
+
+procedure TfrmHoardHelperMain.actGoToPosExecute(Sender: TObject);
+begin
+  //TODO...
+
 end;
 
 procedure TfrmHoardHelperMain.actSaveAsExecute(Sender: TObject);
@@ -550,10 +578,17 @@ begin
   UpdateActions;
 end;
 
+procedure TfrmHoardHelperMain.actDemoModeExecute(Sender: TObject);
+begin
+  actDemoMode.Checked:= not actDemoMode.Checked;
+  UpdateActions;
+end;
+
 procedure TfrmHoardHelperMain.actExecExecute(Sender: TObject);
 begin
+  //Execute script...
   txtOutput.Lines.Clear;
-  FKillProc:= HH.Execute(GetScript);
+  FKillProc:= HH.Execute(GetScript, True, actDemoMode.Checked);
   UpdateActions;
 end;
 
@@ -601,19 +636,8 @@ end;
 
 procedure TfrmHoardHelperMain.actFindNextExecute(Sender: TObject);
 var
-  S: String;
   P: Integer;
-  T: String;
 begin
-  //TODO: Find text...
-  //S:= txtScript.Lines.Text;
-  //if FFindPos >= Length(S) then begin
-    //Search pos is at the end, reset?
-
-  //end;
-  //Find next instance...
-  //P:= Pos(FFindText, S);
-
   P:= SynSearch.Next;
   HighlightMatch(P, Length(FFindText));
 
@@ -638,9 +662,11 @@ begin
   actOpen.Enabled:= (not FExecuting);
   actSave.Enabled:= FModified and (not FExecuting);
   actSaveAs.Enabled:= (not FExecuting);
+
   actCheckSyntax.Enabled:= (not FExecuting);
   actExec.Enabled:= (not FExecuting) and (not CommonIsLoaded);
   actStop.Enabled:= FExecuting;
+  actDemoMode.Enabled:= not FExecuting;
 
   actUndo.Enabled:= txtScript.CanUndo and (not FExecuting);
   actRedo.Enabled:= txtScript.CanRedo and (not FExecuting);
@@ -650,18 +676,31 @@ begin
   actDelete.Enabled:= txtScript.SelAvail and (not FExecuting);
   actSelectAll.Enabled:= (not FExecuting);
 
+  //Caret Position
   Stat.Panels[0].Text:= 'Line '+IntToStr(txtScript.CaretY)+' Col '+IntToStr(txtScript.CaretX);
+
+  //Modified
   if FModified then begin
     Stat.Panels[1].Text:= 'Modified';
   end else begin
     Stat.Panels[1].Text:= '';
   end;
-  if FFileName = '' then begin
-    Stat.Panels[2].Text:= 'Untitled.hhs';
+
+  //Demo Mode
+  if actDemoMode.Checked then begin
+    Stat.Panels[2].Text:= 'DEMO MODE';
   end else begin
-    Stat.Panels[2].Text:= ExtractFileName(FFilename);
+    Stat.Panels[2].Text:= 'LIVE MODE';
   end;
-  Self.Caption:= 'JD Hoard Helper - '+Stat.Panels[2].Text;
+
+
+  //Filename
+  if FFileName = '' then begin
+    Stat.Panels[3].Text:= 'Untitled.hhs';
+  end else begin
+    Stat.Panels[3].Text:= ExtractFileName(FFilename);
+  end;
+  Self.Caption:= 'JD Hoard Helper - '+Stat.Panels[3].Text;
 
   for X := 0 to Toolbar.ControlCount-1 do begin
     TControl(Toolbar.Controls[X]).Invalidate;
