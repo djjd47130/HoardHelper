@@ -263,8 +263,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 4
       Text = 'Execute Script'
-      ExplicitLeft = 361
-      ExplicitTop = -5
     end
     object JDFontButton6: TJDFontButton
       Left = 208
@@ -487,18 +485,16 @@ object frmHoardHelperMain: TfrmHoardHelperMain
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitHeight = 470
     object Splitter1: TSplitter
       Left = 0
-      Top = 221
+      Top = 218
       Width = 882
-      Height = 7
+      Height = 10
       Cursor = crVSplit
       Align = alBottom
       Beveled = True
       ResizeStyle = rsUpdate
-      ExplicitTop = 309
-      ExplicitWidth = 863
+      ExplicitTop = 221
     end
     object txtOutput: TSynEdit
       Left = 0
@@ -546,7 +542,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       TabWidth = 2
       WantTabs = True
       FontSmoothing = fsmClearType
-      ExplicitTop = 209
     end
     object pScript: TPanel
       Left = 0
@@ -578,9 +573,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
             Text = '[Filename]'
             Width = 50
           end>
-        ExplicitLeft = 0
-        ExplicitTop = 470
-        ExplicitWidth = 882
       end
       object txtScript: TSynEdit
         Left = 1

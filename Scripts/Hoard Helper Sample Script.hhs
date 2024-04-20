@@ -8,18 +8,24 @@ PrintLn('');
 (*
                               
 //Searching files...      
-                        
+
 //- All video files in movie library:
-SearchMovies('Movies\', VideoFilter);
+SearchMovies('Movies\', '', VideoFilter);
                      
 //- Files in movie library with the word "star" found:
-SearchMovies('Movies\', '*star*');
+SearchMovies('Movies\', 'star', VideoFilter);
                               
 //- All audio files in music library:
-Search('Music\', AudioFilter);   
+Search('Music\', 'Roses', AudioFilter);
 
 //- All video files in Pics library:
-Search('Pics\', VideoFilter);                                                                                                       
+Search('Pics\', '', VideoFilter);
+
+//- All picture files in Pics library:
+Search('Pics\', '', ImageFilter);
+
+//- All picture files in Pics library from a certain time period:
+Search('Pics\', '20160420', ImageFilter);
 
 
 
@@ -35,7 +41,7 @@ else
 //Working with datasets...
                                              
 //Perform search returning TDataSet...
-var DS: TDataset = DSGetFilesInDataset('Apps\', '*windows*', True);
+var DS: TDataset = DSGetFilesInDataset('Apps\', MakeFilter('Windows', AppFilter), True);
 DSPrintDataset(DS);
 
 //Convert TDataSet to TCSV...                         
@@ -49,10 +55,10 @@ SaveTextFile('Apps\Test Dataset.csv', CSV);
                                    
                                                                      
 
-//Get description of a specific file extension      
-
+//Get description of a specific file extension
 var Ext: String = '.vhdx';
-var ExtInfo: String = GetGenericFileType(Ext); 
+var ExtInfo: String = GetGenericFileType(Ext);
+PrintLn('');
 PrintLn('File type lookup for extension "'+Ext+'": "'+ExtInfo+'"');
                                   
                                   
@@ -70,7 +76,8 @@ end;
                                   
                                     
 
-//Get count of files or folders in a given directory matching a given filter   
+//Get count of files or folders in a given directory matching a given filter
+//TODO: Change each function to use new MakeFilter function...
    
 //- File count
 PrintLn(IntToStr(FindFilesCount('Movies\', VideoFilter, True))+' Files Found');
@@ -89,7 +96,6 @@ FindFoldersWithMultipleFiles('Movies\', VideoFilter, '*', True);
 
 
 //List directories with "sample" in its name...
-
 PrintLn('');
 PrintLn('Searching directories...');
 var Dirs: Array of String = GetDirs('Movies\', '*sample*', True);
@@ -141,9 +147,13 @@ procedure DeleteUnnecessaryFiles;
 begin 
   PrintLn('');
   PrintLn('Deleting unnecessary files...');
+
+  DeleteFiles('Movies\Other\Austin Powers 1-3 Trilogy 1997-2002 BluRay 720p x264 ac3 jbr\Samples');
+  DeleteFiles('Movies\Other\Lost in Space 1998 1080p BDRip H264 AAC - KiNGDOM\Sample');
+  DeleteFiles('Movies\Star Wars Collection\Samples');
+
   DeleteFiles('Movies\', '*.nfo', True);
   DeleteFiles('Movies\', 'Desktop.ini', True);
-  
 end;
 DeleteUnnecessaryFiles;                                       
                              

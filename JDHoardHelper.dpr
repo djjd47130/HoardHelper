@@ -10,7 +10,8 @@ uses
   uHoardHelperLibs in 'uHoardHelperLibs.pas' {frmLibs},
   JD.CmdLine in 'JD.CmdLine.pas',
   uHoardHelperFind in 'uHoardHelperFind.pas' {frmFind},
-  XSuperObject in 'XSuperObject.pas';
+  XSuperObject in 'XSuperObject.pas',
+  JD.HoardHelper.Indexer in 'JD.HoardHelper.Indexer.pas';
 
 {$R *.res}
 

@@ -168,6 +168,7 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="XSuperObject.pas"/>
+        <DCCReference Include="JD.HoardHelper.Indexer.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -220,12 +221,6 @@
                 <DeployFile LocalName="Bin32\JDHoardHelper.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>JDHoardHelper.exe</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Win64\Debug\JDHoardHelper.rsm" Configuration="Debug" Class="DebugSymbols">
-                    <Platform Name="Win64">
-                        <RemoteName>JDHoardHelper.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

@@ -254,8 +254,9 @@ begin
   HH.OnEndUpdate:= HHEndUpdate;
   HH.LoadSettings;
 
+  //Open file from commandline...
   if CmdLine.OpenFilename <> '' then begin
-    Self.Load(CmdLine.OpenFilename);
+    Load(CmdLine.OpenFilename);
   end;
 
   //WindowState:= wsMaximized;
@@ -301,7 +302,7 @@ begin
   try
     F.Load;
     if F.ShowModal = mrOK then begin
-      //F.Save;
+      //F.Save; //Already done within TfrmLibs form
     end;
   finally
     F.Free;
@@ -337,12 +338,19 @@ begin
   end;
   if Result then begin
     //Open script from file...
-    FFilename:= Filename;
-    txtScript.Lines.LoadFromFile(FFilename);
-    txtOutput.Lines.Clear;
-    FModified:= False;
-    txtScript.UndoList.Clear;
-    //txtScript.SetFocus;
+    try
+      FFilename:= Filename;
+      txtScript.Lines.LoadFromFile(FFilename);
+      txtOutput.Lines.Clear;
+      FModified:= False;
+      txtScript.UndoList.Clear;
+      //txtScript.SetFocus;
+    except
+      on E: Exception do begin
+        Result:= False;
+        //TODO
+      end;
+    end;
   end;
   UpdateActions;
 end;
