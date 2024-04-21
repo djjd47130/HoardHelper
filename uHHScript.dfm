@@ -1,8 +1,8 @@
-object frmHoardHelperMain: TfrmHoardHelperMain
+object frmScript: TfrmScript
   Left = 0
   Top = 0
   Caption = 'JD Hoard Helper'
-  ClientHeight = 530
+  ClientHeight = 570
   ClientWidth = 918
   Color = clBlack
   DoubleBuffered = True
@@ -11,7 +11,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
   Font.Height = -15
   Font.Name = 'Tahoma'
   Font.Style = []
-  Menu = MM
   OldCreateOrder = False
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -26,6 +25,8 @@ object frmHoardHelperMain: TfrmHoardHelperMain
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitLeft = -8
+    ExplicitTop = -5
     object Bevel1: TBevel
       AlignWithMargins = True
       Left = 199
@@ -94,6 +95,8 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 0
       Text = 'New Script'
+      ExplicitLeft = 1
+      ExplicitTop = -5
     end
     object JDFontButton2: TJDFontButton
       Left = 49
@@ -263,6 +266,8 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Style = []
       TabOrder = 4
       Text = 'Execute Script'
+      ExplicitLeft = 361
+      ExplicitTop = -5
     end
     object JDFontButton6: TJDFontButton
       Left = 208
@@ -439,7 +444,7 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Width = 49
       Height = 41
       Cursor = crHandPoint
-      Action = actLibraries
+      Action = actFind
       Align = alLeft
       DrawStyle = fdTransparent
       Font.Charset = DEFAULT_CHARSET
@@ -448,14 +453,14 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Font.Name = 'Tahoma'
       Font.Style = []
       Image.AutoSize = False
-      Image.Text = #61485
+      Image.Text = #61442
       Image.Font.Charset = DEFAULT_CHARSET
       Image.Font.Color = clWindowText
       Image.Font.Height = -21
       Image.Font.Name = 'FontAwesome'
       Image.Font.Style = []
       Image.Font.Quality = fqAntialiased
-      Image.StandardColor = fcBlue
+      Image.StandardColor = fcGreen
       Overlay.Text = #57715
       Overlay.Font.Charset = DEFAULT_CHARSET
       Overlay.Font.Color = clWindowText
@@ -473,21 +478,24 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       SubTextFont.Name = 'Tahoma'
       SubTextFont.Style = []
       TabOrder = 9
-      Text = 'Manage Libraries'
+      Text = 'Find'
+      ExplicitLeft = 568
+      ExplicitTop = -5
     end
   end
   object pMain: TPanel
     Left = 0
     Top = 41
     Width = 882
-    Height = 489
+    Height = 529
     Align = alLeft
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitHeight = 509
     object Splitter1: TSplitter
       Left = 0
-      Top = 218
+      Top = 258
       Width = 882
       Height = 10
       Cursor = crVSplit
@@ -498,7 +506,7 @@ object frmHoardHelperMain: TfrmHoardHelperMain
     end
     object txtOutput: TSynEdit
       Left = 0
-      Top = 228
+      Top = 268
       Width = 882
       Height = 261
       Align = alBottom
@@ -542,6 +550,7 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       TabWidth = 2
       WantTabs = True
       FontSmoothing = fsmClearType
+      ExplicitTop = 248
     end
     object pScript: TPanel
       Left = 0
@@ -624,6 +633,7 @@ object frmHoardHelperMain: TfrmHoardHelperMain
         TabWidth = 2
         WantTabs = True
         OnChange = txtScriptChange
+        OnGutterGetText = txtScriptGutterGetText
         FontSmoothing = fsmClearType
       end
     end
@@ -659,6 +669,13 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       ShortCut = 16463
       OnExecute = actOpenExecute
     end
+    object actOpenCommon: TAction
+      Category = 'File'
+      Caption = 'Open Common Script'
+      Hint = 'Open Common Script'
+      ShortCut = 24655
+      OnExecute = actOpenCommonExecute
+    end
     object actSave: TAction
       Category = 'File'
       Caption = 'Save Script'
@@ -687,13 +704,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Hint = 'Stop Exec'
       ShortCut = 121
       OnExecute = actStopExecute
-    end
-    object actLibraries: TAction
-      Category = 'Options'
-      Caption = 'Manage Libraries'
-      Hint = 'Manage Libraries'
-      ShortCut = 16460
-      OnExecute = actLibrariesExecute
     end
     object actUndo: TAction
       Category = 'Edit'
@@ -744,13 +754,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       ShortCut = 16449
       OnExecute = actSelectAllExecute
     end
-    object actOpenCommon: TAction
-      Category = 'File'
-      Caption = 'Open Common Script'
-      Hint = 'Open Common Script'
-      ShortCut = 24655
-      OnExecute = actOpenCommonExecute
-    end
     object actCheckSyntax: TAction
       Category = 'Script'
       Caption = 'Check Syntax (Compile)'
@@ -797,12 +800,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       Hint = 'Case Sensitive'
       OnExecute = actFindCaseSensitiveExecute
     end
-    object actExit: TAction
-      Category = 'File'
-      Caption = 'Exit'
-      Hint = 'Exit Application'
-      OnExecute = actExitExecute
-    end
     object actFindWholeWords: TAction
       Category = 'Search'
       Caption = 'Whole Words'
@@ -827,9 +824,10 @@ object frmHoardHelperMain: TfrmHoardHelperMain
   object MM: TMainMenu
     Left = 272
     Top = 72
-    object File1: TMenuItem
-      Caption = 'File'
-      object File2: TMenuItem
+    object Script1: TMenuItem
+      Caption = 'Script'
+      GroupIndex = 1
+      object NewScript1: TMenuItem
         Action = actNew
       end
       object OpenCommonScript1: TMenuItem
@@ -857,15 +855,10 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       object SaveScript2: TMenuItem
         Action = actSaveAs
       end
-      object N3: TMenuItem
-        Caption = '-'
-      end
-      object Exit1: TMenuItem
-        Action = actExit
-      end
     end
     object Edit1: TMenuItem
       Caption = 'Edit'
+      GroupIndex = 2
       object Undo1: TMenuItem
         Action = actUndo
       end
@@ -893,6 +886,7 @@ object frmHoardHelperMain: TfrmHoardHelperMain
     end
     object Search1: TMenuItem
       Caption = 'Search'
+      GroupIndex = 3
       object Find1: TMenuItem
         Action = actFind
       end
@@ -922,8 +916,9 @@ object frmHoardHelperMain: TfrmHoardHelperMain
         Checked = True
       end
     end
-    object Script1: TMenuItem
-      Caption = 'Script'
+    object Run1: TMenuItem
+      Caption = 'Run'
+      GroupIndex = 4
       object ExecuteScript1: TMenuItem
         Action = actExec
       end
@@ -941,81 +936,6 @@ object frmHoardHelperMain: TfrmHoardHelperMain
       end
       object DemoMode1: TMenuItem
         Action = actDemoMode
-      end
-    end
-    object Options1: TMenuItem
-      Caption = 'Options'
-      object ManageLibraries1: TMenuItem
-        Action = actLibraries
-      end
-      object N5: TMenuItem
-        Caption = '-'
-      end
-      object WordWrap1: TMenuItem
-        Caption = 'Word Wrap'
-        object None1: TMenuItem
-          Caption = 'None'
-          Checked = True
-        end
-        object None2: TMenuItem
-          Caption = 'Editor Width'
-        end
-        object RightLine1: TMenuItem
-          Caption = 'Right Line'
-        end
-      end
-      object AutoBackups1: TMenuItem
-        Caption = 'Auto Backups'
-        object Enabled1: TMenuItem
-          Caption = 'Enabled'
-          GroupIndex = 1
-        end
-        object Enabled2: TMenuItem
-          Caption = 'Disabled'
-          Checked = True
-          GroupIndex = 1
-        end
-        object N4: TMenuItem
-          Caption = '-'
-          GroupIndex = 1
-        end
-        object SelectBackupDirectory1: TMenuItem
-          Caption = 'Select Backup Directory...'
-          GroupIndex = 1
-        end
-      end
-      object Editor1: TMenuItem
-        Caption = 'Editor'
-        object SyntaxHighlighting1: TMenuItem
-          Caption = 'Syntax Highlighting'
-          Checked = True
-        end
-      end
-      object Index1: TMenuItem
-        Caption = 'Index'
-        object Enabled3: TMenuItem
-          Caption = 'Enabled'
-        end
-        object N6: TMenuItem
-          Caption = '-'
-        end
-        object N7: TMenuItem
-          Caption = 'Index Now'
-        end
-      end
-    end
-    object Options2: TMenuItem
-      Caption = 'Help'
-      object HelpContents1: TMenuItem
-        Caption = 'Help Contents'
-        ShortCut = 16496
-      end
-      object HelpContents2: TMenuItem
-        Caption = '-'
-      end
-      object AboutJDHoardHelper1: TMenuItem
-        Caption = 'About JD Hoard Helper...'
-        ShortCut = 24641
       end
     end
   end

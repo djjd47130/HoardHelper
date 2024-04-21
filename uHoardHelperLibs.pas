@@ -7,14 +7,14 @@ uses
   System.SysUtils, System.Variants, System.Classes, System.UITypes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.StdCtrls,
   Vcl.Samples.Spin, Vcl.WinXCtrls, JD.Common, JD.Ctrls, JD.Ctrls.FontButton,
-  JD.HoardHelper, System.Actions, Vcl.ActnList, RzShellDialogs;
+  JD.HoardHelper, System.Actions, Vcl.ActnList, RzShellDialogs,
+  uHHEmbedBase;
 
 type
-  TfrmLibs = class(TForm)
-    Panel1: TPanel;
+  TfrmLibs = class(TfrmHHEmbedBase)
+    pBottom: TPanel;
     btnDone: TJDFontButton;
     pMain: TPanel;
-    Label1: TLabel;
     Toolbar: TPanel;
     btnNewLib: TJDFontButton;
     btnEditLib: TJDFontButton;
@@ -38,7 +38,6 @@ type
     btnSelectDir: TJDFontButton;
     dlgSelectDir: TRzSelectFolderDialog;
     lblEditing: TLabel;
-    actDone: TAction;
     procedure FormCreate(Sender: TObject);
     procedure btnSelectDirClick(Sender: TObject);
     procedure actNewExecute(Sender: TObject);
@@ -48,7 +47,6 @@ type
     procedure actCancelExecute(Sender: TObject);
     procedure actSaveExecute(Sender: TObject);
     procedure actDeleteExecute(Sender: TObject);
-    procedure actDoneExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private
     FEditing: Boolean;
@@ -69,6 +67,7 @@ implementation
 
 procedure TfrmLibs.FormCreate(Sender: TObject);
 begin
+  pBottom.Visible:= False;
   pMain.Align:= alClient;
   lstLibraries.Align:= alClient;
 
@@ -113,11 +112,6 @@ begin
     Load;
   end;
   UpdateActions;
-end;
-
-procedure TfrmLibs.actDoneExecute(Sender: TObject);
-begin
-  Close;
 end;
 
 procedure TfrmLibs.actEditExecute(Sender: TObject);
@@ -268,9 +262,8 @@ begin
   actNew.Enabled:= (not FEditing);
   actEdit.Enabled:= (not FEditing) and (lstLibraries.Selected <> nil);
   actDelete.Enabled:= (not FEditing) and (lstLibraries.Selected <> nil);
-  actSave.Enabled:= FEditing;
-  actCancel.Enabled:= FEditing;
-  actDone.Enabled:= not FEditing;
+  actSave.Visible:= FEditing;
+  actCancel.Visible:= FEditing;
 
   txtName.ReadOnly:= (not FEditing);
   cboType.Enabled:= FEditing;

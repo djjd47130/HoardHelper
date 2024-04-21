@@ -4,7 +4,8 @@ interface
 
 uses
   System.Classes, System.SysUtils, System.Generics.Collections, System.Types,
-  JD.HoardHelper, ActiveX;
+  JD.HoardHelper, ActiveX,
+  XSuperObject;
 
 type
   THHIndexFile = class;
@@ -15,13 +16,14 @@ type
   //Represents a single "libdata.hhi" file (JSON format)
   THHIndexFile = class(TObject)
   private
-    FOwner: THHIndexer;
+    FOwner: THHIndexerThread;
     FFilename: String;
     FLibName: String;
+    FItems: TObjectList<THHIndexFileItem>;
     procedure SetFilename(const Value: String);
     procedure SetLibName(const Value: String);
   public
-    constructor Create(AOwner: THHIndexer);
+    constructor Create(AOwner: THHIndexerThread);
     destructor Destroy; override;
 
     property Filename: String read FFilename write SetFilename;
@@ -33,12 +35,18 @@ type
   private
     FOwner: THHIndexFile;
     FFilename: String;
+    FTags: TStringList;
+    FExtInfo: String;
     procedure SetFilename(const Value: String);
+    function GetTags: TStrings;
+    procedure SetTags(const Value: TStrings);
   public
     constructor Create(AOwner: THHIndexFile);
     destructor Destroy; override;
 
     property Filename: String read FFilename write SetFilename;
+    property ExtInfo: String read FExtInfo;
+    property Tags: TStrings read GetTags write SetTags;
   end;
 
   THHIndexerThread = class(TThread)
@@ -77,15 +85,16 @@ implementation
 
 { THHIndexFile }
 
-constructor THHIndexFile.Create(AOwner: THHIndexer);
+constructor THHIndexFile.Create(AOwner: THHIndexerThread);
 begin
   FOwner:= AOwner;
-
+  FItems:= TObjectList<THHIndexFileItem>.Create(True);
 end;
 
 destructor THHIndexFile.Destroy;
 begin
 
+  FreeAndNil(FItems);
   inherited;
 end;
 
@@ -103,18 +112,31 @@ end;
 
 constructor THHIndexFileItem.Create(AOwner: THHIndexFile);
 begin
+  FOwner:= AOwner;
+  FTags:= TStringList.Create;
 
 end;
 
 destructor THHIndexFileItem.Destroy;
 begin
 
+  FreeAndNil(FTags);
   inherited;
 end;
 
 procedure THHIndexFileItem.SetFilename(const Value: String);
 begin
   FFilename := Value;
+end;
+
+function THHIndexFileItem.GetTags: TStrings;
+begin
+  Result:= TStrings(FTags);
+end;
+
+procedure THHIndexFileItem.SetTags(const Value: TStrings);
+begin
+  FTags.Assign(Value);
 end;
 
 { THHIndexerThread }
@@ -173,11 +195,17 @@ procedure THHIndexerThread.ExecuteIndexing;
 begin
   //TODO: Perform actual indexing...
 
-  //- Get list of all directories recursively...
+  //- Loop all libraries...
 
-  //- Loop all found directories...
+    //- Get list of all files in library recursively...
 
-    //- Open "libdata.hhi", create if doesn't exist...
+    //- Loop all files found...
+
+      //- Extract tag data from each file...
+
+      //- Add file and tag data to new JSON array...
+
+    //- Update "libdata.hhi" in library root with new JSON array...
 
 
 

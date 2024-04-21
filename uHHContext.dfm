@@ -6,8 +6,8 @@ object HHContext: THHContext
   Width = 353
   object DWS: TDelphiWebScript
     Config.MaxExceptionDepth = 20
-    Config.CompileFileSystem = dwsNoFileSystem1
-    Config.RuntimeFileSystem = dwsNoFileSystem1
+    Config.CompileFileSystem = NoFS
+    Config.RuntimeFileSystem = NoFS
     Left = 40
     Top = 32
   end
@@ -306,10 +306,38 @@ object HHContext: THHContext
           end>
         ResultType = 'String'
         OnEval = FileUtilsFunctionsBackupFileEval
+      end
+      item
+        Name = 'RenameFile'
+        Parameters = <
+          item
+            Name = 'Filename'
+            DataType = 'String'
+          end
+          item
+            Name = 'NewName'
+            DataType = 'String'
+          end>
+        ResultType = 'Boolean'
+        OnEval = FileUtilsFunctionsRenameFileEval
+      end
+      item
+        Name = 'RenameDir'
+        Parameters = <
+          item
+            Name = 'DirName'
+            DataType = 'String'
+          end
+          item
+            Name = 'NewName'
+            DataType = 'String'
+          end>
+        ResultType = 'Boolean'
+        OnEval = FileUtilsFunctionsRenameDirEval
       end>
     UnitName = 'FileUtils'
     StaticSymbols = False
-    Left = 144
+    Left = 88
     Top = 88
   end
   object StrUtils: TdwsUnit
@@ -417,8 +445,8 @@ object HHContext: THHContext
       end>
     UnitName = 'StrUtils'
     StaticSymbols = False
-    Left = 144
-    Top = 144
+    Left = 136
+    Top = 32
   end
   object HHUtils: TdwsUnit
     Script = DWS
@@ -447,7 +475,7 @@ object HHContext: THHContext
       end>
     UnitName = 'HHUtils'
     StaticSymbols = False
-    Left = 144
+    Left = 88
     Top = 32
   end
   object TagUtils: TdwsUnit
@@ -475,11 +503,11 @@ object HHContext: THHContext
       end>
     UnitName = 'TagUtils'
     StaticSymbols = False
-    Left = 216
-    Top = 32
+    Left = 136
+    Top = 88
   end
-  object dwsNoFileSystem1: TdwsNoFileSystem
+  object NoFS: TdwsNoFileSystem
     Left = 40
-    Top = 104
+    Top = 88
   end
 end

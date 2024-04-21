@@ -2,7 +2,7 @@ object frmLibs: TfrmLibs
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu, biMaximize]
-  Caption = 'JD Hoard Helper Libraries'
+  Caption = 'Manage Libraries'
   ClientHeight = 524
   ClientWidth = 758
   Color = clBtnFace
@@ -18,7 +18,7 @@ object frmLibs: TfrmLibs
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object Panel1: TPanel
+  object pBottom: TPanel
     Left = 0
     Top = 479
     Width = 758
@@ -31,7 +31,7 @@ object frmLibs: TfrmLibs
       Width = 84
       Height = 43
       Cursor = crHandPoint
-      Action = actDone
+      Hint = 'Done'
       Align = alRight
       DrawStyle = fdTransparent
       Font.Charset = DEFAULT_CHARSET
@@ -77,28 +77,9 @@ object frmLibs: TfrmLibs
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelOuter = bvNone
     TabOrder = 0
-    object Label1: TLabel
-      Left = 0
-      Top = 0
-      Width = 758
-      Height = 33
-      Align = alTop
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'Configure your media libraries'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -16
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      Layout = tlCenter
-      ExplicitTop = -24
-      ExplicitWidth = 605
-    end
     object Toolbar: TPanel
       Left = 0
-      Top = 33
+      Top = 0
       Width = 758
       Height = 41
       Align = alTop
@@ -218,7 +199,6 @@ object frmLibs: TfrmLibs
         Action = actSave
         Align = alLeft
         DrawStyle = fdTransparent
-        Enabled = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWhite
         Font.Height = -15
@@ -260,7 +240,6 @@ object frmLibs: TfrmLibs
         Action = actCancel
         Align = alLeft
         DrawStyle = fdTransparent
-        Enabled = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWhite
         Font.Height = -15
@@ -339,7 +318,7 @@ object frmLibs: TfrmLibs
     object lstLibraries: TListView
       AlignWithMargins = True
       Left = 3
-      Top = 77
+      Top = 44
       Width = 752
       Height = 222
       Align = alTop
@@ -511,28 +490,23 @@ object frmLibs: TfrmLibs
     end
     object actSave: TAction
       Caption = 'Save Library'
-      Enabled = False
       Hint = 'Save Library'
       ShortCut = 16467
+      Visible = False
       OnExecute = actSaveExecute
     end
     object actCancel: TAction
       Caption = 'Cancel Changes'
-      Enabled = False
       Hint = 'Cancel Changes'
       ShortCut = 27
+      Visible = False
       OnExecute = actCancelExecute
-    end
-    object actDone: TAction
-      Caption = 'Done'
-      Hint = 'Done'
-      OnExecute = actDoneExecute
     end
   end
   object dlgSelectDir: TRzSelectFolderDialog
     Title = 'Select Library Location'
     ToolBtnVisualStyle = vsGradient
-    Left = 360
-    Top = 320
+    Left = 456
+    Top = 392
   end
 end

@@ -28,11 +28,13 @@ type
     StrUtils: TdwsUnit;
     HHUtils: TdwsUnit;
     TagUtils: TdwsUnit;
-    dwsNoFileSystem1: TdwsNoFileSystem;
+    NoFS: TdwsNoFileSystem;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
     procedure HHUtilsFunctionsGetTickCountEval(info: TProgramInfo);
     procedure HHUtilsFunctionsPrintLnEval(info: TProgramInfo);
+    procedure HHUtilsFunctionsBeginPrintLnEval(info: TProgramInfo);
+    procedure HHUtilsFunctionsEndPrintLnEval(info: TProgramInfo);
     procedure StrUtilsFunctionsCopyEval(info: TProgramInfo);
     procedure StrUtilsFunctionsPosEval(info: TProgramInfo);
     procedure StrUtilsFunctionsUpperCaseEval(info: TProgramInfo);
@@ -61,12 +63,12 @@ type
     procedure FileUtilsFunctionsGetFileDateModifiedEval(info: TProgramInfo);
     procedure StrUtilsFunctionssTabEval(info: TProgramInfo);
     procedure StrUtilsFunctionsSplitStringEval(info: TProgramInfo);
-    procedure HHUtilsFunctionsBeginPrintLnEval(info: TProgramInfo);
-    procedure HHUtilsFunctionsEndPrintLnEval(info: TProgramInfo);
-    procedure TagUtilsFunctionsExtractID3v1Eval(info: TProgramInfo);
-    procedure TagUtilsFunctionsGetTagsEval(info: TProgramInfo);
     procedure FileUtilsFunctionsSaveTextFileEval(info: TProgramInfo);
     procedure FileUtilsFunctionsBackupFileEval(info: TProgramInfo);
+    procedure TagUtilsFunctionsExtractID3v1Eval(info: TProgramInfo);
+    procedure TagUtilsFunctionsGetTagsEval(info: TProgramInfo);
+    procedure FileUtilsFunctionsRenameFileEval(info: TProgramInfo);
+    procedure FileUtilsFunctionsRenameDirEval(info: TProgramInfo);
   private
     FExec: IdwsProgramExecution;
     FOnPrintLn: THHPrintEvent;
@@ -311,7 +313,6 @@ begin
     Info.ResultAsBoolean:= True;
   except
     on E: Exception do begin
-      //TODO
       raise Exception.Create('Failed to copy file: '+E.Message);
     end;
   end;
@@ -610,6 +611,16 @@ procedure THHContext.FileUtilsFunctionsPathCombineEval(
   info: TProgramInfo);
 begin
   Info.ResultAsString:= PathCombine(Info.ParamAsString[0], Info.ParamAsString[1]);
+end;
+
+procedure THHContext.FileUtilsFunctionsRenameDirEval(info: TProgramInfo);
+begin
+  //TODO
+end;
+
+procedure THHContext.FileUtilsFunctionsRenameFileEval(info: TProgramInfo);
+begin
+  //TODO
 end;
 
 procedure THHContext.FileUtilsFunctionsSaveTextFileEval(info: TProgramInfo);

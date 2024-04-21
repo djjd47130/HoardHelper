@@ -12,7 +12,7 @@ PrintLn('');
 //- All video files in movie library:
 SearchMovies('Movies\', '', VideoFilter);
                      
-//- Files in movie library with the word "star" found:
+//- Files in movie library with the word "star":
 SearchMovies('Movies\', 'star', VideoFilter);
                               
 //- All audio files in music library:

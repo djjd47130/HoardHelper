@@ -1,4 +1,4 @@
-unit uHoardHelperMain;
+unit uHHScript;
 
 interface
 
@@ -11,6 +11,7 @@ uses
   JD.Common, JD.Ctrls, JD.Ctrls.FontButton,
   Vcl.StdCtrls, Vcl.ExtDlgs, Vcl.Menus,
   JD.HoardHelper,
+  uHHEmbedBase,
   uHHContext,
 
   JD.CmdLine,
@@ -33,7 +34,7 @@ uses
   SynEditOptionsDialog;
 
 type
-  TfrmHoardHelperMain = class(TForm)
+  TfrmScript = class(TfrmHHEmbedBase)
     Toolbar: TPanel;
     pMain: TPanel;
     txtScript: TSynEdit;
@@ -54,16 +55,14 @@ type
     Bevel2: TBevel;
     JDFontButton6: TJDFontButton;
     MM: TMainMenu;
-    File1: TMenuItem;
-    File2: TMenuItem;
+    Script1: TMenuItem;
+    NewScript1: TMenuItem;
     N1: TMenuItem;
     N2: TMenuItem;
     SaveScript1: TMenuItem;
     SaveScript2: TMenuItem;
     Edit1: TMenuItem;
-    Script1: TMenuItem;
-    Options1: TMenuItem;
-    Options2: TMenuItem;
+    Run1: TMenuItem;
     Undo1: TMenuItem;
     Redo1: TMenuItem;
     Redo2: TMenuItem;
@@ -72,29 +71,11 @@ type
     Paste1: TMenuItem;
     Paste2: TMenuItem;
     ExecuteScript1: TMenuItem;
-    WordWrap1: TMenuItem;
-    None1: TMenuItem;
-    None2: TMenuItem;
-    RightLine1: TMenuItem;
-    AutoBackups1: TMenuItem;
-    Enabled1: TMenuItem;
-    Enabled2: TMenuItem;
-    N4: TMenuItem;
-    SelectBackupDirectory1: TMenuItem;
-    Editor1: TMenuItem;
-    SyntaxHighlighting1: TMenuItem;
     OpenRecent1: TMenuItem;
     ManageRecents1: TMenuItem;
     ManageRecents2: TMenuItem;
-    ManageLibraries1: TMenuItem;
-    N5: TMenuItem;
-    Index1: TMenuItem;
-    Enabled3: TMenuItem;
-    N6: TMenuItem;
-    N7: TMenuItem;
     JDFontButton7: TJDFontButton;
     actStop: TAction;
-    actLibraries: TAction;
     JDFontButton8: TJDFontButton;
     actUndo: TAction;
     actRedo: TAction;
@@ -115,7 +96,6 @@ type
     dlgOpen: TOpenDialog;
     dlgSave: TSaveDialog;
     Bevel3: TBevel;
-    JDFontButton10: TJDFontButton;
     popScript: TPopupMenu;
     Undo2: TMenuItem;
     Redo3: TMenuItem;
@@ -145,12 +125,6 @@ type
     actFindCaseSensitive: TAction;
     ResetSearch1: TMenuItem;
     CaseSensitive1: TMenuItem;
-    HelpContents1: TMenuItem;
-    HelpContents2: TMenuItem;
-    AboutJDHoardHelper1: TMenuItem;
-    N3: TMenuItem;
-    actExit: TAction;
-    Exit1: TMenuItem;
     Wrap1: TMenuItem;
     actFindWholeWords: TAction;
     actGoToPos: TAction;
@@ -159,6 +133,7 @@ type
     actDemoMode: TAction;
     N15: TMenuItem;
     DemoMode1: TMenuItem;
+    JDFontButton10: TJDFontButton;
     procedure FormCreate(Sender: TObject);
     procedure actExecExecute(Sender: TObject);
     procedure actNewExecute(Sender: TObject);
@@ -188,11 +163,12 @@ type
     procedure actFindPrevExecute(Sender: TObject);
     procedure actFindReplaceExecute(Sender: TObject);
     procedure actFindCaseSensitiveExecute(Sender: TObject);
-    procedure actExitExecute(Sender: TObject);
     procedure actFindWholeWordsExecute(Sender: TObject);
     procedure txtOutputDblClick(Sender: TObject);
     procedure actGoToPosExecute(Sender: TObject);
     procedure actDemoModeExecute(Sender: TObject);
+    procedure txtScriptGutterGetText(Sender: TObject; aLine: Integer;
+      var aText: string);
   private
     FFilename: String;
     FModified: Boolean;
@@ -218,21 +194,23 @@ type
     function SaveAs: Boolean;
     procedure UpdateActions; reintroduce;
     property Modified: Boolean read FModified;
+    function MainMenu: TMainMenu; override;
   end;
 
 var
-  frmHoardHelperMain: TfrmHoardHelperMain;
+  frmScript: TfrmScript;
 
 implementation
 
 {$R *.dfm}
 
 uses
+  uHHMainNEW,
   uHoardHelperLibs,
   Clipbrd,
   StrUtils;
 
-procedure TfrmHoardHelperMain.FormCreate(Sender: TObject);
+procedure TfrmScript.FormCreate(Sender: TObject);
 begin
   {$IFDEF DEBUG}
   ReportMemoryLeaksOnShutdown:= True;
@@ -254,11 +232,6 @@ begin
   HH.OnEndUpdate:= HHEndUpdate;
   HH.LoadSettings;
 
-  //Open file from commandline...
-  if CmdLine.OpenFilename <> '' then begin
-    Load(CmdLine.OpenFilename);
-  end;
-
   //WindowState:= wsMaximized;
   //TODO: Remember window state / size...
   Width:= 1180;
@@ -268,12 +241,12 @@ begin
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.FormDestroy(Sender: TObject);
+procedure TfrmScript.FormDestroy(Sender: TObject);
 begin
   HH.SaveSettings;
 end;
 
-procedure TfrmHoardHelperMain.FormCloseQuery(Sender: TObject;
+procedure TfrmScript.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
   if Modified then begin
@@ -294,7 +267,7 @@ begin
   end;
 end;
 
-procedure TfrmHoardHelperMain.actLibrariesExecute(Sender: TObject);
+procedure TfrmScript.actLibrariesExecute(Sender: TObject);
 var
   F: TfrmLibs;
 begin
@@ -309,17 +282,17 @@ begin
   end;
 end;
 
-procedure TfrmHoardHelperMain.actNewExecute(Sender: TObject);
+procedure TfrmScript.actNewExecute(Sender: TObject);
 begin
   New;
 end;
 
-function TfrmHoardHelperMain.CommonIsLoaded: Boolean;
+function TfrmScript.CommonIsLoaded: Boolean;
 begin
   Result:= SameText(HH.CommonFilename, Self.FFilename);
 end;
 
-function TfrmHoardHelperMain.Load(const Filename: String): Boolean;
+function TfrmScript.Load(const Filename: String): Boolean;
 begin
   if FModified then begin
     case MessageDlg('Save changes to current script?', mtConfirmation, [mbYes,mbNo,mbCancel], 0) of
@@ -355,7 +328,12 @@ begin
   UpdateActions;
 end;
 
-function TfrmHoardHelperMain.New: Boolean;
+function TfrmScript.MainMenu: TMainMenu;
+begin
+  Result:= MM;
+end;
+
+function TfrmScript.New: Boolean;
 begin
   if FModified then begin
     case MessageDlg('Save changes to current script?', mtConfirmation, [mbYes,mbNo,mbCancel], 0) of
@@ -384,7 +362,7 @@ begin
   UpdateActions;
 end;
 
-function TfrmHoardHelperMain.Save: Boolean;
+function TfrmScript.Save: Boolean;
 begin
   if FFilename = '' then begin
     Result:= SaveAs;
@@ -393,7 +371,7 @@ begin
   end;
 end;
 
-function TfrmHoardHelperMain.SaveAs: Boolean;
+function TfrmScript.SaveAs: Boolean;
 begin
   Result:= False;
   dlgSave.FileName:= FFilename;
@@ -402,7 +380,7 @@ begin
   end;
 end;
 
-function TfrmHoardHelperMain.SaveToFile(const Filename: String): Boolean;
+function TfrmScript.SaveToFile(const Filename: String): Boolean;
 begin
   txtScript.Lines.SaveToFile(Filename);
   FFilename:= Filename;
@@ -411,7 +389,7 @@ begin
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.PrintLn(Sender: TObject; Context: THHContext;
+procedure TfrmScript.PrintLn(Sender: TObject; Context: THHContext;
   const Text: String);
 //var
   //X: Integer;
@@ -426,19 +404,19 @@ begin
   txtOutput.Lines.Add(Text);
 end;
 
-procedure TfrmHoardHelperMain.Started(Sender: TObject);
+procedure TfrmScript.Started(Sender: TObject);
 begin
   FExecuting:= True;
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.Stopped(Sender: TObject);
+procedure TfrmScript.Stopped(Sender: TObject);
 begin
   FExecuting:= False;
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.txtOutputDblClick(Sender: TObject);
+procedure TfrmScript.txtOutputDblClick(Sender: TObject);
 var
   R: Integer;
   A: TAction;
@@ -452,79 +430,92 @@ begin
   end;
 end;
 
-procedure TfrmHoardHelperMain.txtScriptChange(Sender: TObject);
+procedure TfrmScript.txtScriptChange(Sender: TObject);
 begin
   FModified:= True;
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.txtScriptKeyUp(Sender: TObject; var Key: Word;
+procedure TfrmScript.txtScriptGutterGetText(Sender: TObject; aLine: Integer;
+  var aText: string);
+begin
+  inherited;
+  if aLine = TSynEdit(Sender).CaretY then
+    Exit;
+  if aLine mod 10 <> 0 then
+    if aLine mod 5 <> 0 then
+      aText := '-'
+    else
+      aText := '—';
+end;
+
+procedure TfrmScript.txtScriptKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.txtScriptMouseUp(Sender: TObject;
+procedure TfrmScript.txtScriptMouseUp(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.actOpenCommonExecute(Sender: TObject);
+procedure TfrmScript.actOpenCommonExecute(Sender: TObject);
 begin
   if Load(HH.CommonFilename) then begin
     PrintLn(nil, nil, 'COMMON script open for editing - cannot be executed.');
   end;
 end;
 
-procedure TfrmHoardHelperMain.actOpenExecute(Sender: TObject);
+procedure TfrmScript.actOpenExecute(Sender: TObject);
 begin
   if dlgOpen.Execute then begin
     Load(dlgOpen.FileName);
   end;
 end;
 
-procedure TfrmHoardHelperMain.actPasteExecute(Sender: TObject);
+procedure TfrmScript.actPasteExecute(Sender: TObject);
 begin
   if not txtScript.Focused then Exit;
   txtScript.PasteFromClipboard;
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.actRedoExecute(Sender: TObject);
+procedure TfrmScript.actRedoExecute(Sender: TObject);
 begin
   Self.txtScript.Redo;
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.actFindReplaceExecute(Sender: TObject);
+procedure TfrmScript.actFindReplaceExecute(Sender: TObject);
 begin
   //
 end;
 
-procedure TfrmHoardHelperMain.actFindWholeWordsExecute(Sender: TObject);
+procedure TfrmScript.actFindWholeWordsExecute(Sender: TObject);
 begin
   actFindWholeWords.Checked:= not actFindWholeWords.Checked;
   SynSearch.Whole:= actFindWholeWords.Checked;
 end;
 
-procedure TfrmHoardHelperMain.actGoToPosExecute(Sender: TObject);
+procedure TfrmScript.actGoToPosExecute(Sender: TObject);
 begin
   //TODO...
 
 end;
 
-procedure TfrmHoardHelperMain.actSaveAsExecute(Sender: TObject);
+procedure TfrmScript.actSaveAsExecute(Sender: TObject);
 begin
   SaveAs;
 end;
 
-procedure TfrmHoardHelperMain.actSaveExecute(Sender: TObject);
+procedure TfrmScript.actSaveExecute(Sender: TObject);
 begin
   Save;
 end;
 
-procedure TfrmHoardHelperMain.actSelectAllExecute(Sender: TObject);
+procedure TfrmScript.actSelectAllExecute(Sender: TObject);
 begin
   if txtScript.Focused then
     txtScript.SelectAll
@@ -533,20 +524,20 @@ begin
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.actStopExecute(Sender: TObject);
+procedure TfrmScript.actStopExecute(Sender: TObject);
 begin
   //TODO: Stop executing script (in thread)...
   if FExecuting then
     FKillProc;
 end;
 
-procedure TfrmHoardHelperMain.actUndoExecute(Sender: TObject);
+procedure TfrmScript.actUndoExecute(Sender: TObject);
 begin
   Self.txtScript.Undo;
   UpdateActions;
 end;
 
-function TfrmHoardHelperMain.GetScript: String;
+function TfrmScript.GetScript: String;
 begin
   if txtScript.SelAvail then begin
     Result:= txtScript.SelText;
@@ -555,14 +546,14 @@ begin
   end;
 end;
 
-procedure TfrmHoardHelperMain.actCheckSyntaxExecute(Sender: TObject);
+procedure TfrmScript.actCheckSyntaxExecute(Sender: TObject);
 begin
   txtOutput.Lines.Clear;
   HH.Compile(GetScript, not CommonIsLoaded);
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.actCopyExecute(Sender: TObject);
+procedure TfrmScript.actCopyExecute(Sender: TObject);
 begin
   if txtScript.Focused then
     txtScript.CopyToClipboard
@@ -571,14 +562,14 @@ begin
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.actCutExecute(Sender: TObject);
+procedure TfrmScript.actCutExecute(Sender: TObject);
 begin
   if not txtScript.Focused then Exit;
   txtScript.CutToClipboard;
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.actDeleteExecute(Sender: TObject);
+procedure TfrmScript.actDeleteExecute(Sender: TObject);
 begin
   if not txtScript.Focused then Exit;
   txtScript.SelText:= '';
@@ -586,13 +577,13 @@ begin
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.actDemoModeExecute(Sender: TObject);
+procedure TfrmScript.actDemoModeExecute(Sender: TObject);
 begin
   actDemoMode.Checked:= not actDemoMode.Checked;
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.actExecExecute(Sender: TObject);
+procedure TfrmScript.actExecExecute(Sender: TObject);
 begin
   //Execute script...
   txtOutput.Lines.Clear;
@@ -600,34 +591,29 @@ begin
   UpdateActions;
 end;
 
-procedure TfrmHoardHelperMain.actExitExecute(Sender: TObject);
-begin
-  Close;
-end;
-
-procedure TfrmHoardHelperMain.actFindCaseSensitiveExecute(Sender: TObject);
+procedure TfrmScript.actFindCaseSensitiveExecute(Sender: TObject);
 begin
   actFindCaseSensitive.Checked:= not actFindCaseSensitive.Checked;
   SynSearch.CaseSensitive:= actFindCaseSensitive.Checked;
 end;
 
-procedure TfrmHoardHelperMain.HHBeginUpdate(Sender: TObject);
+procedure TfrmScript.HHBeginUpdate(Sender: TObject);
 begin
   txtScript.Lines.BeginUpdate;
 end;
 
-procedure TfrmHoardHelperMain.HHEndUpdate(Sender: TObject);
+procedure TfrmScript.HHEndUpdate(Sender: TObject);
 begin
   txtScript.Lines.EndUpdate;
 end;
 
-procedure TfrmHoardHelperMain.HighlightMatch(const Position, Length: Integer);
+procedure TfrmScript.HighlightMatch(const Position, Length: Integer);
 begin
   txtScript.SelStart:= Position;
   txtScript.SelLength:= Length;
 end;
 
-procedure TfrmHoardHelperMain.actFindExecute(Sender: TObject);
+procedure TfrmScript.actFindExecute(Sender: TObject);
 var
   S: String;
   P: Integer;
@@ -642,7 +628,7 @@ begin
   end;
 end;
 
-procedure TfrmHoardHelperMain.actFindNextExecute(Sender: TObject);
+procedure TfrmScript.actFindNextExecute(Sender: TObject);
 var
   P: Integer;
 begin
@@ -651,13 +637,13 @@ begin
 
 end;
 
-procedure TfrmHoardHelperMain.actFindPrevExecute(Sender: TObject);
+procedure TfrmScript.actFindPrevExecute(Sender: TObject);
 begin
   //
   SynSearch.Next
 end;
 
-procedure TfrmHoardHelperMain.UpdateActions;
+procedure TfrmScript.UpdateActions;
 var
   X: Integer;
 begin
@@ -708,7 +694,7 @@ begin
   end else begin
     Stat.Panels[3].Text:= ExtractFileName(FFilename);
   end;
-  Self.Caption:= 'JD Hoard Helper - '+Stat.Panels[3].Text;
+  Self.Caption:= 'Scripting - '+Stat.Panels[3].Text;
 
   for X := 0 to Toolbar.ControlCount-1 do begin
     TControl(Toolbar.Controls[X]).Invalidate;
