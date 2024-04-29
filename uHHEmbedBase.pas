@@ -29,7 +29,7 @@ implementation
 {$R *.dfm}
 
 uses
-  uHHMainNew;
+  uHHMain;
 
 { TfrmHHEmbedBase }
 

@@ -23,7 +23,6 @@ object frmHHMedia: TfrmHHMedia
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitHeight = 456
     object pSearch: TPanel
       Left = 0
       Top = 0
@@ -33,7 +32,6 @@ object frmHHMedia: TfrmHHMedia
       BevelOuter = bvNone
       TabOrder = 0
       Visible = False
-      ExplicitHeight = 456
       DesignSize = (
         256
         476)
@@ -88,9 +86,9 @@ object frmHHMedia: TfrmHHMedia
           'All Libraries')
       end
       object CheckBox1: TCheckBox
-        Left = 110
+        Left = 120
         Top = 117
-        Width = 131
+        Width = 121
         Height = 17
         Alignment = taLeftJustify
         Anchors = [akTop, akRight]
@@ -104,7 +102,6 @@ object frmHHMedia: TfrmHHMedia
         Height = 41
         Align = alBottom
         TabOrder = 4
-        ExplicitTop = 415
         object JDFontButton5: TJDFontButton
           Left = 110
           Top = 1
@@ -148,6 +145,16 @@ object frmHHMedia: TfrmHHMedia
           Text = 'Apply Search'
         end
       end
+      object CheckBox2: TCheckBox
+        Left = 168
+        Top = 20
+        Width = 73
+        Height = 17
+        Alignment = taLeftJustify
+        Anchors = [akTop, akRight]
+        Caption = 'Recursive'
+        TabOrder = 5
+      end
     end
     object lstMedia: TListView
       Left = 363
@@ -171,7 +178,6 @@ object frmHHMedia: TfrmHHMedia
         end>
       TabOrder = 1
       ViewStyle = vsReport
-      ExplicitHeight = 456
     end
   end
   object Toolbar: TPanel

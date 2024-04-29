@@ -334,6 +334,40 @@ object HHContext: THHContext
           end>
         ResultType = 'Boolean'
         OnEval = FileUtilsFunctionsRenameDirEval
+      end
+      item
+        Name = 'OpenFileLocation'
+        Parameters = <
+          item
+            Name = 'Filename'
+            DataType = 'String'
+          end>
+        ResultType = 'Boolean'
+        OnEval = FileUtilsFunctionsOpenFileLocationEval
+      end
+      item
+        Name = 'MakeFilter'
+        Parameters = <
+          item
+            Name = 'S'
+            DataType = 'String'
+          end
+          item
+            Name = 'Filter'
+            DataType = 'String'
+          end>
+        ResultType = 'String'
+        OnEval = FileUtilsFunctionsMakeFilterEval
+      end
+      item
+        Name = 'MoveFileUpAFolder'
+        Parameters = <
+          item
+            Name = 'Filename'
+            DataType = 'String'
+          end>
+        ResultType = 'String'
+        OnEval = FileUtilsFunctionsMoveFileUpAFolderEval
       end>
     UnitName = 'FileUtils'
     StaticSymbols = False
@@ -472,6 +506,16 @@ object HHContext: THHContext
       item
         Name = 'EndPrintLn'
         OnEval = HHUtilsFunctionsEndPrintLnEval
+      end
+      item
+        Name = 'GetLibFilter'
+        Parameters = <
+          item
+            Name = 'LibName'
+            DataType = 'String'
+          end>
+        ResultType = 'String'
+        OnEval = HHUtilsFunctionsGetLibFilterEval
       end>
     UnitName = 'HHUtils'
     StaticSymbols = False
@@ -500,6 +544,20 @@ object HHContext: THHContext
           end>
         ResultType = 'array of String'
         OnEval = TagUtilsFunctionsGetTagsEval
+      end
+      item
+        Name = 'ExtractTag'
+        Parameters = <
+          item
+            Name = 'Tags'
+            DataType = 'array of String'
+          end
+          item
+            Name = 'Name'
+            DataType = 'String'
+          end>
+        ResultType = 'String'
+        OnEval = TagUtilsFunctionsExtractTagEval
       end>
     UnitName = 'TagUtils'
     StaticSymbols = False
@@ -509,5 +567,180 @@ object HHContext: THHContext
   object NoFS: TdwsNoFileSystem
     Left = 40
     Top = 88
+  end
+  object DataUtils: TdwsUnit
+    Script = DWS
+    Classes = <
+      item
+        Name = 'TDataSetCol'
+        Constructors = <
+          item
+            Name = 'Create'
+            OnEval = DataUtilsClassesTDataSetColConstructorsCreateEval
+          end>
+        Fields = <
+          item
+            Name = 'FCaption'
+            DataType = 'String'
+            Visibility = cvPrivate
+          end
+          item
+            Name = 'FWidth'
+            DataType = 'Integer'
+            Visibility = cvPrivate
+          end
+          item
+            Name = 'FColType'
+            DataType = 'TDataSetColType'
+            Visibility = cvPrivate
+          end
+          item
+            Name = 'FAutoSize'
+            DataType = 'Boolean'
+            Visibility = cvPrivate
+          end
+          item
+            Name = 'FAlign'
+            DataType = 'TDataSetColAlign'
+            Visibility = cvPrivate
+          end>
+        Methods = <
+          item
+            Name = 'GetAsString'
+            ResultType = 'String'
+            Kind = mkFunction
+            OnEval = DataUtilsClassesTDataSetColMethodsGetAsStringEval
+          end
+          item
+            Name = 'SetAsString'
+            Parameters = <
+              item
+                Name = 'Value'
+                DataType = 'String'
+              end>
+            Kind = mkProcedure
+            OnEval = DataUtilsClassesTDataSetColMethodsSetAsStringEval
+          end
+          item
+            Name = 'GetAsInteger'
+            ResultType = 'Integer'
+            Kind = mkFunction
+            OnEval = DataUtilsClassesTDataSetColMethodsGetAsIntegerEval
+          end
+          item
+            Name = 'SetAsInteger'
+            Parameters = <
+              item
+                Name = 'Value'
+                DataType = 'Integer'
+              end>
+            Kind = mkProcedure
+            OnEval = DataUtilsClassesTDataSetColMethodsSetAsIntegerEval
+          end>
+        Properties = <
+          item
+            Name = 'Caption'
+            DataType = 'String'
+            Visibility = cvPublished
+            ReadAccess = 'FCaption'
+            WriteAccess = 'FCaption'
+          end
+          item
+            Name = 'Width'
+            DataType = 'Integer'
+            Visibility = cvPublished
+            ReadAccess = 'FWidth'
+            WriteAccess = 'FWIdth'
+          end
+          item
+            Name = 'ColType'
+            DataType = 'TDataSetColType'
+            Visibility = cvPublished
+            ReadAccess = 'FColType'
+            WriteAccess = 'FColType'
+          end
+          item
+            Name = 'AutoSize'
+            DataType = 'Boolean'
+            Visibility = cvPublished
+            ReadAccess = 'FAutoSize'
+            WriteAccess = 'FAutoSize'
+          end
+          item
+            Name = 'Align'
+            DataType = 'TDataSetColAlign'
+            Visibility = cvPublished
+            ReadAccess = 'FAlign'
+            WriteAccess = 'FAlign'
+          end
+          item
+            Name = 'AsString'
+            DataType = 'String'
+            ReadAccess = 'GetAsString'
+            WriteAccess = 'SetAsString'
+          end
+          item
+            Name = 'AsInteger'
+            DataType = 'Integer'
+            ReadAccess = 'GetAsInteger'
+            WriteAccess = 'SetAsInteger'
+          end>
+      end
+      item
+        Name = 'TDataSet'
+        Constructors = <
+          item
+            Name = 'Create'
+            OnEval = DataUtilsClassesTDataSetConstructorsCreateEval
+          end>
+        Fields = <
+          item
+            Name = 'FTitle'
+            DataType = 'String'
+            Visibility = cvPrivate
+          end>
+        Properties = <
+          item
+            Name = 'Title'
+            DataType = 'String'
+            Visibility = cvPublished
+            ReadAccess = 'FTitle'
+            WriteAccess = 'FTitle'
+          end>
+      end>
+    Enumerations = <
+      item
+        Name = 'TDataSetColType'
+        Elements = <
+          item
+            Name = 'ctString'
+          end
+          item
+            Name = 'ctInteger'
+          end
+          item
+            Name = 'ctBoolean'
+          end
+          item
+            Name = 'ctFloat'
+          end>
+      end
+      item
+        Name = 'TDataSetColAlign'
+        Elements = <
+          item
+            Name = 'caLeft'
+          end
+          item
+            Name = 'caRight'
+          end
+          item
+            Name = 'caCenter'
+          end>
+      end>
+    UnitName = 'DataUtils'
+    StaticSymbols = False
+    Left = 184
+    Top = 32
   end
 end

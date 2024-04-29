@@ -19,6 +19,8 @@ uses
 type
   THHContext = class;
 
+  THHMediaAction = (maMove, maCopy, maEdit, maEditTags, maDelete);
+
   THHPrintEvent = procedure(Sender: TObject; Context: THHContext;
     const Text: String) of object;
 
@@ -29,6 +31,7 @@ type
     HHUtils: TdwsUnit;
     TagUtils: TdwsUnit;
     NoFS: TdwsNoFileSystem;
+    DataUtils: TdwsUnit;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
     procedure HHUtilsFunctionsGetTickCountEval(info: TProgramInfo);
@@ -69,11 +72,30 @@ type
     procedure TagUtilsFunctionsGetTagsEval(info: TProgramInfo);
     procedure FileUtilsFunctionsRenameFileEval(info: TProgramInfo);
     procedure FileUtilsFunctionsRenameDirEval(info: TProgramInfo);
+    procedure HHUtilsFunctionsGetLibFilterEval(info: TProgramInfo);
+    procedure FileUtilsFunctionsOpenFileLocationEval(info: TProgramInfo);
+    procedure FileUtilsFunctionsMakeFilterEval(info: TProgramInfo);
+    procedure TagUtilsFunctionsExtractTagEval(info: TProgramInfo);
+    procedure DataUtilsClassesTDataSetColMethodsGetAsStringEval(
+      Info: TProgramInfo; ExtObject: TObject);
+    procedure DataUtilsClassesTDataSetColMethodsSetAsStringEval(
+      Info: TProgramInfo; ExtObject: TObject);
+    procedure DataUtilsClassesTDataSetColMethodsGetAsIntegerEval(
+      Info: TProgramInfo; ExtObject: TObject);
+    procedure DataUtilsClassesTDataSetColMethodsSetAsIntegerEval(
+      Info: TProgramInfo; ExtObject: TObject);
+    procedure DataUtilsClassesTDataSetConstructorsCreateEval(Info: TProgramInfo;
+      var ExtObject: TObject);
+    procedure DataUtilsClassesTDataSetColConstructorsCreateEval(
+      Info: TProgramInfo; var ExtObject: TObject);
+    procedure FileUtilsFunctionsMoveFileUpAFolderEval(info: TProgramInfo);
   private
+    FDemoMode: Boolean;
     FExec: IdwsProgramExecution;
     FOnPrintLn: THHPrintEvent;
     FOnBeginUpdate: TNotifyEvent;
     FOnEndUpdate: TNotifyEvent;
+    function DemoStr: String;
   protected
     procedure DoPrintLn(const S: String); virtual;
     procedure DoBeginUpdate; virtual;
@@ -82,7 +104,8 @@ type
     function Exec(const Expr: String; const DemoMode: Boolean = True): String;
     function Compile(const Expr: String; const DemoMode: Boolean = True): String;
     procedure StopExec;
-    procedure BackupFile(Context: THHContext; const Filename: String);
+    procedure BackupFile(Context: THHContext; const Filename: String; const Action: THHMediaAction);
+    property IsDemoMode: Boolean read FDemoMode;
   published
     property OnPrintLn: THHPrintEvent read FOnPrintLn write FOnPrintLn;
     property OnBeginUpdate: TNotifyEvent read FOnBeginUpdate write FOnBeginUpdate;
@@ -127,13 +150,6 @@ end;
 
 { THHContext }
 
-procedure THHContext.BackupFile(Context: THHContext; const Filename: String);
-begin
-  //TODO: If backups are enabled, copy this file to identical structure in backup directory.
-  //TODO: Translate path...
-
-end;
-
 procedure THHContext.DataModuleCreate(Sender: TObject);
 begin
   //
@@ -142,6 +158,50 @@ end;
 procedure THHContext.DataModuleDestroy(Sender: TObject);
 begin
   FExec:= nil;
+end;
+
+procedure THHContext.BackupFile(Context: THHContext; const Filename: String; const Action: THHMediaAction);
+begin
+  //TODO: If backups are enabled, copy this file to identical structure in backup directory.
+  //TODO: Translate path...
+
+end;
+
+procedure THHContext.DataUtilsClassesTDataSetColConstructorsCreateEval(
+  Info: TProgramInfo; var ExtObject: TObject);
+begin
+  //TODO: Create TDataSetCol...
+
+end;
+
+procedure THHContext.DataUtilsClassesTDataSetColMethodsGetAsIntegerEval(
+  Info: TProgramInfo; ExtObject: TObject);
+begin
+  //TODO: Return value as integer...
+end;
+
+procedure THHContext.DataUtilsClassesTDataSetColMethodsGetAsStringEval(
+  Info: TProgramInfo; ExtObject: TObject);
+begin
+  //TODO: Return value as string...
+end;
+
+procedure THHContext.DataUtilsClassesTDataSetColMethodsSetAsIntegerEval(
+  Info: TProgramInfo; ExtObject: TObject);
+begin
+  //TODO: Set value as integer...
+end;
+
+procedure THHContext.DataUtilsClassesTDataSetColMethodsSetAsStringEval(
+  Info: TProgramInfo; ExtObject: TObject);
+begin
+  //TODO: Set value as string...
+end;
+
+procedure THHContext.DataUtilsClassesTDataSetConstructorsCreateEval(
+  Info: TProgramInfo; var ExtObject: TObject);
+begin
+  //TODO: Create TDataSet...
 end;
 
 procedure THHContext.DoBeginUpdate;
@@ -170,6 +230,7 @@ begin
 
   //Populate conditionals...
   DWS.Config.Conditionals.Clear;
+  FDemoMode:= DemoMode;
   if DemoMode then begin
     DWS.Config.Conditionals.Add('DEMO');
   end;
@@ -193,6 +254,7 @@ var
 begin
   //Populate conditionals...
   DWS.Config.Conditionals.Clear;
+  FDemoMode:= DemoMode;
   if DemoMode then begin
     DWS.Config.Conditionals.Add('DEMO');
   end;
@@ -521,6 +583,11 @@ begin
   Info.ResultAsString:= GetGenericFileType(Info.ParamAsString[0]);
 end;
 
+function GetParentDir(const Filename: String): String;
+begin
+  Result:= TDIrectory.GetParent(Filename);
+end;
+
 procedure THHContext.FileUtilsFunctionsGetParentDirEval(
   info: TProgramInfo);
 var
@@ -588,10 +655,59 @@ begin
 
 end;
 
+procedure THHContext.FileUtilsFunctionsMakeFilterEval(info: TProgramInfo);
+var
+  S, Flt, Res: String;
+  Arr: TArray<String>;
+  X: Integer;
+begin
+  S:= Info.ParamAsString[0];
+  Flt:= Info.ParamAsString[1];
+  Res:= '';
+  Arr:= SplitString(Flt, ';');
+  for X:= 0 to Length(Arr)-1 do begin
+    if X > 0 then Res:= Res + ';';
+    Res:= Res + '*' + S + Arr[X];
+  end;
+  Info.ResultAsString:= Res;
+end;
+
 procedure THHContext.FileUtilsFunctionsMoveFileEval(info: TProgramInfo);
 begin
-  //
+  //TODO: Move file...
   //TODO: Translate path...
+end;
+
+function THHContext.DemoStr: String;
+begin
+  if IsDemoMode then
+    Result:= '[DEMO] ';
+end;
+
+procedure THHContext.FileUtilsFunctionsMoveFileUpAFolderEval(
+  info: TProgramInfo);
+var
+  L: THHLibrary;
+  Filename: String;
+  FN: String;
+  Result: String;
+begin
+  L:= HH.FindLib(Info.ParamAsString[0]);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+Info.ParamAsString[0]);
+  Filename:= L.LibPathToLocalPath(Info.ParamAsString[0]);
+  if FileExists(Filename) then begin
+    FN:= ExtractFileName(Filename);
+    Result:= ExtractFilePath(Filename);
+    Result:= L.LocalPathToLibPath(GetParentDir(Result));
+    Result:= PathCombine(Result, FN);
+    DoPrintLn(DemoStr+'MOVING file up a directory: "'+Filename+'" to "'+Result+'"');
+    if not IsDemoMode then
+      TFile.Move(Filename, Result);
+  end else begin
+    DoPrintLn('File '+Filename+' doesn''t exist!');
+  end;
+  Info.ResultAsString:= Result;
 end;
 
 procedure THHContext.FileUtilsFunctionsOpenFileEval(info: TProgramInfo);
@@ -605,6 +721,19 @@ begin
   FN:= L.LibPathToLocalPath(Info.ParamAsString[0]);
   ShellExecute(Application.Handle, 'open',
     PChar(FN),nil,nil,SW_SHOWNORMAL) ;
+end;
+
+procedure THHContext.FileUtilsFunctionsOpenFileLocationEval(info: TProgramInfo);
+var
+  L: THHLibrary;
+  FN: String;
+begin
+  L:= HH.FindLib(Info.ParamAsString[0]);
+  if L = nil then
+    raise Exception.Create('Failed to find library for path '+Info.ParamAsString[0]);
+  FN:= L.LibPathToLocalPath(Info.ParamAsString[0]);
+  Info.ResultAsBoolean:= OpenFolderAndSelectFile(FN);
+
 end;
 
 procedure THHContext.FileUtilsFunctionsPathCombineEval(
@@ -672,6 +801,19 @@ begin
     FOnEndUpdate(Self);
 end;
 
+procedure THHContext.HHUtilsFunctionsGetLibFilterEval(info: TProgramInfo);
+var
+  N: String;
+  L: THHLibrary;
+begin
+  //Return filter string for given library name...
+  N:= Info.ParamAsString[0];
+  L:= HH.LibraryByName(N);
+  if L = nil then
+    raise Exception.Create('Library "'+N+'" not found!');
+  Info.ResultAsString:= L.Filter;
+end;
+
 procedure THHContext.HHUtilsFunctionsGetTickCountEval(
   info: TProgramInfo);
 begin
@@ -727,6 +869,29 @@ begin
 
   Info.ResultAsStringArray:= Arr;
 
+end;
+
+procedure THHContext.TagUtilsFunctionsExtractTagEval(info: TProgramInfo);
+var
+  Tags: TArray<String>;
+  Name: String;
+  X, P: Integer;
+  S, N, Result: String;
+begin
+  Result:= '';
+  Tags:= Info.ParamAsScriptDynArray[0].ToStringArray;
+  Name:= Info.ParamAsString[1];
+  for X := 0 to Length(Tags)-1 do begin
+    S:= Tags[X];
+    P:= Pos('=', S);
+    N:= Copy(S, 1, P-1);
+    if SameText(N, Name) then begin
+      Delete(S, 1, P);
+      Result:= S;
+      Break;
+    end;
+  end;
+  Info.ResultAsString:= Result;
 end;
 
 procedure THHContext.TagUtilsFunctionsGetTagsEval(info: TProgramInfo);

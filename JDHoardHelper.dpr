@@ -7,12 +7,12 @@ uses
   Vcl.Themes,
   Vcl.Styles,
   JD.HoardHelper in 'JD.HoardHelper.pas',
-  uHoardHelperLibs in 'uHoardHelperLibs.pas' {frmLibs},
+  uHHLibraries in 'uHHLibraries.pas' {frmLibs},
   JD.CmdLine in 'JD.CmdLine.pas',
-  uHoardHelperFind in 'uHoardHelperFind.pas' {frmFind},
+  uHHScriptFind in 'uHHScriptFind.pas' {frmFind},
   XSuperObject in 'XSuperObject.pas',
   JD.HoardHelper.Indexer in 'JD.HoardHelper.Indexer.pas',
-  uHHMainNEW in 'uHHMainNEW.pas' {frmHHMain},
+  uHHMain in 'uHHMain.pas' {frmHHMain},
   uHHEmbedBase in 'uHHEmbedBase.pas' {frmHHEmbedBase},
   uHHMedia in 'uHHMedia.pas' {frmHHMedia},
   uHHHome in 'uHHHome.pas' {frmHHHome},
@@ -25,7 +25,7 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  TStyleManager.TrySetStyle('Carbon');
+  TStyleManager.TrySetStyle('Onyx Blue');
   Application.Title := 'JD Hoard Helper';
   Application.CreateForm(TfrmHHMain, frmHHMain);
   Application.Run;

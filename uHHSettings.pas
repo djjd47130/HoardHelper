@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uHHEmbedBase, JD.Ctrls.PageMenu, JD.Graphics,
   Vcl.Themes, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.WinXCtrls, JD.Common, JD.Ctrls,
-  JD.Ctrls.FontButton, Vcl.StdCtrls, RzShellDialogs, Vcl.Menus;
+  JD.Ctrls.FontButton, Vcl.StdCtrls, RzShellDialogs, Vcl.Menus,
+  uHHLibraries;
 
 type
   TfrmHHSettings = class(TfrmHHEmbedBase)
@@ -54,6 +55,22 @@ type
     JDFontButton5: TJDFontButton;
     JDFontButton6: TJDFontButton;
     btnPurgeBackups: TJDFontButton;
+    tabMigration: TTabSheet;
+    JDFontButton7: TJDFontButton;
+    ScrollBox4: TScrollBox;
+    pEnableMigration: TPanel;
+    swEnableMigration: TToggleSwitch;
+    Panel6: TPanel;
+    ComboBox3: TComboBox;
+    Panel4: TPanel;
+    Edit1: TEdit;
+    JDFontButton8: TJDFontButton;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    Panel9: TPanel;
+    Panel10: TPanel;
+    Panel11: TPanel;
+    Panel12: TPanel;
     procedure FormCreate(Sender: TObject);
     procedure pEnableIndexingClick(Sender: TObject);
     procedure pSyntaxHighlightingClick(Sender: TObject);
@@ -63,8 +80,10 @@ type
     procedure TabButtonClick(Sender: TObject);
     procedure Panel1Click(Sender: TObject);
     procedure swWordWrapClick(Sender: TObject);
+    procedure pEnableMigrationClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
-    { Private declarations }
+    FLibs: TfrmLibs;
   public
     procedure ShowTab(const Index: Integer);
     procedure ShowSettings;
@@ -82,7 +101,7 @@ implementation
 {$R *.dfm}
 
 uses
-  uHHMainNEW;
+  uHHMain;
 
 { General }
 
@@ -115,6 +134,13 @@ var
   X: Integer;
 begin
   inherited;
+
+  FLibs:= TfrmLibs.Create(tabLibraries);
+  FLibs.Parent:= tabLibraries;
+  FLibs.BorderStyle:= bsNone;
+  FLibs.Align:= alClient;
+  FLibs.Show;
+
   Pages.Align:= alClient;
   sbIndexing.Align:= alClient;
   for X := 0 to Pages.PageCount-1 do
@@ -123,6 +149,12 @@ begin
 
   btnPurgeBackups.Font.Color:= ColorManager.Color[fcRed];
 
+end;
+
+procedure TfrmHHSettings.FormShow(Sender: TObject);
+begin
+  inherited;
+  FLibs.Load;
 end;
 
 procedure TfrmHHSettings.ShowSettings;
@@ -170,6 +202,13 @@ begin
 
 end;
 
+procedure TfrmHHSettings.pEnableMigrationClick(Sender: TObject);
+begin
+  inherited;
+  ToggleSwitch(swEnableMigration);
+
+end;
+
 procedure TfrmHHSettings.pSyntaxHighlightingClick(Sender: TObject);
 begin
   inherited;
@@ -193,12 +232,15 @@ begin
   for X := 0 to pMenu.ControlCount-1 do begin
     if pMenu.Controls[X] is TJDFontButton then begin
       B:= TJDFontButton(pMenu.Controls[X]);
-      if X = Index then begin
+      if B.Tag = Index then begin
         B.Image.StandardColor:= fcOrange;
-        B.DrawStyle:= fdThemed;
+        B.Font.Color:= ColorManager.Color[fcOrange];
+        //B.DrawStyle:= fdThemed;
+        Caption:= 'Settings - '+B.Text;
       end else begin
-        B.Image.StandardColor:= fcGreen;
-        B.DrawStyle:= fdTransparent;
+        B.Image.StandardColor:= fcBlue; // fcGreen;
+        B.Font.Color:= clWindowText;
+        //B.DrawStyle:= fdTransparent;
       end;
     end;
   end;

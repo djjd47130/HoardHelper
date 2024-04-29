@@ -53,6 +53,7 @@ type
     IntoSubdirectory2: TMenuItem;
     MovetoTrash1: TMenuItem;
     MovetoTrash2: TMenuItem;
+    CheckBox2: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure JDFontButton1Click(Sender: TObject);
   private

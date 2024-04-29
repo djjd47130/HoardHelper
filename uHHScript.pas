@@ -134,6 +134,7 @@ type
     N15: TMenuItem;
     DemoMode1: TMenuItem;
     JDFontButton10: TJDFontButton;
+    dlgFind: TFindDialog;
     procedure FormCreate(Sender: TObject);
     procedure actExecExecute(Sender: TObject);
     procedure actNewExecute(Sender: TObject);
@@ -205,17 +206,13 @@ implementation
 {$R *.dfm}
 
 uses
-  uHHMainNEW,
-  uHoardHelperLibs,
+  uHHMain,
+  uHHLibraries,
   Clipbrd,
   StrUtils;
 
 procedure TfrmScript.FormCreate(Sender: TObject);
 begin
-  {$IFDEF DEBUG}
-  ReportMemoryLeaksOnShutdown:= True;
-  {$ENDIF}
-
   //FFindPos:= 0;
   TStyleManager.Engine.RegisterStyleHook(TCustomSynEdit, TScrollingStyleHook);
 
@@ -618,7 +615,19 @@ var
   S: String;
   P: Integer;
 begin
+  if dlgFind.Execute(Handle) then begin
+    S:= dlgFind.FindText;
+    if S <> '' then begin
+      Self.FFindText:= S;
+      SynSearch.Pattern:= S;
+      P:= SynSearch.FindFirst(S);
+      HighlightMatch(P, Length(FFindText));
+    end;
+  end;
+
+
   //Open find window (show on top)...
+  {
   S:= InputBox('Find', 'Enter your search:', txtScript.SelText);
   if S <> '' then begin
     Self.FFindText:= S;
@@ -626,6 +635,7 @@ begin
     P:= SynSearch.FindFirst(S);
     HighlightMatch(P, Length(FFindText));
   end;
+  }
 end;
 
 procedure TfrmScript.actFindNextExecute(Sender: TObject);
@@ -659,7 +669,7 @@ begin
 
   actCheckSyntax.Enabled:= (not FExecuting);
   actExec.Enabled:= (not FExecuting) and (not CommonIsLoaded);
-  actStop.Enabled:= FExecuting;
+  actStop.Enabled:= False; // FExecuting; //TODO: Finish implementing #18
   actDemoMode.Enabled:= not FExecuting;
 
   actUndo.Enabled:= txtScript.CanUndo and (not FExecuting);

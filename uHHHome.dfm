@@ -42,7 +42,7 @@ object frmHHHome: TfrmHHHome
       TabOrder = 0
       object Label1: TLabel
         AlignWithMargins = True
-        Left = 10
+        Left = 96
         Top = 34
         Width = 208
         Height = 80
@@ -78,11 +78,11 @@ object frmHHHome: TfrmHHHome
       end
       object JDGauge2: TJDGauge
         AlignWithMargins = True
-        Left = 265
+        Left = 3
         Top = 34
         Width = 80
         Height = 80
-        Align = alRight
+        Align = alLeft
         BaseAutoSize = True
         BaseSize = 50.000000000000000000
         CaptionMargin = 10.000000000000000000
@@ -173,9 +173,7 @@ object frmHHHome: TfrmHHHome
         ValueAlign = taCenter
         ValueFormat = '#,###,##0.00'
         ValueMargin = 10.000000000000000000
-        ExplicitLeft = 586
-        ExplicitTop = 3
-        ExplicitHeight = 72
+        ExplicitLeft = -32
       end
     end
     object pMigrationInfo: TPanel
@@ -198,7 +196,7 @@ object frmHHHome: TfrmHHHome
       TabOrder = 1
       object Label2: TLabel
         AlignWithMargins = True
-        Left = 10
+        Left = 96
         Top = 34
         Width = 208
         Height = 80
@@ -234,11 +232,11 @@ object frmHHHome: TfrmHHHome
       end
       object JDGauge1: TJDGauge
         AlignWithMargins = True
-        Left = 262
+        Left = 3
         Top = 34
         Width = 80
         Height = 80
-        Align = alRight
+        Align = alLeft
         BaseAutoSize = True
         BaseSize = 50.000000000000000000
         CaptionMargin = 10.000000000000000000
@@ -328,9 +326,7 @@ object frmHHHome: TfrmHHHome
           end>
         ValueFormat = '#,###,##0.00'
         ValueMargin = 10.000000000000000000
-        ExplicitLeft = 586
-        ExplicitTop = 3
-        ExplicitHeight = 72
+        ExplicitLeft = -32
       end
     end
   end

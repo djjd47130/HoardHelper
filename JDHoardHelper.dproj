@@ -4,7 +4,7 @@
         <ProjectVersion>19.1</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -70,7 +70,7 @@
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
         <SanitizedProjectName>JDHoardHelper</SanitizedProjectName>
-        <Custom_Styles>Carbon|VCLSTYLE|$(BDSCOMMONDIR)\Styles\Carbon.vsf</Custom_Styles>
+        <Custom_Styles>&quot;Onyx Blue|VCLSTYLE|$(BDSCOMMONDIR)\Styles\OnyxBlue.vsf&quot;</Custom_Styles>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>DBXSqliteDriver;RESTComponents;DBXInterBaseDriver;vclactnband;vclFireDAC;OpenWireBindingPkg;bindcompvclsmp;tethering;svnui;Mitov_VCL_BasicLab;JDLibComponents;FireDACADSDriver;OpenWireEditorPkg;OpenWireBindingFmxPkg;JDGamesComps;vcltouch;AudioLabEssentialPkg;vcldb;bindcompfmx;svn;inetdb;RaizeComponentsVcl;OpenWireEditorBasicPkg;FmxTeeUI;RaizeComponentsVclDb;EdoniaCompPackage;fmx;FireDACIBDriver;fmxdae;MSICS_RAD21_Rtl;vcledge;Mitov_VCL_AudioLab;dwsLibRuntime;dbexpress;IndyCore;TextLabBasicPkg;vclx;dsnap;Mitov_VCL_AudioLab_Essential;FireDACCommon;TimingLabBasicPkg;RESTBackendComponents;JDVisualsComponentsDX10_1;QR506RunDXE10;VCLRESTComponents;soapserver;JclDeveloperTools;vclie;bindengine;DBXMySQLDriver;CloudService;FireDACMySQLDriver;FireDACCommonODBC;FireDACCommonDriver;Mitov_BasicLab;SignalLabScopePkg;LockBoxDR;inet;IndyIPCommon;bindcompdbx;OpenWirePkg;vcl;IndyIPServer;MediaLabBasicPkg;IndySystem;OpenWireStudioAudioHostPkg;dsnapcon;FireDACMSAccDriver;fmxFireDAC;JDCardComponents;vclimg;TeeDB;FireDAC;Jcl;Mitov_Runtime;OpenWireStudioHostPkg;MiTeC_Common_RAD21;FireDACSqliteDriver;FireDACPgDriver;FMXTee;soaprtl;DbxCommonDriver;OpenWireBindingDatabasePkg;Tee;Mitov_VCL_AudioLab_Basic;xmlrtl;soapmidas;fmxobj;vclwinx;rtl;DbxClientDriver;CustomIPTransport;vcldsnap;SignalLabBasicPkg;AudioLabBasicPkg;MediaLabPkg;WMI_PKG;SignalLabAdditionalPkg;bindcomp;appanalytics;Mitov_VCL_Runtime;SynEditDR;AudioLabPkg;IndyIPClient;bindcompvcl;TeeUI;dbxcds;VclSmp;OpenWireBindingVclPkg;adortl;AudioLabGenericBasicPkg;SignalLabGenericBasicPkg;JclVcl;dsnapxml;dbrtl;IndyProtocols;inetdbxpress;JclContainers;fmxase;$(DCC_UsePackage)</DCC_UsePackage>
@@ -114,25 +114,29 @@
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
         <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
         <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
         <DCC_DebugInformation>0</DCC_DebugInformation>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Locale>1033</VerInfo_Locale>
         <Icon_MainIcon>Media\trash-icon.ico</Icon_MainIcon>
         <UWP_DelphiLogo44>Media\trash-icon.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>Media\trash-icon.png</UWP_DelphiLogo150>
         <DCC_ExeOutput>.\Bin32</DCC_ExeOutput>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
-        <VerInfo_MinorVer>6</VerInfo_MinorVer>
-        <VerInfo_Keys>CompanyName=Jerry Dodge;FileDescription=$(MSBuildProjectName);FileVersion=0.6.0.0;InternalName=HoardHelper;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.jerrydodge.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=0.6;Comments=</VerInfo_Keys>
+        <VerInfo_MinorVer>7</VerInfo_MinorVer>
+        <VerInfo_Keys>CompanyName=Jerry Dodge;FileDescription=$(MSBuildProjectName);FileVersion=0.7.0.0;InternalName=HoardHelper;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.jerrydodge.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=0.7;Comments=</VerInfo_Keys>
+        <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -158,18 +162,18 @@
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="JD.HoardHelper.pas"/>
-        <DCCReference Include="uHoardHelperLibs.pas">
+        <DCCReference Include="uHHLibraries.pas">
             <Form>frmLibs</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="JD.CmdLine.pas"/>
-        <DCCReference Include="uHoardHelperFind.pas">
+        <DCCReference Include="uHHScriptFind.pas">
             <Form>frmFind</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="XSuperObject.pas"/>
         <DCCReference Include="JD.HoardHelper.Indexer.pas"/>
-        <DCCReference Include="uHHMainNEW.pas">
+        <DCCReference Include="uHHMain.pas">
             <Form>frmHHMain</Form>
             <FormType>dfm</FormType>
         </DCCReference>

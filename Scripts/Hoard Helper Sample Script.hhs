@@ -24,18 +24,22 @@ Search('Pics\', '', VideoFilter);
 //- All picture files in Pics library:
 Search('Pics\', '', ImageFilter);
 
-//- All picture files in Pics library from a certain time period:
-Search('Pics\', '20160420', ImageFilter);
+//- All files in Pics library from a certain time period:
+Search('Pics\', '20160420', '*.*');
 
 
 
 //Check whether a file is in use...
 PrintLn('');
-if FileInUse('Movies\ISO\A Good Day To Die Hard.iso') then
-  PrintLn('File is in use')
-else
-  PrintLn('File is NOT in use');
-
+var FN: String = 'Movies\ISO\A Good Day To Die Hard.iso';
+if not FileExists(FN) then begin
+  PrintLn('File does not exist.');
+end else begin
+  if FileInUse(FN) then
+    PrintLn('File is in use')
+  else
+    PrintLn('File is NOT in use');
+end;
 
                               
 //Working with datasets...
@@ -57,7 +61,7 @@ SaveTextFile('Apps\Test Dataset.csv', CSV);
 
 //Get description of a specific file extension
 var Ext: String = '.vhdx';
-var ExtInfo: String = GetGenericFileType(Ext);
+var ExtInfo: String = FileUtils.GetGenericFileType(Ext);
 PrintLn('');
 PrintLn('File type lookup for extension "'+Ext+'": "'+ExtInfo+'"');
                                   
@@ -112,6 +116,9 @@ OpenFile('Movies\Other\Joker (2019) 2160p.mkv');
 
 //- Open a directory...
 OpenFile('Movies\Other\');
+
+//- Open file location...
+OpenFileLocation('Movies\Other\Joker (2019) 2160p.mkv');
                                     
                                     
                    

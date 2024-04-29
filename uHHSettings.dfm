@@ -1,38 +1,38 @@
 inherited frmHHSettings: TfrmHHSettings
   Caption = 'Settings'
   ClientHeight = 455
-  ClientWidth = 838
+  ClientWidth = 866
   OnCreate = FormCreate
-  ExplicitWidth = 854
+  OnShow = FormShow
+  ExplicitWidth = 882
   ExplicitHeight = 494
   PixelsPerInch = 96
   TextHeight = 13
   object Pages: TPageControl
     Left = 0
     Top = 33
-    Width = 838
+    Width = 866
     Height = 368
-    ActivePage = tabScripting
+    ActivePage = tabLibraries
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 838
     object tabGeneral: TTabSheet
       Caption = 'tabGeneral'
-      ExplicitWidth = 895
-      ExplicitHeight = 372
+      ExplicitWidth = 830
       object ScrollBox3: TScrollBox
         Left = 0
         Top = 0
-        Width = 830
-        Height = 201
+        Width = 858
+        Height = 281
         Align = alTop
         BorderStyle = bsNone
         TabOrder = 0
-        ExplicitWidth = 898
         object Panel5: TPanel
           AlignWithMargins = True
           Left = 3
-          Top = 3
-          Width = 824
+          Top = 50
+          Width = 852
           Height = 41
           Align = alTop
           Alignment = taLeftJustify
@@ -47,10 +47,11 @@ inherited frmHHSettings: TfrmHHSettings
           Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 0
-          ExplicitWidth = 892
+          ExplicitTop = 3
+          ExplicitWidth = 824
           object ComboBox2: TComboBox
             AlignWithMargins = True
-            Left = 623
+            Left = 651
             Top = 5
             Width = 198
             Height = 27
@@ -63,36 +64,54 @@ inherited frmHHSettings: TfrmHHSettings
             Text = 'Carbon'
             Items.Strings = (
               'Carbon')
-            ExplicitLeft = 688
+            ExplicitLeft = 623
           end
+        end
+        object Panel10: TPanel
+          AlignWithMargins = True
+          Left = 3
+          Top = 3
+          Width = 852
+          Height = 41
+          Align = alTop
+          BevelEdges = [beBottom]
+          BevelKind = bkFlat
+          BevelOuter = bvNone
+          Caption = 'UNDER DEVELOPMENT'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clRed
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+          StyleElements = [seClient, seBorder]
+          ExplicitTop = -18
         end
       end
     end
     object tabLibraries: TTabSheet
       Caption = 'tabLibraries'
       ImageIndex = 1
-      ExplicitWidth = 895
-      ExplicitHeight = 372
+      ExplicitLeft = 0
     end
     object tabIndexing: TTabSheet
       Caption = 'tabIndexing'
       ImageIndex = 2
-      ExplicitWidth = 895
-      ExplicitHeight = 372
+      ExplicitWidth = 830
       object sbIndexing: TScrollBox
         Left = 0
         Top = 0
-        Width = 830
-        Height = 217
+        Width = 858
+        Height = 249
         Align = alTop
         BorderStyle = bsNone
         TabOrder = 0
-        ExplicitWidth = 898
         object pEnableIndexing: TPanel
           AlignWithMargins = True
           Left = 3
-          Top = 3
-          Width = 824
+          Top = 50
+          Width = 852
           Height = 41
           Cursor = crHandPoint
           Align = alTop
@@ -109,37 +128,245 @@ inherited frmHHSettings: TfrmHHSettings
           ParentFont = False
           TabOrder = 0
           OnClick = pEnableIndexingClick
-          ExplicitWidth = 892
+          ExplicitTop = 3
+          ExplicitWidth = 824
           object swEnableIndexing: TToggleSwitch
-            Left = 744
+            Left = 772
             Top = 0
             Height = 39
             Align = alRight
             TabOrder = 0
-            ExplicitLeft = 809
+            ExplicitLeft = 744
             ExplicitHeight = 21
           end
+        end
+        object Panel4: TPanel
+          AlignWithMargins = True
+          Left = 3
+          Top = 97
+          Width = 852
+          Height = 41
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelEdges = [beBottom]
+          BevelKind = bkFlat
+          BevelOuter = bvNone
+          Caption = 'Index Data Location'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+          ExplicitLeft = 6
+          ExplicitTop = 58
+          object Edit1: TEdit
+            AlignWithMargins = True
+            Left = 403
+            Top = 5
+            Width = 405
+            Height = 29
+            Margins.Top = 5
+            Margins.Bottom = 5
+            Align = alRight
+            ReadOnly = True
+            TabOrder = 0
+            Text = 'D:\Media\Index'
+            ExplicitHeight = 27
+          end
+          object JDFontButton8: TJDFontButton
+            Left = 811
+            Top = 0
+            Width = 41
+            Height = 39
+            Cursor = crHandPoint
+            Hint = 'Browse...'
+            Align = alRight
+            DrawStyle = fdTransparent
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            Image.AutoSize = False
+            Image.Text = #61564
+            Image.Font.Charset = DEFAULT_CHARSET
+            Image.Font.Color = clWindowText
+            Image.Font.Height = -21
+            Image.Font.Name = 'FontAwesome'
+            Image.Font.Style = []
+            Image.Font.Quality = fqAntialiased
+            Image.StandardColor = fcOrange
+            Overlay.Text = #57715
+            Overlay.Font.Charset = DEFAULT_CHARSET
+            Overlay.Font.Color = clWindowText
+            Overlay.Font.Height = -7
+            Overlay.Font.Name = 'FontAwesome'
+            Overlay.Font.Style = []
+            Overlay.Font.Quality = fqAntialiased
+            Overlay.Position = foNone
+            Overlay.Margin = 3
+            ImagePosition = fpImgOnly
+            ShowHint = True
+            SubTextFont.Charset = DEFAULT_CHARSET
+            SubTextFont.Color = clGray
+            SubTextFont.Height = -11
+            SubTextFont.Name = 'Tahoma'
+            SubTextFont.Style = []
+            TabOrder = 1
+            Text = 'btnSelectDir'
+          end
+        end
+        object Panel9: TPanel
+          AlignWithMargins = True
+          Left = 3
+          Top = 3
+          Width = 852
+          Height = 41
+          Align = alTop
+          BevelEdges = [beBottom]
+          BevelKind = bkFlat
+          BevelOuter = bvNone
+          Caption = 'UNDER DEVELOPMENT'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clRed
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 2
+          StyleElements = [seClient, seBorder]
+          OnClick = pAutoBackupsEnabledClick
+          ExplicitTop = -18
+        end
+      end
+    end
+    object tabMigration: TTabSheet
+      Caption = 'tabMigration'
+      ImageIndex = 6
+      ExplicitWidth = 830
+      object ScrollBox4: TScrollBox
+        Left = 0
+        Top = 0
+        Width = 858
+        Height = 273
+        Align = alTop
+        BorderStyle = bsNone
+        TabOrder = 0
+        object pEnableMigration: TPanel
+          AlignWithMargins = True
+          Left = 3
+          Top = 50
+          Width = 852
+          Height = 41
+          Cursor = crHandPoint
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelEdges = [beBottom]
+          BevelKind = bkFlat
+          BevelOuter = bvNone
+          Caption = 'Enable Media Migration'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 0
+          OnClick = pEnableMigrationClick
+          ExplicitTop = 0
+          object swEnableMigration: TToggleSwitch
+            Left = 772
+            Top = 0
+            Height = 39
+            Align = alRight
+            TabOrder = 0
+            ExplicitHeight = 21
+          end
+        end
+        object Panel6: TPanel
+          AlignWithMargins = True
+          Left = 3
+          Top = 97
+          Width = 852
+          Height = 41
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelEdges = [beBottom]
+          BevelKind = bkFlat
+          BevelOuter = bvNone
+          Caption = 'Migration Method'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+          ExplicitLeft = 6
+          ExplicitTop = 58
+          object ComboBox3: TComboBox
+            AlignWithMargins = True
+            Left = 576
+            Top = 5
+            Width = 273
+            Height = 27
+            Margins.Top = 5
+            Margins.Bottom = 5
+            Align = alRight
+            Style = csDropDownList
+            ItemIndex = 0
+            TabOrder = 0
+            Text = 'Leave In Place (Organize)'
+            Items.Strings = (
+              'Leave In Place (Organize)'
+              'Copy Media (Keep Original)'
+              'Move Data (Permanent)')
+          end
+        end
+        object Panel8: TPanel
+          AlignWithMargins = True
+          Left = 3
+          Top = 3
+          Width = 852
+          Height = 41
+          Align = alTop
+          BevelEdges = [beBottom]
+          BevelKind = bkFlat
+          BevelOuter = bvNone
+          Caption = 'UNDER DEVELOPMENT'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clRed
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 2
+          StyleElements = [seClient, seBorder]
+          OnClick = pAutoBackupsEnabledClick
+          ExplicitTop = -18
         end
       end
     end
     object tabBackups: TTabSheet
       Caption = 'tabBackups'
       ImageIndex = 3
-      ExplicitWidth = 895
-      ExplicitHeight = 372
+      ExplicitWidth = 830
       object ScrollBox2: TScrollBox
         Left = 0
         Top = 0
-        Width = 830
+        Width = 858
         Height = 289
         Align = alTop
         BorderStyle = bsNone
         TabOrder = 0
+        ExplicitWidth = 830
         object pAutoBackupsEnabled: TPanel
           AlignWithMargins = True
           Left = 3
-          Top = 50
-          Width = 824
+          Top = 97
+          Width = 852
           Height = 41
           Cursor = crHandPoint
           Align = alTop
@@ -156,24 +383,24 @@ inherited frmHHSettings: TfrmHHSettings
           ParentFont = False
           TabOrder = 0
           OnClick = pAutoBackupsEnabledClick
-          ExplicitTop = 3
-          ExplicitWidth = 892
+          ExplicitTop = 50
+          ExplicitWidth = 824
           object swAutoBackupsEnabled: TToggleSwitch
-            Left = 744
+            Left = 772
             Top = 0
             Height = 39
             Align = alRight
             State = tssOn
             TabOrder = 0
-            ExplicitLeft = 809
+            ExplicitLeft = 744
             ExplicitHeight = 21
           end
         end
         object Panel2: TPanel
           AlignWithMargins = True
           Left = 3
-          Top = 97
-          Width = 824
+          Top = 144
+          Width = 852
           Height = 41
           Align = alTop
           Alignment = taLeftJustify
@@ -188,11 +415,11 @@ inherited frmHHSettings: TfrmHHSettings
           Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 1
-          ExplicitTop = 50
-          ExplicitWidth = 892
+          ExplicitTop = 97
+          ExplicitWidth = 824
           object txtBackupDir: TEdit
             AlignWithMargins = True
-            Left = 375
+            Left = 403
             Top = 5
             Width = 405
             Height = 29
@@ -202,11 +429,11 @@ inherited frmHHSettings: TfrmHHSettings
             ReadOnly = True
             TabOrder = 0
             Text = 'D:\Media\Backup'
-            ExplicitLeft = 440
+            ExplicitLeft = 375
             ExplicitHeight = 27
           end
           object btnSelectDir: TJDFontButton
-            Left = 783
+            Left = 811
             Top = 0
             Width = 41
             Height = 39
@@ -247,15 +474,14 @@ inherited frmHHSettings: TfrmHHSettings
             TabOrder = 1
             Text = 'btnSelectDir'
             OnClick = btnSelectDirClick
-            ExplicitLeft = 848
-            ExplicitHeight = 41
+            ExplicitLeft = 783
           end
         end
         object Panel3: TPanel
           AlignWithMargins = True
           Left = 3
-          Top = 144
-          Width = 824
+          Top = 191
+          Width = 852
           Height = 41
           Align = alTop
           Alignment = taLeftJustify
@@ -270,11 +496,11 @@ inherited frmHHSettings: TfrmHHSettings
           Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 2
-          ExplicitTop = 97
-          ExplicitWidth = 892
+          ExplicitTop = 144
+          ExplicitWidth = 824
           object ComboBox1: TComboBox
             AlignWithMargins = True
-            Left = 623
+            Left = 651
             Top = 5
             Width = 198
             Height = 27
@@ -289,14 +515,14 @@ inherited frmHHSettings: TfrmHHSettings
               'Ignore'
               'Create Copies'
               'Overwrite')
-            ExplicitTop = 2
+            ExplicitLeft = 623
           end
         end
         object Panel1: TPanel
           AlignWithMargins = True
           Left = 3
-          Top = 3
-          Width = 824
+          Top = 50
+          Width = 852
           Height = 41
           Cursor = crHandPoint
           Align = alTop
@@ -313,31 +539,31 @@ inherited frmHHSettings: TfrmHHSettings
           ParentFont = False
           TabOrder = 3
           OnClick = Panel1Click
-          ExplicitTop = -18
+          ExplicitTop = 3
+          ExplicitWidth = 824
           object Label1: TLabel
             AlignWithMargins = True
-            Left = 490
+            Left = 738
             Top = 3
-            Width = 245
+            Width = 111
             Height = 33
             Align = alRight
             Alignment = taRightJustify
-            AutoSize = False
             Caption = '0 Files (0 MB)'
             Layout = tlCenter
-            ExplicitLeft = 479
-            ExplicitTop = 8
+            ExplicitLeft = 652
+            ExplicitHeight = 19
           end
           object btnPurgeBackups: TJDFontButton
             AlignWithMargins = True
-            Left = 741
+            Left = 652
             Top = 3
             Width = 80
             Height = 33
             Cursor = crHandPoint
             Hint = 'Delete all backup files'
             Align = alRight
-            DrawStyle = fdTransparent
+            DrawStyle = fdHybrid
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clRed
             Font.Height = -13
@@ -369,33 +595,54 @@ inherited frmHHSettings: TfrmHHSettings
             SubTextFont.Name = 'Tahoma'
             SubTextFont.Style = []
             TabOrder = 0
+            TabStop = False
             Text = 'Purge'
-            ExplicitLeft = 744
-            ExplicitTop = 0
-            ExplicitHeight = 39
+            ExplicitTop = 8
           end
+        end
+        object Panel7: TPanel
+          AlignWithMargins = True
+          Left = 3
+          Top = 3
+          Width = 852
+          Height = 41
+          Align = alTop
+          BevelEdges = [beBottom]
+          BevelKind = bkFlat
+          BevelOuter = bvNone
+          Caption = 'UNDER DEVELOPMENT'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clRed
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 4
+          StyleElements = [seClient, seBorder]
+          OnClick = pAutoBackupsEnabledClick
+          ExplicitLeft = 27
+          ExplicitTop = -18
         end
       end
     end
     object tabScripting: TTabSheet
       Caption = 'tabScripting'
       ImageIndex = 4
-      ExplicitWidth = 895
-      ExplicitHeight = 372
+      ExplicitWidth = 830
       object ScrollBox1: TScrollBox
         Left = 0
         Top = 0
-        Width = 830
+        Width = 858
         Height = 217
         Align = alTop
         BorderStyle = bsNone
         TabOrder = 0
-        ExplicitWidth = 898
+        ExplicitWidth = 830
         object pSyntaxHighlighting: TPanel
           AlignWithMargins = True
           Left = 3
-          Top = 3
-          Width = 824
+          Top = 50
+          Width = 852
           Height = 41
           Cursor = crHandPoint
           Align = alTop
@@ -412,23 +659,24 @@ inherited frmHHSettings: TfrmHHSettings
           ParentFont = False
           TabOrder = 0
           OnClick = pSyntaxHighlightingClick
-          ExplicitWidth = 892
+          ExplicitTop = 3
+          ExplicitWidth = 824
           object swSyntaxHighlighting: TToggleSwitch
-            Left = 744
+            Left = 772
             Top = 0
             Height = 39
             Align = alRight
             State = tssOn
             TabOrder = 0
-            ExplicitLeft = 809
+            ExplicitLeft = 744
             ExplicitHeight = 21
           end
         end
         object pWordWrap: TPanel
           AlignWithMargins = True
           Left = 3
-          Top = 50
-          Width = 824
+          Top = 97
+          Width = 852
           Height = 41
           Cursor = crHandPoint
           Align = alTop
@@ -445,36 +693,98 @@ inherited frmHHSettings: TfrmHHSettings
           ParentFont = False
           TabOrder = 1
           OnClick = pWordWrapClick
-          ExplicitWidth = 892
+          ExplicitTop = 50
+          ExplicitWidth = 824
           object swWordWrap: TToggleSwitch
-            Left = 744
+            Left = 772
             Top = 0
             Height = 39
             Align = alRight
             TabOrder = 0
             OnClick = swWordWrapClick
-            ExplicitLeft = 809
+            ExplicitLeft = 744
             ExplicitHeight = 21
           end
+        end
+        object Panel11: TPanel
+          AlignWithMargins = True
+          Left = 3
+          Top = 3
+          Width = 852
+          Height = 41
+          Align = alTop
+          BevelEdges = [beBottom]
+          BevelKind = bkFlat
+          BevelOuter = bvNone
+          Caption = 'UNDER DEVELOPMENT'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clRed
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 2
+          StyleElements = [seClient, seBorder]
+          OnClick = pAutoBackupsEnabledClick
+          ExplicitTop = -18
         end
       end
     end
     object tabFilters: TTabSheet
       Caption = 'tabFilters'
       ImageIndex = 5
-      ExplicitWidth = 954
-      ExplicitHeight = 260
+      ExplicitLeft = 8
+      object lstFilters: TListView
+        AlignWithMargins = True
+        Left = 3
+        Top = 91
+        Width = 852
+        Height = 222
+        Align = alTop
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        Columns = <
+          item
+            Caption = 'Name'
+            Width = 150
+          end
+          item
+            Caption = 'Filter'
+            Width = 400
+          end>
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        HideSelection = False
+        HotTrackStyles = [htHandPoint, htUnderlineHot]
+        Items.ItemData = {
+          05B20000000200000000000000FFFFFFFFFFFFFFFF01000000FFFFFFFF000000
+          000B56006900640065006F002000460069006C0065007300112A002E004D0050
+          0034003B002A002E004100560049003B002A002E004D004B0056001859CD1800
+          000000FFFFFFFFFFFFFFFF01000000FFFFFFFF000000000B4100750064006900
+          6F002000460069006C0065007300112A002E004D00500033003B002A002E0057
+          00410056003B002A002E0057004D0041004828A83EFFFFFFFF}
+        ReadOnly = True
+        RowSelect = True
+        ParentFont = False
+        TabOrder = 0
+        ViewStyle = vsReport
+        ExplicitTop = 47
+        ExplicitWidth = 824
+      end
       object Toolbar: TPanel
         Left = 0
-        Top = 0
-        Width = 830
+        Top = 47
+        Width = 858
         Height = 41
         Align = alTop
         BevelOuter = bvNone
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 0
-        ExplicitTop = 8
+        TabOrder = 1
+        ExplicitLeft = 32
+        ExplicitTop = -18
         object btnNewLib: TJDFontButton
           Left = 0
           Top = 0
@@ -680,58 +990,43 @@ inherited frmHHSettings: TfrmHHSettings
           Text = 'Delete Library'
         end
       end
-      object lstFilters: TListView
+      object Panel12: TPanel
         AlignWithMargins = True
         Left = 3
-        Top = 44
-        Width = 824
-        Height = 222
+        Top = 3
+        Width = 852
+        Height = 41
         Align = alTop
-        Anchors = [akLeft, akTop, akRight, akBottom]
-        Columns = <
-          item
-            Caption = 'Name'
-            Width = 150
-          end
-          item
-            Caption = 'Filter'
-            Width = 400
-          end>
+        BevelEdges = [beBottom]
+        BevelKind = bkFlat
+        BevelOuter = bvNone
+        Caption = 'UNDER DEVELOPMENT'
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clRed
         Font.Height = -16
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
-        HideSelection = False
-        HotTrackStyles = [htHandPoint, htUnderlineHot]
-        Items.ItemData = {
-          05B20000000200000000000000FFFFFFFFFFFFFFFF01000000FFFFFFFF000000
-          000B56006900640065006F002000460069006C0065007300112A002E004D0050
-          0034003B002A002E004100560049003B002A002E004D004B0056001859CD1800
-          000000FFFFFFFFFFFFFFFF01000000FFFFFFFF000000000B4100750064006900
-          6F002000460069006C0065007300112A002E004D00500033003B002A002E0057
-          00410056003B002A002E0057004D0041004828A83EFFFFFFFF}
-        ReadOnly = True
-        RowSelect = True
         ParentFont = False
-        TabOrder = 1
-        ViewStyle = vsReport
-        ExplicitTop = 47
+        TabOrder = 2
+        StyleElements = [seClient, seBorder]
+        ExplicitLeft = 11
+        ExplicitTop = -18
       end
     end
   end
   object pMenu: TPanel
     Left = 0
     Top = 0
-    Width = 838
+    Width = 866
     Height = 33
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitWidth = 838
     object JDFontButton1: TJDFontButton
       Left = 0
       Top = 0
-      Width = 113
+      Width = 117
       Height = 33
       Cursor = crHandPoint
       Align = alLeft
@@ -749,7 +1044,7 @@ inherited frmHHSettings: TfrmHHSettings
       Image.Font.Name = 'FontAwesome'
       Image.Font.Style = []
       Image.Font.Quality = fqAntialiased
-      Image.StandardColor = fcGreen
+      Image.StandardColor = fcBlue
       Overlay.Text = #57715
       Overlay.Font.Charset = DEFAULT_CHARSET
       Overlay.Font.Color = clWindowText
@@ -759,6 +1054,9 @@ inherited frmHHSettings: TfrmHHSettings
       Overlay.Font.Quality = fqAntialiased
       Overlay.Position = foNone
       Overlay.Margin = 3
+      Margin = 8
+      Spacing = 8
+      StyleColors = [scBack, scFrame]
       SubTextFont.Charset = DEFAULT_CHARSET
       SubTextFont.Color = clGray
       SubTextFont.Height = -11
@@ -767,13 +1065,12 @@ inherited frmHHSettings: TfrmHHSettings
       TabOrder = 0
       Text = 'General'
       OnClick = TabButtonClick
-      ExplicitHeight = 41
     end
     object JDFontButton2: TJDFontButton
       Tag = 1
-      Left = 113
+      Left = 117
       Top = 0
-      Width = 113
+      Width = 117
       Height = 33
       Cursor = crHandPoint
       Align = alLeft
@@ -791,7 +1088,7 @@ inherited frmHHSettings: TfrmHHSettings
       Image.Font.Name = 'FontAwesome'
       Image.Font.Style = []
       Image.Font.Quality = fqAntialiased
-      Image.StandardColor = fcGreen
+      Image.StandardColor = fcBlue
       Overlay.Text = #57715
       Overlay.Font.Charset = DEFAULT_CHARSET
       Overlay.Font.Color = clWindowText
@@ -801,6 +1098,9 @@ inherited frmHHSettings: TfrmHHSettings
       Overlay.Font.Quality = fqAntialiased
       Overlay.Position = foNone
       Overlay.Margin = 3
+      Margin = 8
+      Spacing = 8
+      StyleColors = [scBack, scFrame]
       SubTextFont.Charset = DEFAULT_CHARSET
       SubTextFont.Color = clGray
       SubTextFont.Height = -11
@@ -809,14 +1109,13 @@ inherited frmHHSettings: TfrmHHSettings
       TabOrder = 1
       Text = 'Libraries'
       OnClick = TabButtonClick
-      ExplicitLeft = 107
-      ExplicitHeight = 41
+      ExplicitLeft = 116
     end
     object JDFontButton3: TJDFontButton
       Tag = 2
-      Left = 226
+      Left = 234
       Top = 0
-      Width = 113
+      Width = 117
       Height = 33
       Cursor = crHandPoint
       Align = alLeft
@@ -834,7 +1133,7 @@ inherited frmHHSettings: TfrmHHSettings
       Image.Font.Name = 'FontAwesome'
       Image.Font.Style = []
       Image.Font.Quality = fqAntialiased
-      Image.StandardColor = fcGreen
+      Image.StandardColor = fcBlue
       Overlay.Text = #57715
       Overlay.Font.Charset = DEFAULT_CHARSET
       Overlay.Font.Color = clWindowText
@@ -844,6 +1143,9 @@ inherited frmHHSettings: TfrmHHSettings
       Overlay.Font.Quality = fqAntialiased
       Overlay.Position = foNone
       Overlay.Margin = 3
+      Margin = 8
+      Spacing = 8
+      StyleColors = [scBack, scFrame]
       SubTextFont.Charset = DEFAULT_CHARSET
       SubTextFont.Color = clGray
       SubTextFont.Height = -11
@@ -852,15 +1154,12 @@ inherited frmHHSettings: TfrmHHSettings
       TabOrder = 2
       Text = 'Indexing'
       OnClick = TabButtonClick
-      ExplicitLeft = 220
-      ExplicitTop = -6
-      ExplicitHeight = 41
     end
     object JDFontButton4: TJDFontButton
-      Tag = 3
-      Left = 339
+      Tag = 4
+      Left = 481
       Top = 0
-      Width = 113
+      Width = 117
       Height = 33
       Cursor = crHandPoint
       Align = alLeft
@@ -878,7 +1177,7 @@ inherited frmHHSettings: TfrmHHSettings
       Image.Font.Name = 'FontAwesome'
       Image.Font.Style = []
       Image.Font.Quality = fqAntialiased
-      Image.StandardColor = fcGreen
+      Image.StandardColor = fcBlue
       Overlay.Text = #57715
       Overlay.Font.Charset = DEFAULT_CHARSET
       Overlay.Font.Color = clWindowText
@@ -888,22 +1187,23 @@ inherited frmHHSettings: TfrmHHSettings
       Overlay.Font.Quality = fqAntialiased
       Overlay.Position = foNone
       Overlay.Margin = 3
+      Margin = 8
+      Spacing = 8
+      StyleColors = [scBack, scFrame]
       SubTextFont.Charset = DEFAULT_CHARSET
       SubTextFont.Color = clGray
       SubTextFont.Height = -11
       SubTextFont.Name = 'Tahoma'
       SubTextFont.Style = []
-      TabOrder = 3
+      TabOrder = 4
       Text = 'Backups'
       OnClick = TabButtonClick
-      ExplicitLeft = 333
-      ExplicitHeight = 41
     end
     object JDFontButton5: TJDFontButton
-      Tag = 4
-      Left = 452
+      Tag = 5
+      Left = 598
       Top = 0
-      Width = 113
+      Width = 117
       Height = 33
       Cursor = crHandPoint
       Align = alLeft
@@ -921,7 +1221,7 @@ inherited frmHHSettings: TfrmHHSettings
       Image.Font.Name = 'FontAwesome'
       Image.Font.Style = []
       Image.Font.Quality = fqAntialiased
-      Image.StandardColor = fcGreen
+      Image.StandardColor = fcBlue
       Overlay.Text = #57715
       Overlay.Font.Charset = DEFAULT_CHARSET
       Overlay.Font.Color = clWindowText
@@ -931,23 +1231,23 @@ inherited frmHHSettings: TfrmHHSettings
       Overlay.Font.Quality = fqAntialiased
       Overlay.Position = foNone
       Overlay.Margin = 3
+      Margin = 8
+      Spacing = 8
+      StyleColors = [scBack, scFrame]
       SubTextFont.Charset = DEFAULT_CHARSET
       SubTextFont.Color = clGray
       SubTextFont.Height = -11
       SubTextFont.Name = 'Tahoma'
       SubTextFont.Style = []
-      TabOrder = 4
+      TabOrder = 5
       Text = 'Scripting'
       OnClick = TabButtonClick
-      ExplicitLeft = 552
-      ExplicitTop = -6
-      ExplicitHeight = 41
     end
     object JDFontButton6: TJDFontButton
-      Tag = 5
-      Left = 565
+      Tag = 6
+      Left = 715
       Top = 0
-      Width = 113
+      Width = 117
       Height = 33
       Cursor = crHandPoint
       Align = alLeft
@@ -965,7 +1265,7 @@ inherited frmHHSettings: TfrmHHSettings
       Image.Font.Name = 'FontAwesome'
       Image.Font.Style = []
       Image.Font.Quality = fqAntialiased
-      Image.StandardColor = fcGreen
+      Image.StandardColor = fcBlue
       Overlay.Text = #57715
       Overlay.Font.Charset = DEFAULT_CHARSET
       Overlay.Font.Color = clWindowText
@@ -975,16 +1275,61 @@ inherited frmHHSettings: TfrmHHSettings
       Overlay.Font.Quality = fqAntialiased
       Overlay.Position = foNone
       Overlay.Margin = 3
+      Margin = 8
+      Spacing = 8
+      StyleColors = [scBack, scFrame]
       SubTextFont.Charset = DEFAULT_CHARSET
       SubTextFont.Color = clGray
       SubTextFont.Height = -11
       SubTextFont.Name = 'Tahoma'
       SubTextFont.Style = []
-      TabOrder = 5
+      TabOrder = 6
       Text = 'Filters'
       OnClick = TabButtonClick
-      ExplicitTop = -6
-      ExplicitHeight = 41
+    end
+    object JDFontButton7: TJDFontButton
+      Tag = 3
+      Left = 351
+      Top = 0
+      Width = 130
+      Height = 33
+      Cursor = crHandPoint
+      Align = alLeft
+      DrawStyle = fdTransparent
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      Image.AutoSize = False
+      Image.Text = #61561
+      Image.Font.Charset = DEFAULT_CHARSET
+      Image.Font.Color = clWindowText
+      Image.Font.Height = -21
+      Image.Font.Name = 'FontAwesome'
+      Image.Font.Style = []
+      Image.Font.Quality = fqAntialiased
+      Image.StandardColor = fcBlue
+      Overlay.Text = #57715
+      Overlay.Font.Charset = DEFAULT_CHARSET
+      Overlay.Font.Color = clWindowText
+      Overlay.Font.Height = -7
+      Overlay.Font.Name = 'FontAwesome'
+      Overlay.Font.Style = []
+      Overlay.Font.Quality = fqAntialiased
+      Overlay.Position = foNone
+      Overlay.Margin = 3
+      Margin = 8
+      Spacing = 8
+      StyleColors = [scBack, scFrame]
+      SubTextFont.Charset = DEFAULT_CHARSET
+      SubTextFont.Color = clGray
+      SubTextFont.Height = -11
+      SubTextFont.Name = 'Tahoma'
+      SubTextFont.Style = []
+      TabOrder = 3
+      Text = 'Migration'
+      OnClick = TabButtonClick
     end
   end
   object dlgOpenDir: TFileOpenDialog

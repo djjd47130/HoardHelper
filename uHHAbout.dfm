@@ -114,6 +114,7 @@ inherited frmHHAbout: TfrmHHAbout
     Layout = tlCenter
     StyleElements = [seClient, seBorder]
     OnClick = Label5Click
+    ExplicitLeft = -2
   end
   object Panel1: TPanel
     Left = 0
@@ -123,15 +124,13 @@ inherited frmHHAbout: TfrmHHAbout
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitLeft = -3
-    ExplicitTop = 145
-    ExplicitWidth = 692
     object JDFontButton1: TJDFontButton
       AlignWithMargins = True
       Left = 3
       Top = 3
       Width = 301
       Height = 35
+      Cursor = crHandPoint
       Action = frmHHMain.actHelpContents
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
@@ -164,10 +163,6 @@ inherited frmHHAbout: TfrmHHAbout
       SubTextFont.Style = []
       TabOrder = 0
       Text = 'Help Contents'
-      ExplicitLeft = 328
-      ExplicitTop = 16
-      ExplicitWidth = 100
-      ExplicitHeight = 30
     end
   end
 end

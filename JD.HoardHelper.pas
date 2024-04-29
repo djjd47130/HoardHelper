@@ -43,13 +43,22 @@ type
     FName: String;
     FLocation: String;
     FLibraryType: THHLibraryType;
+    FFilter: String;
+    FCollectionsSubdir: Boolean;
+    FStructure: String;
     procedure SetLibraryType(const Value: THHLibraryType);
     procedure SetLocation(const Value: String);
     procedure SetName(const Value: String);
+    procedure SetFilter(const Value: String);
+    procedure SetCollectionsSubdir(const Value: Boolean);
+    procedure SetStructure(const Value: String);
   public
     property LibraryType: THHLibraryType read FLibraryType write SetLibraryType;
     property Location: String read FLocation write SetLocation;
     property Name: String read FName write SetName;
+    property Filter: String read FFilter write SetFilter;
+    property Structure: String read FStructure write SetStructure;
+    property CollectionsSubdir: Boolean read FCollectionsSubdir write SetCollectionsSubdir;
 
     function LibPathToLocalPath(const Value: String): String;
     function LocalPathToLibPath(const Value: String): String;
@@ -73,26 +82,28 @@ type
     FCommonLOC: Integer;
     FOnBeginUpdate: TNotifyEvent;
     FOnEndUpdate: TNotifyEvent;
+    function GetLibrary(const Index: Integer): THHLibrary;
     procedure SetProfileName(const Value: String);
     procedure SetBackupEnabled(const Value: Boolean);
     procedure SetBackupLocation(const Value: String);
-    procedure LoadLibs(A: ISuperArray);
-
-    procedure PrintLn(Sender: TObject; Context: THHContext;
-      const Text: String);
-    procedure Started(Sender: TObject);
-    procedure Stopped(Sender: TObject);
-    procedure ThreadBeginUpdate(Sender: TObject);
-    procedure ThreadEndUpdate(Sender: TObject);
-    
-    function GetLibrary(const Index: Integer): THHLibrary;
-    procedure SaveLibs(var A: ISuperArray);
     procedure SetWrapType(const Value: THHWrapType);
     procedure SetHighlighting(const Value: Boolean);
     procedure SetRightLine(const Value: Integer);
     procedure SetBackupDirectory(const Value: String);
     procedure SetBackupsEnabled(const Value: Boolean);
+
+    procedure LoadLibs(A: ISuperArray);
+    procedure SaveLibs(var A: ISuperArray);
+
+    procedure PrintLn(Sender: TObject; Context: THHContext;
+      const Text: String);
     procedure EnsureCommonFile;
+
+    procedure Started(Sender: TObject);
+    procedure Stopped(Sender: TObject);
+    procedure ThreadBeginUpdate(Sender: TObject);
+    procedure ThreadEndUpdate(Sender: TObject);
+
   protected
 
   public
@@ -185,12 +196,16 @@ function LibTypeToStr(const T: THHLibraryType): String;
 function StrToWrapType(const S: String): THHWrapType;
 function WrapTypeToStr(const T: THHWrapType): String;
 function PathCombine(P1, P2: String): String;
+function OpenFolderAndSelectFile(const FileName: String): boolean;
 
 implementation
 
 uses
   System.IOUtils,
-  System.StrUtils;
+  System.StrUtils,
+  Winapi.Windows,
+  Winapi.ShlObj,
+  Winapi.ShellAPI;
 
 var
   _HH: THoardHelper;
@@ -314,6 +329,35 @@ begin
   //Combine
   Result:= P1 + P2;
 
+end;
+
+const
+  OFASI_EDIT = $0001;
+  OFASI_OPENDESKTOP = $0002;
+
+{$IFDEF UNICODE}
+function ILCreateFromPath(pszPath: PChar): PItemIDList stdcall; external shell32
+  name 'ILCreateFromPathW';
+{$ELSE}
+function ILCreateFromPath(pszPath: PChar): PItemIDList stdcall; external shell32
+  name 'ILCreateFromPathA';
+{$ENDIF}
+procedure ILFree(pidl: PItemIDList) stdcall; external shell32;
+function SHOpenFolderAndSelectItems(pidlFolder: PItemIDList; cidl: Cardinal;
+  apidl: pointer; dwFlags: DWORD): HRESULT; stdcall; external shell32;
+
+function OpenFolderAndSelectFile(const FileName: String): boolean;
+var
+  IIDL: PItemIDList;
+begin
+  result := false;
+  IIDL := ILCreateFromPath(PChar(FileName));
+  if IIDL <> nil then
+    try
+      result := SHOpenFolderAndSelectItems(IIDL, 0, nil, 0) = S_OK;
+    finally
+      ILFree(IIDL);
+    end;
 end;
 
 { THoardHelper }
@@ -576,6 +620,9 @@ begin
       L.FName:= O.S['name'];
       L.FLibraryType:= StrToLibType(O.S['type']);
       L.FLocation:= O.S['directory'];
+      L.FFilter:= O.S['filter'];
+      L.FStructure:= O.S['structure'];
+      L.FCollectionsSubdir:= O.B['collsubdir'];
     finally
       FLibraries.Add(L);
     end;
@@ -596,6 +643,9 @@ begin
       O.S['name']:= L.FName;
       O.S['type']:= LibTypeToStr(L.FLibraryType);
       O.S['directory']:= L.FLocation;
+      O.S['filter']:= L.FFilter;
+      O.S['structure']:= L.FStructure;
+      O.B['collsubdir']:= L.FCollectionsSubdir;
     finally
       A.Add(O);
     end;
@@ -737,16 +787,17 @@ begin
   //Remove lib path from filename...
   Delete(Result, 1, Length(FLocation));
   //Insert lib name instead...
-  //Result:= TPath.Combine(FName, Result);
   Result:= PathCombine(FName, Result);
+end;
 
-  {
-  if Length(Result) = 0 then
-    Result:= '\';
-  if Result[1] <> '\' then
-    Result:= '\' + Result;
-  Result:= FName + Result;
-  }
+procedure THHLibrary.SetCollectionsSubdir(const Value: Boolean);
+begin
+  FCollectionsSubdir := Value;
+end;
+
+procedure THHLibrary.SetFilter(const Value: String);
+begin
+  FFilter := Value;
 end;
 
 procedure THHLibrary.SetLibraryType(
@@ -763,6 +814,11 @@ end;
 procedure THHLibrary.SetName(const Value: String);
 begin
   FName := Value;
+end;
+
+procedure THHLibrary.SetStructure(const Value: String);
+begin
+  FStructure := Value;
 end;
 
 { THoardHelperFile }

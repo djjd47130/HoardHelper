@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "JD Hoard Helper"
-#define MyAppVersion "0.6"
+#define MyAppVersion "0.7"
 #define MyAppPublisher "Jerry Dodge"
 #define MyAppURL "https://jerryszone.com"
 #define MyAppExeName "JDHoardHelper.exe"

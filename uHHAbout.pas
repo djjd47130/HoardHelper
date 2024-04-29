@@ -31,7 +31,7 @@ implementation
 {$R *.dfm}
 
 uses
-  uHHMainNEW;
+  uHHMain;
 
 procedure TfrmHHAbout.Label5Click(Sender: TObject);
 begin

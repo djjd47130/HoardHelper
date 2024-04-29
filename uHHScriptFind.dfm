@@ -41,8 +41,6 @@ object frmFind: TfrmFind
     Height = 45
     Align = alBottom
     TabOrder = 1
-    ExplicitLeft = -343
-    ExplicitWidth = 758
     object btnFind: TJDFontButton
       Left = 330
       Top = 1
@@ -83,7 +81,6 @@ object frmFind: TfrmFind
       SubTextFont.Style = []
       TabOrder = 0
       Text = 'Find'
-      ExplicitLeft = 673
     end
   end
 end

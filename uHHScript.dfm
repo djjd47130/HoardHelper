@@ -25,8 +25,6 @@ object frmScript: TfrmScript
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitLeft = -8
-    ExplicitTop = -5
     object Bevel1: TBevel
       AlignWithMargins = True
       Left = 199
@@ -95,8 +93,6 @@ object frmScript: TfrmScript
       SubTextFont.Style = []
       TabOrder = 0
       Text = 'New Script'
-      ExplicitLeft = 1
-      ExplicitTop = -5
     end
     object JDFontButton2: TJDFontButton
       Left = 49
@@ -266,8 +262,6 @@ object frmScript: TfrmScript
       SubTextFont.Style = []
       TabOrder = 4
       Text = 'Execute Script'
-      ExplicitLeft = 361
-      ExplicitTop = -5
     end
     object JDFontButton6: TJDFontButton
       Left = 208
@@ -479,8 +473,6 @@ object frmScript: TfrmScript
       SubTextFont.Style = []
       TabOrder = 9
       Text = 'Find'
-      ExplicitLeft = 568
-      ExplicitTop = -5
     end
   end
   object pMain: TPanel
@@ -492,7 +484,6 @@ object frmScript: TfrmScript
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitHeight = 509
     object Splitter1: TSplitter
       Left = 0
       Top = 258
@@ -541,16 +532,14 @@ object frmScript: TfrmScript
       Gutter.Gradient = True
       Gutter.GradientStartColor = clBlack
       Gutter.GradientEndColor = 4539717
-      Options = [eoAutoIndent, eoDragDropEditing, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs, eoTabsToSpaces]
+      Options = [eoAutoIndent, eoDragDropEditing, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs]
       ReadOnly = True
       RightEdge = 0
       RightEdgeColor = 4539717
       ScrollHintColor = 6828847
       SelectedColor.Background = 9201502
-      TabWidth = 2
       WantTabs = True
       FontSmoothing = fsmClearType
-      ExplicitTop = 248
     end
     object pScript: TPanel
       Left = 0
@@ -997,5 +986,9 @@ object frmScript: TfrmScript
   object SynSearch: TSynEditSearch
     Left = 416
     Top = 73
+  end
+  object dlgFind: TFindDialog
+    Left = 536
+    Top = 81
   end
 end

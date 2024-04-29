@@ -1,4 +1,4 @@
-unit uHoardHelperLibs;
+unit uHHLibraries;
 
 interface
 
@@ -8,12 +8,10 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.StdCtrls,
   Vcl.Samples.Spin, Vcl.WinXCtrls, JD.Common, JD.Ctrls, JD.Ctrls.FontButton,
   JD.HoardHelper, System.Actions, Vcl.ActnList, RzShellDialogs,
-  uHHEmbedBase;
+  uHHEmbedBase, System.ImageList, Vcl.ImgList, JD.FontGlyphs;
 
 type
   TfrmLibs = class(TfrmHHEmbedBase)
-    pBottom: TPanel;
-    btnDone: TJDFontButton;
     pMain: TPanel;
     Toolbar: TPanel;
     btnNewLib: TJDFontButton;
@@ -38,6 +36,17 @@ type
     btnSelectDir: TJDFontButton;
     dlgSelectDir: TRzSelectFolderDialog;
     lblEditing: TLabel;
+    Label1: TLabel;
+    txtFilter: TEdit;
+    Pages: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Glyphs: TJDFontGlyphs;
+    Img24: TImageList;
+    Img64: TImageList;
+    Label5: TLabel;
+    txtStructure: TEdit;
+    chkCollectionsSubdir: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure btnSelectDirClick(Sender: TObject);
     procedure actNewExecute(Sender: TObject);
@@ -67,9 +76,9 @@ implementation
 
 procedure TfrmLibs.FormCreate(Sender: TObject);
 begin
-  pBottom.Visible:= False;
   pMain.Align:= alClient;
   lstLibraries.Align:= alClient;
+  Pages.ActivePageIndex:= 0;
 
   UpdateActions;
 end;
@@ -129,6 +138,7 @@ begin
   txtName.Text:= '';
   cboType.ItemIndex:= -1;
   txtDir.Text:= '';
+  txtFilter.Text:= '';
   UpdateActions;
 end;
 
@@ -201,6 +211,7 @@ begin
   L.Name:= txtName.Text;
   L.LibraryType:= StrToLibType(cboType.Text);
   L.Location:= txtDir.Text;
+  L.Filter:= txtFilter.Text;
   HH.SaveSettings;
   FEditing:= False;
   FIsNew:= False;
@@ -231,6 +242,7 @@ begin
     I.SubItems.Add(LibTypeToStr(L.LibraryType));
     I.SubItems.Add(L.Location);
     I.Data:= L;
+    I.ImageIndex:= Integer(L.LibraryType);
   end;
   lstLibraries.ItemIndex:= -1;
   Self.lstLibrariesSelectItem(nil, nil, False);
@@ -245,11 +257,13 @@ begin
   txtName.Text:= '';
   cboType.ItemIndex:= -1;
   txtDir.Text:= '';
+  txtFilter.Text:= '';
   if Selected then begin
     L:= THHLibrary(Item.Data);
     txtName.Text:= L.Name;
     cboType.ItemIndex:= cboType.Items.IndexOf(LibTypeToStr(L.LibraryType));
     txtDir.Text:= L.Location;
+    txtFilter.Text:= L.Filter;
   end;
   UpdateActions;
 end;
@@ -269,6 +283,7 @@ begin
   cboType.Enabled:= FEditing;
   txtDir.ReadOnly:= (not FEditing);
   btnSelectDir.Enabled:= FEditing;
+  txtFilter.ReadOnly:= (not FEditing);
 
   if FEditing and FIsNew then begin
     lblEditing.Caption:= 'New Library';

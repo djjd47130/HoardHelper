@@ -1,4 +1,4 @@
-unit uHHMainNEW;
+unit uHHMain;
 
 interface
 
@@ -14,7 +14,7 @@ uses
   uHHEmbedBase,
   uHHHome,
   uHHMedia,
-  uHoardHelperLibs,
+  uHHLibraries,
   uHHDupeFinder,
   uHHScript,
   uHHSettings,
@@ -27,7 +27,6 @@ type
     pMenu: TPanel;
     btnMenuHome: TJDFontButton;
     btnMenuMedia: TJDFontButton;
-    btnMenuLibs: TJDFontButton;
     Bevel1: TBevel;
     Acts: TActionList;
     MM: TMainMenu;
@@ -53,7 +52,6 @@ type
     actMenuDupeFinder: TAction;
     procedure FormCreate(Sender: TObject);
     procedure btnMenuMediaClick(Sender: TObject);
-    procedure btnMenuLibsClick(Sender: TObject);
     procedure actMenuHomeExecute(Sender: TObject);
     procedure actMenuSettingsExecute(Sender: TObject);
     procedure actMenuScriptExecute(Sender: TObject);
@@ -67,7 +65,6 @@ type
     FCurScreen: TfrmHHEmbedBase;
     FHome: TfrmHHHome;
     FMedia: TfrmHHMedia;
-    FLibs: TfrmLibs;
     FDupeFinder: TfrmHHDupeFinder;
     FScript: TfrmScript;
     FSettings: TfrmHHSettings;
@@ -104,12 +101,13 @@ end;
 procedure TfrmHHMain.FormCreate(Sender: TObject);
 begin
   {$IFDEF DEBUG}
-  ReportMemoryLeaksOnShutdown:= True;
+  //ReportMemoryLeaksOnShutdown:= True;
+  //DISABLED TEMPORARILY - The gauge control has a memory leak...
   {$ENDIF}
 
   //Setup UI
-  Width:= 1100;
-  Height:= 700;
+  Width:= 1200;
+  Height:= 800;
   ColorManager.BaseColor:= clBlack;
   pMain.Align:= alClient;
 
@@ -121,7 +119,6 @@ begin
   FSettings:= TfrmHHSettings(Embed(TfrmHHSettings));
   FHome:= TfrmHHHome(Embed(TfrmHHHome));
   FMedia:= TfrmHHMedia(Embed(TfrmHHMedia));
-  FLibs:= TfrmLibs(Embed(TfrmLibs));
   FDupeFinder:= TfrmHHDupeFinder(Embed(TfrmHHDupeFinder));
   FScript:= TfrmScript(Embed(TfrmScript));
   FAbout:= TfrmHHAbout(Embed(TfrmHHAbout));
@@ -200,12 +197,6 @@ begin
   ShowScreen(FSettings, btnMenuSettings);
 end;
 
-procedure TfrmHHMain.btnMenuLibsClick(Sender: TObject);
-begin
-  FLibs.Load;
-  ShowScreen(FLibs, btnMenuLibs);
-end;
-
 procedure TfrmHHMain.ShowScreen(Inst: TfrmHHEmbedBase; Btn: TJDFontButton = nil);
 begin
   HideAll;
@@ -222,7 +213,7 @@ begin
   Inst.Show;
   UpdateCaption(Inst.Caption);
   if Assigned(Btn) then begin
-    Btn.DrawStyle:= fdThemed;
+    //Btn.DrawStyle:= fdThemed;
     Btn.Image.StandardColor:= fcOrange;
   end;
 end;

@@ -2,8 +2,8 @@ object frmHHMain: TfrmHHMain
   Left = 0
   Top = 0
   Caption = 'JD Hoard Helper'
-  ClientHeight = 563
-  ClientWidth = 926
+  ClientHeight = 481
+  ClientWidth = 893
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,34 +17,43 @@ object frmHHMain: TfrmHHMain
   PixelsPerInch = 96
   TextHeight = 13
   object Bevel1: TBevel
+    AlignWithMargins = True
     Left = 49
-    Top = 0
+    Top = 3
     Width = 8
-    Height = 563
+    Height = 475
+    Margins.Left = 0
+    Margins.Right = 0
     Align = alLeft
     Shape = bsLeftLine
-    ExplicitHeight = 534
+    Style = bsRaised
+    ExplicitLeft = 52
+    ExplicitTop = -2
   end
   object pMain: TPanel
-    Left = 334
+    Left = 79
     Top = 0
-    Width = 592
-    Height = 563
+    Width = 814
+    Height = 481
     Align = alRight
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitLeft = 112
+    ExplicitHeight = 563
   end
   object pMenu: TPanel
     Left = 0
     Top = 0
     Width = 49
-    Height = 563
+    Height = 481
     Align = alLeft
+    BevelEdges = [beRight]
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitHeight = 563
     object btnMenuSettings: TJDFontButton
       Left = 0
-      Top = 465
+      Top = 383
       Width = 49
       Height = 49
       Cursor = crHandPoint
@@ -81,12 +90,13 @@ object frmHHMain: TfrmHHMain
       SubTextFont.Height = -11
       SubTextFont.Name = 'Tahoma'
       SubTextFont.Style = []
-      TabOrder = 5
+      TabOrder = 4
       Text = 'Settings...'
+      ExplicitTop = 465
     end
     object btnMenuAbout: TJDFontButton
       Left = 0
-      Top = 514
+      Top = 432
       Width = 49
       Height = 49
       Cursor = crHandPoint
@@ -123,10 +133,9 @@ object frmHHMain: TfrmHHMain
       SubTextFont.Height = -11
       SubTextFont.Name = 'Tahoma'
       SubTextFont.Style = []
-      TabOrder = 6
+      TabOrder = 5
       Text = 'About JD Hoard Helper...'
-      ExplicitLeft = -6
-      ExplicitTop = 520
+      ExplicitTop = 514
     end
     object btnMenuHome: TJDFontButton
       Left = 0
@@ -212,53 +221,9 @@ object frmHHMain: TfrmHHMain
       TabOrder = 1
       Text = 'Search Media'
     end
-    object btnMenuLibs: TJDFontButton
-      Left = 0
-      Top = 98
-      Width = 49
-      Height = 49
-      Cursor = crHandPoint
-      Action = actMenuLibs
-      Align = alTop
-      DrawStyle = fdTransparent
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWhite
-      Font.Height = -15
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      Image.AutoSize = False
-      Image.Text = #61875
-      Image.Font.Charset = DEFAULT_CHARSET
-      Image.Font.Color = clWindowText
-      Image.Font.Height = -21
-      Image.Font.Name = 'FontAwesome'
-      Image.Font.Style = []
-      Image.Font.Quality = fqAntialiased
-      Image.StandardColor = fcGreen
-      Overlay.Text = #57715
-      Overlay.Font.Charset = DEFAULT_CHARSET
-      Overlay.Font.Color = clWindowText
-      Overlay.Font.Height = -7
-      Overlay.Font.Name = 'FontAwesome'
-      Overlay.Font.Style = []
-      Overlay.Font.Quality = fqAntialiased
-      Overlay.Position = foNone
-      Overlay.Margin = 3
-      ImagePosition = fpImgOnly
-      ShowHint = True
-      SubTextFont.Charset = DEFAULT_CHARSET
-      SubTextFont.Color = clGray
-      SubTextFont.Height = -11
-      SubTextFont.Name = 'Tahoma'
-      SubTextFont.Style = []
-      TabOrder = 2
-      Text = 'Manage Libraries'
-      ExplicitLeft = -6
-      ExplicitTop = 92
-    end
     object btnMenuScript: TJDFontButton
       Left = 0
-      Top = 196
+      Top = 147
       Width = 49
       Height = 49
       Cursor = crHandPoint
@@ -295,13 +260,13 @@ object frmHHMain: TfrmHHMain
       SubTextFont.Height = -11
       SubTextFont.Name = 'Tahoma'
       SubTextFont.Style = []
-      TabOrder = 4
+      TabOrder = 3
       Text = 'Scripting'
-      ExplicitTop = 147
+      ExplicitTop = 196
     end
     object btnMenuDupeFinder: TJDFontButton
       Left = 0
-      Top = 147
+      Top = 98
       Width = 49
       Height = 49
       Cursor = crHandPoint
@@ -338,13 +303,14 @@ object frmHHMain: TfrmHHMain
       SubTextFont.Height = -11
       SubTextFont.Name = 'Tahoma'
       SubTextFont.Style = []
-      TabOrder = 3
+      TabOrder = 2
       Text = 'Duplicate Finder'
+      ExplicitTop = 147
     end
   end
   object Acts: TActionList
-    Left = 104
-    Top = 57
+    Left = 64
+    Top = 65
     object actHelpContents: TAction
       Category = 'Help'
       Caption = 'Help Contents'
@@ -378,7 +344,6 @@ object frmHHMain: TfrmHHMain
       Caption = 'Manage Libraries'
       Hint = 'Manage Libraries'
       ShortCut = 24652
-      OnExecute = btnMenuLibsClick
     end
     object actMenuDupeFinder: TAction
       Category = 'Menu'
@@ -401,8 +366,8 @@ object frmHHMain: TfrmHHMain
     end
   end
   object MM: TMainMenu
-    Left = 152
-    Top = 56
+    Left = 64
+    Top = 136
     object File1: TMenuItem
       Caption = 'File'
       object mFileSettings: TMenuItem
