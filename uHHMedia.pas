@@ -54,6 +54,7 @@ type
     MovetoTrash1: TMenuItem;
     MovetoTrash2: TMenuItem;
     CheckBox2: TCheckBox;
+    Panel12: TPanel;
     procedure FormCreate(Sender: TObject);
     procedure JDFontButton1Click(Sender: TObject);
   private

@@ -139,6 +139,8 @@ begin
   cboType.ItemIndex:= -1;
   txtDir.Text:= '';
   txtFilter.Text:= '';
+  txtStructure.Text:= '';
+  chkCollectionsSubdir.Checked:= False;
   UpdateActions;
 end;
 
@@ -203,6 +205,7 @@ begin
 
   //TODO: Illegal chars in name...
 
+  //TODO: Validate structure string...
 
   if FIsNew then begin
     L:= THHLibrary.Create;
@@ -212,6 +215,8 @@ begin
   L.LibraryType:= StrToLibType(cboType.Text);
   L.Location:= txtDir.Text;
   L.Filter:= txtFilter.Text;
+  L.Structure:= txtStructure.Text;
+  L.CollectionsSubdir:= chkCollectionsSubdir.Checked;
   HH.SaveSettings;
   FEditing:= False;
   FIsNew:= False;
@@ -258,12 +263,16 @@ begin
   cboType.ItemIndex:= -1;
   txtDir.Text:= '';
   txtFilter.Text:= '';
+  txtStructure.Text:= '';
+  chkCollectionsSubdir.Checked:= False;
   if Selected then begin
     L:= THHLibrary(Item.Data);
     txtName.Text:= L.Name;
     cboType.ItemIndex:= cboType.Items.IndexOf(LibTypeToStr(L.LibraryType));
     txtDir.Text:= L.Location;
     txtFilter.Text:= L.Filter;
+    txtStructure.Text:= L.Structure;
+    chkCollectionsSubdir.Checked:= L.CollectionsSubdir;
   end;
   UpdateActions;
 end;
@@ -284,6 +293,8 @@ begin
   txtDir.ReadOnly:= (not FEditing);
   btnSelectDir.Enabled:= FEditing;
   txtFilter.ReadOnly:= (not FEditing);
+  txtStructure.ReadOnly:= (not FEditing);
+  chkCollectionsSubdir.Enabled:= FEditing;
 
   if FEditing and FIsNew then begin
     lblEditing.Caption:= 'New Library';

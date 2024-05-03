@@ -82,6 +82,9 @@ var
 
 implementation
 
+uses
+  Vcl.Themes, Vcl.Styles;
+
 {$R *.dfm}
 
 function TfrmHHMain.Embed(AClass: TfrmHHEmbedBaseClass): TfrmHHEmbedBase;
@@ -108,7 +111,7 @@ begin
   //Setup UI
   Width:= 1200;
   Height:= 800;
-  ColorManager.BaseColor:= clBlack;
+  ColorManager.BaseColor:= TStyleManager.ActiveStyle.GetStyleColor(TStyleColor.scWindow);
   pMain.Align:= alClient;
 
   //Load configuration settings

@@ -2,8 +2,8 @@ object frmHHHome: TfrmHHHome
   Left = 0
   Top = 0
   Caption = 'Home'
-  ClientHeight = 404
-  ClientWidth = 838
+  ClientHeight = 570
+  ClientWidth = 867
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,17 +11,21 @@ object frmHHHome: TfrmHHHome
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object pStatBar: TPanel
     Left = 0
-    Top = 0
-    Width = 838
+    Top = 47
+    Width = 867
     Height = 121
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
     OnResize = pStatBarResize
+    ExplicitLeft = -3
+    ExplicitTop = 79
+    ExplicitWidth = 838
     object pIndexInfo: TPanel
       Left = 0
       Top = 0
@@ -173,7 +177,6 @@ object frmHHHome: TfrmHHHome
         ValueAlign = taCenter
         ValueFormat = '#,###,##0.00'
         ValueMargin = 10.000000000000000000
-        ExplicitLeft = -32
       end
     end
     object pMigrationInfo: TPanel
@@ -326,7 +329,99 @@ object frmHHHome: TfrmHHHome
           end>
         ValueFormat = '#,###,##0.00'
         ValueMargin = 10.000000000000000000
-        ExplicitLeft = -32
+      end
+    end
+  end
+  object Panel12: TPanel
+    AlignWithMargins = True
+    Left = 3
+    Top = 3
+    Width = 861
+    Height = 41
+    Align = alTop
+    BevelEdges = [beBottom]
+    BevelOuter = bvNone
+    Caption = 
+      'UNDER DEVELOPMENT - The dashboard that shows you how heaping of ' +
+      'a hoard you have.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clRed
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 1
+    StyleElements = [seClient, seBorder]
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 168
+    Width = 867
+    Height = 281
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 2
+    object chLibSizeComp: TChart
+      Left = 0
+      Top = 0
+      Width = 437
+      Height = 281
+      AllowPanning = pmNone
+      BackWall.Visible = False
+      Legend.Color = clBlack
+      Legend.Font.Color = clWhite
+      Title.Font.Color = clWhite
+      Title.Font.Height = -16
+      Title.Font.Style = [fsBold]
+      Title.Text.Strings = (
+        'Library Size Comparison')
+      View3D = False
+      View3DOptions.Elevation = 315
+      View3DOptions.Orthogonal = False
+      View3DOptions.Perspective = 0
+      View3DOptions.Rotation = 360
+      Zoom.Allow = False
+      Align = alLeft
+      BevelOuter = bvNone
+      ParentColor = True
+      TabOrder = 0
+      DefaultCanvas = 'TGDIPlusCanvas'
+      PrintMargins = (
+        15
+        23
+        15
+        23)
+      ColorPaletteIndex = 20
+      object Series1: TPieSeries
+        Marks.Visible = False
+        XValues.Order = loAscending
+        YValues.Name = 'Pie'
+        YValues.Order = loNone
+        Frame.InnerBrush.BackColor = clRed
+        Frame.InnerBrush.Gradient.EndColor = clGray
+        Frame.InnerBrush.Gradient.MidColor = clWhite
+        Frame.InnerBrush.Gradient.StartColor = 4210752
+        Frame.InnerBrush.Gradient.Visible = True
+        Frame.MiddleBrush.BackColor = clYellow
+        Frame.MiddleBrush.Gradient.EndColor = 8553090
+        Frame.MiddleBrush.Gradient.MidColor = clWhite
+        Frame.MiddleBrush.Gradient.StartColor = clGray
+        Frame.MiddleBrush.Gradient.Visible = True
+        Frame.OuterBrush.BackColor = clGreen
+        Frame.OuterBrush.Gradient.EndColor = 4210752
+        Frame.OuterBrush.Gradient.MidColor = clWhite
+        Frame.OuterBrush.Gradient.StartColor = clSilver
+        Frame.OuterBrush.Gradient.Visible = True
+        Frame.Width = 4
+        OtherSlice.Legend.Visible = False
+        PiePen.Visible = False
+        Data = {
+          04060000000000000000608940FF060000004D6F766965730000000000708C40
+          FF0800000054562053686F77730000000000F88840FF0B000000486F6D652056
+          6964656F730000000000606F40FF050000004D757369630000000000003F40FF
+          0A000000486F6D6520417564696F0000000000005540FF0D000000486F6D6520
+          5069637475726573}
+        Detail = {0000000000}
       end
     end
   end

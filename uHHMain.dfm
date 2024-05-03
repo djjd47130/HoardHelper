@@ -194,7 +194,7 @@ object frmHHMain: TfrmHHMain
       Font.Name = 'Tahoma'
       Font.Style = []
       Image.AutoSize = False
-      Image.Text = #61451
+      Image.Text = #61442
       Image.Font.Charset = DEFAULT_CHARSET
       Image.Font.Color = clWindowText
       Image.Font.Height = -21

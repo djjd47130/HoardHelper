@@ -165,7 +165,7 @@ begin
     while not Terminated do begin
       if CheckActive then
         ExecuteIndexing;
-      Sleep(1);
+      Sleep(0);
     end;
   finally
     Uninit;

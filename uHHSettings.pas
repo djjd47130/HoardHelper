@@ -20,12 +20,12 @@ type
     sbIndexing: TScrollBox;
     pEnableIndexing: TPanel;
     swEnableIndexing: TToggleSwitch;
-    ScrollBox1: TScrollBox;
+    sbScripting: TScrollBox;
     pSyntaxHighlighting: TPanel;
     swSyntaxHighlighting: TToggleSwitch;
     pWordWrap: TPanel;
     swWordWrap: TToggleSwitch;
-    ScrollBox2: TScrollBox;
+    sbBackups: TScrollBox;
     pAutoBackupsEnabled: TPanel;
     swAutoBackupsEnabled: TToggleSwitch;
     Panel2: TPanel;
@@ -33,7 +33,7 @@ type
     btnSelectDir: TJDFontButton;
     Panel3: TPanel;
     ComboBox1: TComboBox;
-    ScrollBox3: TScrollBox;
+    sbGeneral: TScrollBox;
     Panel5: TPanel;
     ComboBox2: TComboBox;
     tabFilters: TTabSheet;
@@ -57,7 +57,7 @@ type
     btnPurgeBackups: TJDFontButton;
     tabMigration: TTabSheet;
     JDFontButton7: TJDFontButton;
-    ScrollBox4: TScrollBox;
+    sbMigration: TScrollBox;
     pEnableMigration: TPanel;
     swEnableMigration: TToggleSwitch;
     Panel6: TPanel;
@@ -71,6 +71,9 @@ type
     Panel10: TPanel;
     Panel11: TPanel;
     Panel12: TPanel;
+    pRememberSize: TPanel;
+    swRememberSize: TToggleSwitch;
+    Panel13: TPanel;
     procedure FormCreate(Sender: TObject);
     procedure pEnableIndexingClick(Sender: TObject);
     procedure pSyntaxHighlightingClick(Sender: TObject);
@@ -82,6 +85,10 @@ type
     procedure swWordWrapClick(Sender: TObject);
     procedure pEnableMigrationClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure swEnableIndexingClick(Sender: TObject);
+    procedure swEnableMigrationClick(Sender: TObject);
+    procedure swAutoBackupsEnabledClick(Sender: TObject);
+    procedure Panel13Click(Sender: TObject);
   private
     FLibs: TfrmLibs;
   public
@@ -142,7 +149,11 @@ begin
   FLibs.Show;
 
   Pages.Align:= alClient;
+  sbGeneral.Align:= alClient;
   sbIndexing.Align:= alClient;
+  sbMigration.Align:= alClient;
+  sbBackups.Align:= alClient;
+  sbScripting.Align:= alClient;
   for X := 0 to Pages.PageCount-1 do
     Pages.Pages[X].TabVisible:= False;
   ShowTab(0);
@@ -170,6 +181,13 @@ begin
   if dlgOpenDir.Execute then begin
     txtBackupDir.Text:= dlgOpenDir.FileName;
   end;
+end;
+
+procedure TfrmHHSettings.Panel13Click(Sender: TObject);
+begin
+  inherited;
+  //TODO: Open common script in script editor...
+
 end;
 
 procedure TfrmHHSettings.Panel1Click(Sender: TObject);
@@ -243,6 +261,33 @@ begin
         //B.DrawStyle:= fdTransparent;
       end;
     end;
+  end;
+end;
+
+procedure TfrmHHSettings.swAutoBackupsEnabledClick(Sender: TObject);
+begin
+  inherited;
+  if swAutoBackupsEnabled.IsOn then begin
+    swAutoBackupsEnabled.State:= TToggleSwitchState.tssOff;
+    MessageDlg('Sorry, this feature is not yet available.', mtInformation, [mbOK], 0);
+  end;
+end;
+
+procedure TfrmHHSettings.swEnableIndexingClick(Sender: TObject);
+begin
+  inherited;
+  if swEnableIndexing.IsOn then begin
+    swEnableIndexing.State:= TToggleSwitchState.tssOff;
+    MessageDlg('Sorry, this feature is not yet available.', mtInformation, [mbOK], 0);
+  end;
+end;
+
+procedure TfrmHHSettings.swEnableMigrationClick(Sender: TObject);
+begin
+  inherited;
+  if swEnableMigration.IsOn then begin
+    swEnableMigration.State:= TToggleSwitchState.tssOff;
+    MessageDlg('Sorry, this feature is not yet available.', mtInformation, [mbOK], 0);
   end;
 end;
 

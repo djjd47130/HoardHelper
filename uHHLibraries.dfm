@@ -227,7 +227,6 @@ object frmLibs: TfrmLibs
           Anchors = [akLeft, akTop, akRight]
           ReadOnly = True
           TabOrder = 0
-          Text = 'Movies\<Title>\<Title> (<Year>).<Ext>'
         end
         object chkCollectionsSubdir: TCheckBox
           Left = 29

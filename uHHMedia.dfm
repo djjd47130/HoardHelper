@@ -16,13 +16,14 @@ object frmHHMedia: TfrmHHMedia
   TextHeight = 13
   object pMain: TPanel
     Left = 0
-    Top = 41
+    Top = 88
     Width = 896
     Height = 476
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 41
     object pSearch: TPanel
       Left = 0
       Top = 0
@@ -182,12 +183,13 @@ object frmHHMedia: TfrmHHMedia
   end
   object Toolbar: TPanel
     Left = 0
-    Top = 0
+    Top = 47
     Width = 896
     Height = 41
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 0
     object Bevel1: TBevel
       AlignWithMargins = True
       Left = 52
@@ -334,6 +336,27 @@ object frmHHMedia: TfrmHHMedia
       TabOrder = 2
       Text = 'Save Script'
     end
+  end
+  object Panel12: TPanel
+    AlignWithMargins = True
+    Left = 3
+    Top = 3
+    Width = 890
+    Height = 41
+    Align = alTop
+    BevelEdges = [beBottom]
+    BevelOuter = bvNone
+    Caption = 'UNDER DEVELOPMENT - Searching media within your helluva hoard'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clRed
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 2
+    StyleElements = [seClient, seBorder]
+    ExplicitLeft = 8
+    ExplicitTop = -20
   end
   object MM: TMainMenu
     Left = 288

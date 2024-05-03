@@ -5,7 +5,10 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  uHHEmbedBase, Vcl.ExtCtrls, JD.Common, JD.Ctrls, JD.Ctrls.Gauges, Vcl.StdCtrls;
+  uHHEmbedBase, Vcl.ExtCtrls, JD.Common, JD.Ctrls, JD.Ctrls.Gauges, Vcl.StdCtrls,
+  VclTee.TeeGDIPlus, VCLTee.TeEngine, VCLTee.Series, VCLTee.TeeProcs,
+  VCLTee.Chart,
+  JD.Graphics;
 
 type
   TfrmHHHome = class(TfrmHHEmbedBase)
@@ -18,7 +21,12 @@ type
     JDGauge1: TJDGauge;
     Label3: TLabel;
     Label4: TLabel;
+    Panel12: TPanel;
+    Panel1: TPanel;
+    chLibSizeComp: TChart;
+    Series1: TPieSeries;
     procedure pStatBarResize(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -31,6 +39,12 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TfrmHHHome.FormCreate(Sender: TObject);
+begin
+  inherited;
+  chLibSizeComp.Color:= ColorManager.BaseColor;
+end;
 
 procedure TfrmHHHome.pStatBarResize(Sender: TObject);
 var
