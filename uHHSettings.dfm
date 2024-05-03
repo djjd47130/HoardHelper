@@ -1,38 +1,41 @@
 inherited frmHHSettings: TfrmHHSettings
   Caption = 'Settings'
-  ClientHeight = 455
-  ClientWidth = 866
+  ClientHeight = 464
+  ClientWidth = 857
   OnCreate = FormCreate
   OnShow = FormShow
-  ExplicitWidth = 882
-  ExplicitHeight = 494
+  ExplicitWidth = 873
+  ExplicitHeight = 503
   PixelsPerInch = 96
   TextHeight = 13
   object Pages: TPageControl
     Left = 0
     Top = 33
-    Width = 866
-    Height = 368
-    ActivePage = tabLibraries
+    Width = 857
+    Height = 400
+    ActivePage = tabFilters
     Align = alTop
+    Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
-    ExplicitWidth = 838
     object tabGeneral: TTabSheet
       Caption = 'tabGeneral'
-      ExplicitWidth = 830
-      object ScrollBox3: TScrollBox
+      ExplicitWidth = 858
+      ExplicitHeight = 340
+      object sbGeneral: TScrollBox
         Left = 0
         Top = 0
-        Width = 858
+        Width = 849
         Height = 281
+        VertScrollBar.Tracking = True
         Align = alTop
         BorderStyle = bsNone
         TabOrder = 0
+        ExplicitWidth = 858
         object Panel5: TPanel
           AlignWithMargins = True
           Left = 3
           Top = 50
-          Width = 852
+          Width = 843
           Height = 41
           Align = alTop
           Alignment = taLeftJustify
@@ -47,11 +50,10 @@ inherited frmHHSettings: TfrmHHSettings
           Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 0
-          ExplicitTop = 3
-          ExplicitWidth = 824
+          ExplicitWidth = 852
           object ComboBox2: TComboBox
             AlignWithMargins = True
-            Left = 651
+            Left = 642
             Top = 5
             Width = 198
             Height = 27
@@ -64,14 +66,14 @@ inherited frmHHSettings: TfrmHHSettings
             Text = 'Carbon'
             Items.Strings = (
               'Carbon')
-            ExplicitLeft = 623
+            ExplicitLeft = 651
           end
         end
         object Panel10: TPanel
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 852
+          Width = 843
           Height = 41
           Align = alTop
           BevelEdges = [beBottom]
@@ -86,32 +88,70 @@ inherited frmHHSettings: TfrmHHSettings
           ParentFont = False
           TabOrder = 1
           StyleElements = [seClient, seBorder]
-          ExplicitTop = -18
+          ExplicitWidth = 852
+        end
+        object pRememberSize: TPanel
+          AlignWithMargins = True
+          Left = 3
+          Top = 97
+          Width = 843
+          Height = 41
+          Cursor = crHandPoint
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelEdges = [beBottom]
+          BevelKind = bkFlat
+          BevelOuter = bvNone
+          Caption = 'Remember Size and Position'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 2
+          ExplicitTop = 162
+          ExplicitWidth = 852
+          object swRememberSize: TToggleSwitch
+            AlignWithMargins = True
+            Left = 760
+            Top = 3
+            Height = 33
+            Align = alRight
+            TabOrder = 0
+            ExplicitLeft = 772
+            ExplicitTop = 0
+            ExplicitHeight = 21
+          end
         end
       end
     end
     object tabLibraries: TTabSheet
       Caption = 'tabLibraries'
       ImageIndex = 1
-      ExplicitLeft = 0
+      ExplicitWidth = 858
+      ExplicitHeight = 340
     end
     object tabIndexing: TTabSheet
       Caption = 'tabIndexing'
       ImageIndex = 2
-      ExplicitWidth = 830
+      ExplicitWidth = 858
+      ExplicitHeight = 340
       object sbIndexing: TScrollBox
         Left = 0
         Top = 0
-        Width = 858
+        Width = 849
         Height = 249
+        VertScrollBar.Tracking = True
         Align = alTop
         BorderStyle = bsNone
         TabOrder = 0
+        ExplicitWidth = 858
         object pEnableIndexing: TPanel
           AlignWithMargins = True
           Left = 3
           Top = 50
-          Width = 852
+          Width = 843
           Height = 41
           Cursor = crHandPoint
           Align = alTop
@@ -128,15 +168,17 @@ inherited frmHHSettings: TfrmHHSettings
           ParentFont = False
           TabOrder = 0
           OnClick = pEnableIndexingClick
-          ExplicitTop = 3
-          ExplicitWidth = 824
+          ExplicitWidth = 852
           object swEnableIndexing: TToggleSwitch
-            Left = 772
-            Top = 0
-            Height = 39
+            AlignWithMargins = True
+            Left = 760
+            Top = 3
+            Height = 33
             Align = alRight
             TabOrder = 0
-            ExplicitLeft = 744
+            OnClick = swEnableIndexingClick
+            ExplicitLeft = 772
+            ExplicitTop = 0
             ExplicitHeight = 21
           end
         end
@@ -144,7 +186,7 @@ inherited frmHHSettings: TfrmHHSettings
           AlignWithMargins = True
           Left = 3
           Top = 97
-          Width = 852
+          Width = 843
           Height = 41
           Align = alTop
           Alignment = taLeftJustify
@@ -159,11 +201,10 @@ inherited frmHHSettings: TfrmHHSettings
           Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 1
-          ExplicitLeft = 6
-          ExplicitTop = 58
+          ExplicitWidth = 852
           object Edit1: TEdit
             AlignWithMargins = True
-            Left = 403
+            Left = 394
             Top = 5
             Width = 405
             Height = 29
@@ -173,10 +214,11 @@ inherited frmHHSettings: TfrmHHSettings
             ReadOnly = True
             TabOrder = 0
             Text = 'D:\Media\Index'
+            ExplicitLeft = 403
             ExplicitHeight = 27
           end
           object JDFontButton8: TJDFontButton
-            Left = 811
+            Left = 802
             Top = 0
             Width = 41
             Height = 39
@@ -216,19 +258,20 @@ inherited frmHHSettings: TfrmHHSettings
             SubTextFont.Style = []
             TabOrder = 1
             Text = 'btnSelectDir'
+            ExplicitLeft = 805
           end
         end
         object Panel9: TPanel
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 852
+          Width = 843
           Height = 41
           Align = alTop
           BevelEdges = [beBottom]
           BevelKind = bkFlat
           BevelOuter = bvNone
-          Caption = 'UNDER DEVELOPMENT'
+          Caption = 'UNDER DEVELOPMENT - Build index of media meta data / tags'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clRed
           Font.Height = -16
@@ -238,29 +281,35 @@ inherited frmHHSettings: TfrmHHSettings
           TabOrder = 2
           StyleElements = [seClient, seBorder]
           OnClick = pAutoBackupsEnabledClick
-          ExplicitTop = -18
+          ExplicitWidth = 852
         end
       end
     end
     object tabMigration: TTabSheet
       Caption = 'tabMigration'
       ImageIndex = 6
-      ExplicitWidth = 830
-      object ScrollBox4: TScrollBox
+      ExplicitWidth = 858
+      ExplicitHeight = 340
+      object sbMigration: TScrollBox
         Left = 0
         Top = 0
-        Width = 858
+        Width = 849
         Height = 273
+        VertScrollBar.Tracking = True
         Align = alTop
         BorderStyle = bsNone
         TabOrder = 0
+        ExplicitWidth = 858
         object pEnableMigration: TPanel
           AlignWithMargins = True
           Left = 3
           Top = 50
-          Width = 852
+          Width = 843
           Height = 41
           Cursor = crHandPoint
+          Hint = 
+            'Activate the mechanism to automatically organize your heaping ho' +
+            'ard'
           Align = alTop
           Alignment = taLeftJustify
           BevelEdges = [beBottom]
@@ -273,15 +322,24 @@ inherited frmHHSettings: TfrmHHSettings
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 0
           OnClick = pEnableMigrationClick
-          ExplicitTop = 0
+          ExplicitWidth = 852
           object swEnableMigration: TToggleSwitch
-            Left = 772
-            Top = 0
-            Height = 39
+            AlignWithMargins = True
+            Left = 760
+            Top = 3
+            Height = 33
+            Hint = 
+              'Activate the mechanism to automatically organize your heaping ho' +
+              'ard'
             Align = alRight
             TabOrder = 0
+            OnClick = swEnableMigrationClick
+            ExplicitLeft = 772
+            ExplicitTop = 0
             ExplicitHeight = 21
           end
         end
@@ -289,8 +347,9 @@ inherited frmHHSettings: TfrmHHSettings
           AlignWithMargins = True
           Left = 3
           Top = 97
-          Width = 852
+          Width = 843
           Height = 41
+          Hint = 'How to handle original hoard during migration'
           Align = alTop
           Alignment = taLeftJustify
           BevelEdges = [beBottom]
@@ -303,15 +362,17 @@ inherited frmHHSettings: TfrmHHSettings
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 1
-          ExplicitLeft = 6
-          ExplicitTop = 58
+          ExplicitWidth = 852
           object ComboBox3: TComboBox
             AlignWithMargins = True
-            Left = 576
+            Left = 567
             Top = 5
             Width = 273
             Height = 27
+            Hint = 'How to handle original hoard during migration'
             Margins.Top = 5
             Margins.Bottom = 5
             Align = alRight
@@ -323,19 +384,22 @@ inherited frmHHSettings: TfrmHHSettings
               'Leave In Place (Organize)'
               'Copy Media (Keep Original)'
               'Move Data (Permanent)')
+            ExplicitLeft = 576
           end
         end
         object Panel8: TPanel
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 852
+          Width = 843
           Height = 41
           Align = alTop
           BevelEdges = [beBottom]
           BevelKind = bkFlat
           BevelOuter = bvNone
-          Caption = 'UNDER DEVELOPMENT'
+          Caption = 
+            'UNDER DEVELOPMENT - Automatically migrate media to new folder st' +
+            'ructure'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clRed
           Font.Height = -16
@@ -345,30 +409,32 @@ inherited frmHHSettings: TfrmHHSettings
           TabOrder = 2
           StyleElements = [seClient, seBorder]
           OnClick = pAutoBackupsEnabledClick
-          ExplicitTop = -18
+          ExplicitWidth = 852
         end
       end
     end
     object tabBackups: TTabSheet
       Caption = 'tabBackups'
       ImageIndex = 3
-      ExplicitWidth = 830
-      object ScrollBox2: TScrollBox
+      ExplicitWidth = 858
+      ExplicitHeight = 340
+      object sbBackups: TScrollBox
         Left = 0
         Top = 0
-        Width = 858
+        Width = 849
         Height = 289
         Align = alTop
         BorderStyle = bsNone
         TabOrder = 0
-        ExplicitWidth = 830
+        ExplicitWidth = 858
         object pAutoBackupsEnabled: TPanel
           AlignWithMargins = True
           Left = 3
           Top = 97
-          Width = 852
+          Width = 843
           Height = 41
           Cursor = crHandPoint
+          Hint = 'Enable automatic backups during file operations'
           Align = alTop
           Alignment = taLeftJustify
           BevelEdges = [beBottom]
@@ -381,18 +447,22 @@ inherited frmHHSettings: TfrmHHSettings
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 0
           OnClick = pAutoBackupsEnabledClick
-          ExplicitTop = 50
-          ExplicitWidth = 824
+          ExplicitWidth = 852
           object swAutoBackupsEnabled: TToggleSwitch
-            Left = 772
-            Top = 0
-            Height = 39
+            AlignWithMargins = True
+            Left = 760
+            Top = 3
+            Height = 33
+            Hint = 'Enable automatic backups during file operations'
             Align = alRight
-            State = tssOn
             TabOrder = 0
-            ExplicitLeft = 744
+            OnClick = swAutoBackupsEnabledClick
+            ExplicitLeft = 772
+            ExplicitTop = 0
             ExplicitHeight = 21
           end
         end
@@ -400,8 +470,9 @@ inherited frmHHSettings: TfrmHHSettings
           AlignWithMargins = True
           Left = 3
           Top = 144
-          Width = 852
+          Width = 843
           Height = 41
+          Hint = 'Choose the location where files shall be  backed up'
           Align = alTop
           Alignment = taLeftJustify
           BevelEdges = [beBottom]
@@ -414,31 +485,33 @@ inherited frmHHSettings: TfrmHHSettings
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 1
-          ExplicitTop = 97
-          ExplicitWidth = 824
+          ExplicitWidth = 852
           object txtBackupDir: TEdit
             AlignWithMargins = True
-            Left = 403
+            Left = 394
             Top = 5
             Width = 405
             Height = 29
+            Hint = 'Choose the location where files shall be  backed up'
             Margins.Top = 5
             Margins.Bottom = 5
             Align = alRight
             ReadOnly = True
             TabOrder = 0
             Text = 'D:\Media\Backup'
-            ExplicitLeft = 375
+            ExplicitLeft = 403
             ExplicitHeight = 27
           end
           object btnSelectDir: TJDFontButton
-            Left = 811
+            Left = 802
             Top = 0
             Width = 41
             Height = 39
             Cursor = crHandPoint
-            Hint = 'Browse...'
+            Hint = 'Choose the location where files shall be  backed up'
             Align = alRight
             DrawStyle = fdTransparent
             Font.Charset = DEFAULT_CHARSET
@@ -474,15 +547,16 @@ inherited frmHHSettings: TfrmHHSettings
             TabOrder = 1
             Text = 'btnSelectDir'
             OnClick = btnSelectDirClick
-            ExplicitLeft = 783
+            ExplicitLeft = 811
           end
         end
         object Panel3: TPanel
           AlignWithMargins = True
           Left = 3
           Top = 191
-          Width = 852
+          Width = 843
           Height = 41
+          Hint = 'How to handle files which have already been backed up previously'
           Align = alTop
           Alignment = taLeftJustify
           BevelEdges = [beBottom]
@@ -495,15 +569,17 @@ inherited frmHHSettings: TfrmHHSettings
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 2
-          ExplicitTop = 144
-          ExplicitWidth = 824
+          ExplicitWidth = 852
           object ComboBox1: TComboBox
             AlignWithMargins = True
-            Left = 651
+            Left = 642
             Top = 5
             Width = 198
             Height = 27
+            Hint = 'How to handle files which have already been backed up previously'
             Margins.Top = 5
             Margins.Bottom = 5
             Align = alRight
@@ -515,16 +591,18 @@ inherited frmHHSettings: TfrmHHSettings
               'Ignore'
               'Create Copies'
               'Overwrite')
-            ExplicitLeft = 623
+            ExplicitLeft = 643
+            ExplicitTop = 2
           end
         end
         object Panel1: TPanel
           AlignWithMargins = True
           Left = 3
           Top = 50
-          Width = 852
+          Width = 843
           Height = 41
           Cursor = crHandPoint
+          Hint = 'The amount of data currently in your backup directory'
           Align = alTop
           Alignment = taLeftJustify
           BevelEdges = [beBottom]
@@ -537,26 +615,30 @@ inherited frmHHSettings: TfrmHHSettings
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 3
           OnClick = Panel1Click
-          ExplicitTop = 3
-          ExplicitWidth = 824
+          ExplicitWidth = 852
           object Label1: TLabel
             AlignWithMargins = True
-            Left = 738
+            Left = 729
             Top = 3
             Width = 111
             Height = 33
+            Hint = 'The amount of data currently in your backup directory'
             Align = alRight
             Alignment = taRightJustify
             Caption = '0 Files (0 MB)'
+            ParentShowHint = False
+            ShowHint = True
             Layout = tlCenter
-            ExplicitLeft = 652
+            ExplicitLeft = 738
             ExplicitHeight = 19
           end
           object btnPurgeBackups: TJDFontButton
             AlignWithMargins = True
-            Left = 652
+            Left = 643
             Top = 3
             Width = 80
             Height = 33
@@ -597,20 +679,20 @@ inherited frmHHSettings: TfrmHHSettings
             TabOrder = 0
             TabStop = False
             Text = 'Purge'
-            ExplicitTop = 8
+            ExplicitLeft = 652
           end
         end
         object Panel7: TPanel
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 852
+          Width = 843
           Height = 41
           Align = alTop
           BevelEdges = [beBottom]
           BevelKind = bkFlat
           BevelOuter = bvNone
-          Caption = 'UNDER DEVELOPMENT'
+          Caption = 'UNDER DEVELOPMENT - Automatic backups during file operations'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clRed
           Font.Height = -16
@@ -620,29 +702,30 @@ inherited frmHHSettings: TfrmHHSettings
           TabOrder = 4
           StyleElements = [seClient, seBorder]
           OnClick = pAutoBackupsEnabledClick
-          ExplicitLeft = 27
-          ExplicitTop = -18
+          ExplicitWidth = 852
         end
       end
     end
     object tabScripting: TTabSheet
       Caption = 'tabScripting'
       ImageIndex = 4
-      ExplicitWidth = 830
-      object ScrollBox1: TScrollBox
+      ExplicitWidth = 858
+      ExplicitHeight = 340
+      object sbScripting: TScrollBox
         Left = 0
         Top = 0
-        Width = 858
-        Height = 217
+        Width = 849
+        Height = 273
+        VertScrollBar.Tracking = True
         Align = alTop
         BorderStyle = bsNone
         TabOrder = 0
-        ExplicitWidth = 830
+        ExplicitWidth = 858
         object pSyntaxHighlighting: TPanel
           AlignWithMargins = True
           Left = 3
           Top = 50
-          Width = 852
+          Width = 843
           Height = 41
           Cursor = crHandPoint
           Align = alTop
@@ -659,16 +742,17 @@ inherited frmHHSettings: TfrmHHSettings
           ParentFont = False
           TabOrder = 0
           OnClick = pSyntaxHighlightingClick
-          ExplicitTop = 3
-          ExplicitWidth = 824
+          ExplicitWidth = 852
           object swSyntaxHighlighting: TToggleSwitch
-            Left = 772
-            Top = 0
-            Height = 39
+            AlignWithMargins = True
+            Left = 760
+            Top = 3
+            Height = 33
             Align = alRight
             State = tssOn
             TabOrder = 0
-            ExplicitLeft = 744
+            ExplicitLeft = 772
+            ExplicitTop = 0
             ExplicitHeight = 21
           end
         end
@@ -676,7 +760,7 @@ inherited frmHHSettings: TfrmHHSettings
           AlignWithMargins = True
           Left = 3
           Top = 97
-          Width = 852
+          Width = 843
           Height = 41
           Cursor = crHandPoint
           Align = alTop
@@ -693,16 +777,17 @@ inherited frmHHSettings: TfrmHHSettings
           ParentFont = False
           TabOrder = 1
           OnClick = pWordWrapClick
-          ExplicitTop = 50
-          ExplicitWidth = 824
+          ExplicitWidth = 852
           object swWordWrap: TToggleSwitch
-            Left = 772
-            Top = 0
-            Height = 39
+            AlignWithMargins = True
+            Left = 760
+            Top = 3
+            Height = 33
             Align = alRight
             TabOrder = 0
             OnClick = swWordWrapClick
-            ExplicitLeft = 744
+            ExplicitLeft = 772
+            ExplicitTop = 0
             ExplicitHeight = 21
           end
         end
@@ -710,13 +795,13 @@ inherited frmHHSettings: TfrmHHSettings
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 852
+          Width = 843
           Height = 41
           Align = alTop
           BevelEdges = [beBottom]
           BevelKind = bkFlat
           BevelOuter = bvNone
-          Caption = 'UNDER DEVELOPMENT'
+          Caption = 'UNDER DEVELOPMENT - Settings to control scripting behavior'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clRed
           Font.Height = -16
@@ -726,20 +811,47 @@ inherited frmHHSettings: TfrmHHSettings
           TabOrder = 2
           StyleElements = [seClient, seBorder]
           OnClick = pAutoBackupsEnabledClick
-          ExplicitTop = -18
+          ExplicitWidth = 852
+        end
+        object Panel13: TPanel
+          AlignWithMargins = True
+          Left = 3
+          Top = 144
+          Width = 843
+          Height = 41
+          Cursor = crHandPoint
+          Hint = 'Open the common script which is included in all executions'
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelEdges = [beBottom]
+          BevelKind = bkFlat
+          BevelOuter = bvNone
+          Caption = 'Open Common Script'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+          OnClick = Panel13Click
+          ExplicitTop = 161
         end
       end
     end
     object tabFilters: TTabSheet
       Caption = 'tabFilters'
       ImageIndex = 5
-      ExplicitLeft = 8
+      ExplicitWidth = 858
+      ExplicitHeight = 340
       object lstFilters: TListView
         AlignWithMargins = True
         Left = 3
         Top = 91
-        Width = 852
-        Height = 222
+        Width = 843
+        Height = 254
         Align = alTop
         Anchors = [akLeft, akTop, akRight, akBottom]
         Columns = <
@@ -772,19 +884,19 @@ inherited frmHHSettings: TfrmHHSettings
         ViewStyle = vsReport
         ExplicitTop = 47
         ExplicitWidth = 824
+        ExplicitHeight = 222
       end
       object Toolbar: TPanel
         Left = 0
         Top = 47
-        Width = 858
+        Width = 849
         Height = 41
         Align = alTop
         BevelOuter = bvNone
         ParentShowHint = False
         ShowHint = True
         TabOrder = 1
-        ExplicitLeft = 32
-        ExplicitTop = -18
+        ExplicitWidth = 858
         object btnNewLib: TJDFontButton
           Left = 0
           Top = 0
@@ -994,13 +1106,15 @@ inherited frmHHSettings: TfrmHHSettings
         AlignWithMargins = True
         Left = 3
         Top = 3
-        Width = 852
+        Width = 843
         Height = 41
         Align = alTop
         BevelEdges = [beBottom]
         BevelKind = bkFlat
         BevelOuter = bvNone
-        Caption = 'UNDER DEVELOPMENT'
+        Caption = 
+          'UNDER DEVELOPMENT - A central registration of file extension fil' +
+          'ters'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clRed
         Font.Height = -16
@@ -1009,20 +1123,19 @@ inherited frmHHSettings: TfrmHHSettings
         ParentFont = False
         TabOrder = 2
         StyleElements = [seClient, seBorder]
-        ExplicitLeft = 11
-        ExplicitTop = -18
+        ExplicitWidth = 852
       end
     end
   end
   object pMenu: TPanel
     Left = 0
     Top = 0
-    Width = 866
+    Width = 857
     Height = 33
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 838
+    ExplicitWidth = 866
     object JDFontButton1: TJDFontButton
       Left = 0
       Top = 0
@@ -1109,7 +1222,6 @@ inherited frmHHSettings: TfrmHHSettings
       TabOrder = 1
       Text = 'Libraries'
       OnClick = TabButtonClick
-      ExplicitLeft = 116
     end
     object JDFontButton3: TJDFontButton
       Tag = 2
@@ -1336,7 +1448,7 @@ inherited frmHHSettings: TfrmHHSettings
     FavoriteLinks = <>
     FileTypes = <>
     Options = [fdoPickFolders]
-    Left = 616
-    Top = 392
+    Left = 40
+    Top = 56
   end
 end

@@ -18,14 +18,16 @@ uses
   uHHHome in 'uHHHome.pas' {frmHHHome},
   uHHSettings in 'uHHSettings.pas' {frmHHSettings},
   uHHDupeFinder in 'uHHDupeFinder.pas' {frmHHDupeFinder},
-  uHHAbout in 'uHHAbout.pas' {frmHHAbout};
+  uHHAbout in 'uHHAbout.pas' {frmHHAbout},
+  JD.HoardHelper.Plugins in 'JD.HoardHelper.Plugins.pas',
+  JD.HoardHelper.Plugins.Intf in 'JD.HoardHelper.Plugins.Intf.pas';
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  TStyleManager.TrySetStyle('Onyx Blue');
+  TStyleManager.TrySetStyle('Carbon');
   Application.Title := 'JD Hoard Helper';
   Application.CreateForm(TfrmHHMain, frmHHMain);
   Application.Run;
