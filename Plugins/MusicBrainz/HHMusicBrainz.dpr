@@ -5,7 +5,8 @@ uses
   System.Classes,
   JD.HoardHelper.Plugins.Intf in '..\..\JD.HoardHelper.Plugins.Intf.pas',
   JD.HoardHelper.Plugins in '..\..\JD.HoardHelper.Plugins.pas',
-  MusicBrainz.Client in 'MusicBrainz.Client.pas';
+  MusicBrainz.Client in 'MusicBrainz.Client.pas',
+  MusicBrainz.Plugin.Impl in 'MusicBrainz.Plugin.Impl.pas';
 
 {$R *.res}
 
@@ -14,6 +15,8 @@ var
 
 function HHInitializePlugin: IHHPlugin; stdcall;
 begin
+  //TODO: Implement interfaces by inheriting plugin's interfaced objects...
+
   _Plugin:= THHPlugin.Create;
   _Plugin.InitializePlugin;
   Result:= _Plugin;
@@ -28,10 +31,6 @@ end;
 exports
   HHInitializePlugin,
   HHUninitializePlugin;
-
-
-//TODO: Implement integration with MusicBrainz API for looking up music metadata
-
 
 begin
 end.

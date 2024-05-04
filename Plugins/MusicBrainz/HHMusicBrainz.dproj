@@ -72,6 +72,10 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <Manifest_File>(None)</Manifest_File>
+        <OutputExt>.hhplugin</OutputExt>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -86,6 +90,7 @@
         <DCCReference Include="..\..\JD.HoardHelper.Plugins.Intf.pas"/>
         <DCCReference Include="..\..\JD.HoardHelper.Plugins.pas"/>
         <DCCReference Include="MusicBrainz.Client.pas"/>
+        <DCCReference Include="MusicBrainz.Plugin.Impl.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -106,6 +111,14 @@
                 <Source>
                     <Source Name="MainSource">HHMusicBrainz.dpr</Source>
                 </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\21.0\Bpl\JDWordGridComps.bpl">(untitled)</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\21.0\Bpl\dclJDUOMLib.bpl">(untitled)</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k270.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp270.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="C:\WINDOWS\system32\FMX_MediaLabBasicDsn270.bpl">Mitov - FireMonkey MediaLab Basic Design Package</Excluded_Packages>
+                    <Excluded_Packages Name="C:\WINDOWS\system32\FMX_SignalLabScopeDsn270.bpl">Mitov - FireMonkey SignalLab Scope Design Package</Excluded_Packages>
+                </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
                 <DeployFile LocalName="$(BDS)\Redist\osx32\libcgunwind.1.0.dylib" Class="DependencyModule">
@@ -123,7 +136,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Win32\Debug\HHMusicBrainz.dll" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="Win32\Debug\HHMusicBrainz.hhplugin" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>HHMusicBrainz.dll</RemoteName>
                         <Overwrite>true</Overwrite>
