@@ -1,19 +1,13 @@
 unit MusicBrainz.Client;
 
-{
+(*
+  MusicBrainz API Wrapper for Delphi
+  Written by Jerry Dodge
+
   API Documentation:
   https://musicbrainz.org/doc/MusicBrainz_API
 
-  We have 13 resources on our API which represent core entities in our database:
-  area, artist, event, genre, instrument, label, place, recording, release, release-group, series, work, url
-  ... rating, tag, collection ... discid, isrc, iswc
-  https://musicbrainz.org/doc/MusicBrainz_Entity
-
-  - GET lookup
-  - GET browse
-  - GET search
-
-}
+*)
 
 interface
 
@@ -245,7 +239,8 @@ var
   URL: String;
 begin
   if APIClient.CheckLimiting then begin
-
+    URL:= EntityTypeStr+'/'+MBID+'?inc='+Inc;
+    Result:= APIClient.GetJSON(URL);
   end;
 end;
 

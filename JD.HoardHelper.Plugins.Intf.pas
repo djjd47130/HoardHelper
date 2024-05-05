@@ -57,6 +57,23 @@ type
     procedure Execute; stdcall;
   end;
 
+  THHMediaagentType = (hhmaMovies, hhmaShows, hhmaMusic);
+  THHMediaagentTypes = set of THHMediaagentType;
+
+  //Integration with metadata - allows fetching metadata from media agents
+  IHHPluginMediaAgent = interface
+    ['{55332637-8088-4C47-87F8-1CA68846BCCB}']
+    function GetName: WideString; stdcall;
+    function GetMediaTypes: THHMediaagentTypes;
+
+    function GetTags(const MediaType: THHMediaagentType;
+      const Title: WideString): TArray<WideString>;
+
+  end;
+
+
+
+
 
 
   //Integration entry point
